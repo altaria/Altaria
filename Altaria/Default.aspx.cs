@@ -19,7 +19,11 @@ namespace Altaria
         {
 
         }
-
+        public AltariaImage getImage()
+        {
+            return ai;
+        }
+        protected AltariaImage ai;
         //Upload file
         protected void upload_onclick(object sender, EventArgs e)
         {
@@ -43,7 +47,7 @@ namespace Altaria
                 else if (Validation.isImage(type))
                 {
                     // else if image, convert to AltariaImage first.
-                    AltariaImage ai = new AltariaImage(new Bitmap(file.InputStream));
+                    ai = new AltariaImage(new Bitmap(file.InputStream));
                     // check watermark
                     if (ai.isWatermarked())
                     {
@@ -52,7 +56,12 @@ namespace Altaria
                     else
                     {
                         //redirect to step 2
+                        Server.Transfer("eiwm.aspx");
                     }
+                }
+                else
+                {
+                    // random file type.
                 }
             }
         }
