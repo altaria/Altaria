@@ -20,9 +20,6 @@ namespace Altaria
         {
             return true;
         }
-        public static bool isWatermarked(Bitmap file)
-        {
-            return false;
-        }
+
     }
 }

@@ -42,10 +42,10 @@ namespace Altaria
                 }
                 else if (Validation.isImage(type))
                 {
-                    // else if image, convert to bitmap first.
-                    Bitmap bitmap_file = new Bitmap(file.InputStream);
+                    // else if image, convert to AltariaImage first.
+                    AltariaImage ai = new AltariaImage(new Bitmap(file.InputStream));
                     // check watermark
-                    if (Validation.isWatermarked(bitmap_file))
+                    if (ai.isWatermarked())
                     {
                         //todo: extract watermark, perform attacks.
                     }
