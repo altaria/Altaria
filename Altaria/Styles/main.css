@@ -6,6 +6,10 @@
   text-align: center;
 }
 
+input[type=file] 
+{
+    display: none;
+}
 .logo {
   font-size: 80px;
   line-height: 120px;

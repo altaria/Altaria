@@ -12,10 +12,11 @@ namespace Altaria
 {
     public partial class EIWM : System.Web.UI.Page
     {
+        protected AltariaImage ai;
         protected void Page_Load(object sender, EventArgs e)
         {
             _Default prev = Context.Handler as _Default;
-            AltariaImage ai = prev.getImage(); //ai is the non-watermarked image.
+            ai = prev.getImage(); //ai is the non-watermarked image.
         }
     }
 }

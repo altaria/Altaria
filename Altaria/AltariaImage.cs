@@ -12,12 +12,13 @@ namespace Altaria
         Bitmap bmp;
         Int32[] dimensions = new Int32[2];
         List<double> hh, hl, lh, ll; //four subdomains of the transformed image by haar.
-
+        public string name;
         //constructor
-        public AltariaImage(Bitmap bmp)
+        public AltariaImage(Bitmap bmp, string name)
         {
             this.bmp = bmp; //original image
             this.dimensions = new Int32[2]{ bmp.Height, bmp.Width };
+            this.name = name;
         }
 
         //functions

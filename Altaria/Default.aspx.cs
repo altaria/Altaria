@@ -47,7 +47,7 @@ namespace Altaria
                 else if (Validation.isImage(type))
                 {
                     // else if image, convert to AltariaImage first.
-                    ai = new AltariaImage(new Bitmap(file.InputStream));
+                    ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
                     // check watermark
                     if (ai.isWatermarked())
                     {
