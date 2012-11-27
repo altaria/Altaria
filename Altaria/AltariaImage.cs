@@ -11,6 +11,7 @@ namespace Altaria
         //variables
         Bitmap bmp;
         public Int32[] dimensions { get; private set; }
+        public bool isWatermarked { get; private set; }
         List<double> hh, hl, lh, ll; //four subdomains of the transformed image by haar.
         public string name { get; private set; }
         //constructor
@@ -19,12 +20,7 @@ namespace Altaria
             this.bmp = bmp; //original image
             this.dimensions = new Int32[2]{ bmp.Height, bmp.Width };
             this.name = name;
-        }
-
-        //functions
-        public bool isWatermarked()
-        {
-            return false;
+            this.isWatermarked = false;
         }
         
 /* The Haar Transform is performed in two stages. First, each row is transformed. Then each column is transformed. The coefficients

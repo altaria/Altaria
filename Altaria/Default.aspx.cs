@@ -60,5 +60,19 @@ namespace Altaria
                 UploadedImages.DataBind();
             }
         }
+
+        protected void UploadedImages_ItemDataBound(object sender, RepeaterItemEventArgs riea)
+        {
+            AltariaImage ai = riea.Item.DataItem as AltariaImage;
+            if (ai.isWatermarked)
+            {
+                //watermarked
+                riea.Item.FindControl("wm_form").Visible = false;
+            }
+            else
+            {
+                //not watermarked, embed watermark
+            }
+        }
     }
 }

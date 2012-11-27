@@ -17,9 +17,15 @@
             <asp:RequiredFieldValidator class="text-error" id="RequiredFile" runat="server" ControlToValidate="uploadedfile" ErrorMessage="No file is chosen!" />
         </form>
         <hr />
-        <asp:Repeater ID="UploadedImages" runat="server">
+        <asp:Repeater ID="UploadedImages" runat="server" OnItemDataBound="UploadedImages_ItemDataBound">
             <ItemTemplate>
                 <%# Eval("name") %><br />
+                <form id="wm_form" action="Default.aspx" enctype="multipart/form-data" method="post">
+                    <input type="file" runat="server" clientidmode="Static" ValidationGroup='<% "wm_upload" + Container.DataItemIndex %>'/>
+                    <span class="input-append">
+                    </span>
+                    <asp:button type="submit" text="Upload Watermark" runat="server" class="btn btn-success"/>
+                </form>
             </ItemTemplate>
         </asp:Repeater>
     </ContentTemplate>
