@@ -19,50 +19,45 @@ namespace Altaria
         {
 
         }
-        public AltariaImage getImage()
+        protected List<AltariaImage> ai = new List<AltariaImage>();
+        public List<AltariaImage> getImages()
         {
             return ai;
         }
-        protected AltariaImage ai;
         //Upload file
         protected void upload_onclick(object sender, EventArgs e)
         {
             if (Page.IsValid)
             {
-                HttpPostedFile file = uploadedfile.PostedFile;
-                int len = file.ContentLength;
-                string type = file.ContentType;
-                //todo: determine content type.
-                byte[] file_bytes = new byte[len];
-                file.InputStream.Read(file_bytes, 0, len);
-                // if audio/ video...
-                if (Validation.isAudio(type))
+                HttpFileCollection hfc = Request.Files;
+                for (int i = 0; i < hfc.Count; i++)
                 {
-                    // do something..
-                }
-                else if (Validation.isVideo(type))
-                {
-                    // do something..
-                }
-                else if (Validation.isImage(type))
-                {
-                    // else if image, convert to AltariaImage first.
-                    ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
-                    // check watermark
-                    if (ai.isWatermarked())
+                    HttpPostedFile file = hfc[i];
+                    int len = file.ContentLength;
+                    string type = file.ContentType;
+                    //todo: determine content type.
+                    byte[] file_bytes = new byte[len];
+                    file.InputStream.Read(file_bytes, 0, len);
+                    // if audio/ video...
+                    if (Validation.isAudio(type))
                     {
-                        //todo: extract watermark, perform attacks.
+                        // do something..
+                    }
+                    else if (Validation.isVideo(type))
+                    {
+                        // do something..
+                    }
+                    else if (Validation.isImage(type))
+                    {
+                        ai.Add(new AltariaImage(new Bitmap(file.InputStream), file.FileName));
                     }
                     else
                     {
-                        //redirect to step 2
-                        Server.Transfer("eiwm.aspx");
+                        // random file type.
                     }
                 }
-                else
-                {
-                    // random file type.
-                }
+                UploadedImages.DataSource = ai;
+                UploadedImages.DataBind();
             }
         }
     }

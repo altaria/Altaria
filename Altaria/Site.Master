@@ -17,7 +17,7 @@
         <div class="row-fluid">
             <div class="span12">
             <h1 class="logo center">Altaria</h1>
-            <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
+                <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
             </div>
         </div>
     </div>
