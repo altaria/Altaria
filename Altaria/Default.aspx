@@ -27,7 +27,7 @@
         <asp:Repeater ID="UploadedImages" runat="server" OnItemDataBound="UploadedImages_ItemDataBound">
             <ItemTemplate>
             <!-- previous file -->
-                <%# Eval("name") %>
+               <asp:Label runat="server" ID="ci" Text='<%# Eval("name") %>'></asp:Label>
                 <br />
             <!-- watermark file -->
                 <asp:FileUpload runat="server" id="fu" />

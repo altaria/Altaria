@@ -18,10 +18,6 @@ namespace Altaria
         protected void Page_Load(object sender, EventArgs e)
         {
             step2.Visible = false;
-            if (Session["ai"] != null)
-            {
-                ai = (List<AltariaImage>)Session["ai"];
-            }
         }
         protected List<AltariaImage> ai = new List<AltariaImage>();
         //Upload file
@@ -49,15 +45,18 @@ namespace Altaria
                     }
                     else if (Validation.isImage(type))
                     {
-                        ai.Add(new AltariaImage(new Bitmap(file.InputStream), file.FileName));
+                        AltariaImage temp_ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
+                        ai.Add(temp_ai);
+                        //add uploaded file to session
+                        Session.Add(file.FileName, temp_ai);
                     }
                     else
                     {
                         // random file type.
                     }
+
                 }
                 UploadedImages.DataSource = ai;
-                Session.Add("ai", ai);
                 step2.Visible = true;
                 UploadedImages.DataBind();
             }
@@ -76,6 +75,7 @@ namespace Altaria
                     //start embed of watermark
                     //step 1: Two images are taken as input
                     AltariaImage wm = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName);
+                    AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text];
                     //step 2: The sizes of the images are extracted
                     //step 3: Normalize and reshape the logo
                     //step 4: Transforming the cover image into wavelet domain using DWT
