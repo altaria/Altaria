@@ -17,7 +17,6 @@
                 <a class="btn" onclick="$('input[id=uploadedfile]').click();">Browse</a>
             </span>
             <asp:Button type="submit" id="submit" text="Upload" runat="server" class="btn btn-success" OnClick="upload_onclick"/>
-            <asp:RequiredFieldValidator class="text-error" id="RequiredFile" runat="server" ControlToValidate="uploadedfile" ErrorMessage="No file is chosen!" />
         </form>
         <hr />
         <!-- Step 2 for Image Watermark. YJ Portion -->
@@ -26,20 +25,21 @@
         </fieldset>
         <asp:Repeater ID="UploadedImages" runat="server" OnItemDataBound="UploadedImages_ItemDataBound">
             <ItemTemplate>
-                <%# Eval("name") %><br />
-                <form id="wm_form" action="Default.aspx" enctype="multipart/form-data" method="post" class="form-inline">
-                    <input type="file" id="uploadedwm<%# DataBinder.Eval(Container, "ItemIndex", "") %>"/>
-                    <span class="input-append">
-                        <input id="wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>" class="input-large" type="text">
-                        <script type="text/javascript">
-                                    $('input[id=uploadedwm<%# DataBinder.Eval(Container, "ItemIndex", "") %>]').change(function () {
-                                        $('#wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>').val($(this).val().replace(/C:\\fakepath\\/i, ''));
-                                    });
-                        </script>
-                        <a class="btn" onclick="$('input[id=uploadedwm<%# DataBinder.Eval(Container, "ItemIndex", "")%>]').click();">Browse</a>
-                    </span>
-                    <asp:button type="submit" text="Upload Watermark" runat="server" class="btn btn-success" OnClick="uploadwm_onclick"/>
-                </form>
+            <!-- previous file -->
+                <%# Eval("name") %>
+                <br />
+            <!-- watermark file -->
+                <asp:FileUpload runat="server" id="fu" />
+                <span class="input-append">
+                    <input id="wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>" class="input-large" type="text">
+                    <script type="text/javascript">
+                        $('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "") %>]').change(function () {
+                                $('#wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+                            });
+                    </script>
+                    <a class="btn" onclick="$('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "")%>]').click();">Browse</a>
+                </span>
+                <asp:Button runat="server" OnClick="uploadwm_onclick" text="Upload Watermark" class="btn btn-success"/>
             </ItemTemplate>
         </asp:Repeater>
         <!-- End Step 2 for YJ -->

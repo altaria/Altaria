@@ -61,24 +61,31 @@ namespace Altaria
                 UploadedImages.DataBind();
             }
         }
-        
-        //upload watermark
+
         protected void uploadwm_onclick(object sender, EventArgs e)
         {
-            HttpFileCollection hfc = Request.Files;
+            Button btn = sender as Button;
+            RepeaterItem ri = btn.NamingContainer as RepeaterItem;
+            FileUpload fu = ri.FindControl("fu") as FileUpload;
+            if (fu.HasFile)
+            {
+            }
         }
 
         protected void UploadedImages_ItemDataBound(object sender, RepeaterItemEventArgs riea)
         {
-            AltariaImage ai = riea.Item.DataItem as AltariaImage;
-            if (ai.isWatermarked)
+            if (riea.Item.ItemType == ListItemType.Item || riea.Item.ItemType == ListItemType.AlternatingItem)
             {
-                //watermarked
-                riea.Item.FindControl("wm_form").Visible = false;
-            }
-            else
-            {
-                //not watermarked, embed watermark
+                AltariaImage ai = riea.Item.DataItem as AltariaImage;
+                if (ai.isWatermarked)
+                {
+                    //watermarked
+                    riea.Item.FindControl("wm_form").Visible = false;
+                }
+                else
+                {
+                    //not watermarked, embed watermark
+                }
             }
         }
     }
