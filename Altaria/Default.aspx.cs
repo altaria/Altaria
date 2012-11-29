@@ -17,7 +17,7 @@ namespace Altaria
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            step2image.Visible = false;
+            step2.Visible = false;
         }
         protected List<AltariaImage> ai = new List<AltariaImage>();
         public List<AltariaImage> getImages()
@@ -57,7 +57,7 @@ namespace Altaria
                     }
                 }
                 UploadedImages.DataSource = ai;
-                step2image.Visible = true;
+                step2.Visible = true;
                 UploadedImages.DataBind();
             }
         }
@@ -74,6 +74,7 @@ namespace Altaria
 
         protected void UploadedImages_ItemDataBound(object sender, RepeaterItemEventArgs riea)
         {
+            step1.Visible = false;
             if (riea.Item.ItemType == ListItemType.Item || riea.Item.ItemType == ListItemType.AlternatingItem)
             {
                 AltariaImage ai = riea.Item.DataItem as AltariaImage;
@@ -87,6 +88,12 @@ namespace Altaria
                     //not watermarked, embed watermark
                 }
             }
+        }
+
+        protected void backtostep1_onclick(object sender, EventArgs e)
+        {
+            step1.Visible = true;
+            step2.Visible = false;
         }
     }
 }

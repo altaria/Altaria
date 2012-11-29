@@ -13,6 +13,15 @@ namespace Altaria {
     public partial class _Default {
         
         /// <summary>
+        /// step1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl step1;
+        
+        /// <summary>
         /// uploadedfile control.
         /// </summary>
         /// <remarks>
@@ -31,6 +40,15 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.Button submit;
         
         /// <summary>
+        /// step2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl step2;
+        
+        /// <summary>
         /// step2image control.
         /// </summary>
         /// <remarks>
@@ -47,5 +65,14 @@ namespace Altaria {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater UploadedImages;
+        
+        /// <summary>
+        /// back control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton back;
     }
 }

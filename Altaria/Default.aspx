@@ -5,8 +5,7 @@
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <div class="well">
-    <asp:UpdatePanel runat="server">
-    <ContentTemplate>
+    <div runat="server" id="step1">
         <fieldset>
             <legend>Step 1: Upload files</legend>
         </fieldset>
@@ -19,6 +18,8 @@
             <asp:Button type="submit" id="submit" text="Upload" runat="server" class="btn btn-success" OnClick="upload_onclick"/>
         </form>
         <hr />
+        </div>
+        <div runat="server" id="step2">
         <!-- Step 2 for Image Watermark. YJ Portion -->
         <fieldset>
         <legend id="step2image" runat="server">Step 2: Upload / Extract Watermark</legend>
@@ -39,7 +40,7 @@
                     </script>
                     <a class="btn" onclick="$('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "")%>]').click();">Browse</a>
                 </span>
-                <asp:Button runat="server" OnClick="uploadwm_onclick" text="Upload Watermark" class="btn btn-success"/>
+                <asp:Button type="submit" id="submit_wm" runat="server" OnClick="uploadwm_onclick" text="Upload Watermark" class="btn btn-success"/>
             </ItemTemplate>
         </asp:Repeater>
         <!-- End Step 2 for YJ -->
@@ -49,11 +50,11 @@
         
         <!-- Start Step 2 for Cyrus -->
         <!-- End Step 2 for Cyrus -->
-    
-    </ContentTemplate>
-    <Triggers>
-        <asp:PostBackTrigger ControlID = "submit" />
-    </Triggers>
-    </asp:UpdatePanel>
+        <hr />
+        <asp:LinkButton runat="server" ID="back" OnClick="backtostep1_onclick" class="btn btn-warning">
+        <i class="icon-backward"></i>
+        Back to first step
+        </asp:LinkButton>
+        </div>
     </div>
 </asp:Content>
