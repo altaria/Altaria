@@ -9,10 +9,16 @@ namespace Altaria
     public class AltariaImage
     {
         //variables
-        Bitmap bmp;
+        public Bitmap bmp { get; private set; }
         public Int32[] dimensions { get; private set; }
         public bool isWatermarked { get; private set; }
-        List<double> hh, hl, lh, ll; //four subdomains of the transformed image by haar.
+
+        //four subdomains of the transformed image by haar.
+        public List<double> hh { get; private set;}
+        public List<double> lh { get; private set; }
+        public List<double> hl { get; private set; } 
+        public List<double> ll { get; private set; } 
+        
         public string name { get; private set; }
         //constructor
         public AltariaImage(Bitmap bmp, string name)
@@ -103,7 +109,80 @@ namespace Altaria
             }
 
             bmp = newbmp;
+            //top left quarter of bmp is hh,
+            //top right quarter of bmp is hl,
+            //bottom left quarter of bmp is lh,
+            //bottom right quarter of bmp is ll
+            return bmp;
+        }
+        public static Bitmap HaarRestore(Bitmap bmp)
+        {
+            int x, y, w = bmp.Width, h = bmp.Height;
+            int r1, g1, b1, r2, g2, b2;
+
+            //samples from image
+            Color s1, s2;
+            Bitmap newbmp = new Bitmap(bmp);
+           
+            //perform one vertical pass
+            for (y = 0; y < h; y += 2)
+            {
+                for (x = 0; x < w; x++)
+                {
+                    s1 = bmp.GetPixel(x, y / 2);
+                    s2 = bmp.GetPixel(x, y / 2 + h / 2);
+                    
+                    r1 = s1.R - 128; g1 = s1.G - 128; b1 = s1.B - 128;
+                    r2 = s2.R - 128; g2 = s2.G - 128; b2 = s2.B - 128;
+                    r1 = (r1 - r2 / 2); g1 = (g1 - g2 / 2); b1 = (b1 - b2 / 2);
+
+                    if (r1 < -128) r1 += 256; if (r1 > 127) r1 -= 256;
+                    if (g1 < -128) g1 += 256; if (g1 > 127) g1 -= 256;
+                    if (b1 < -128) b1 += 256; if (b1 > 127) b1 -= 256;
+                    r2 = (r2 + r1); g2 = (g2 + g1); b2 = (b2 + b1);
+
+                    if (r2 < -128) r2 += 256; if (r2 > 127) r2 -= 256;
+                    if (g2 < -128) g2 += 256; if (g2 > 127) g2 -= 256;
+                    if (b2 < -128) b2 += 256; if (b2 > 127) b2 -= 256;
+                    r1 += 128; g1 += 128; b1 += 128;
+                    r2 += 128; g2 += 128; b2 += 128;
+
+                    newbmp.SetPixel(x, y, Color.FromArgb(r1, g1, b1));
+                    newbmp.SetPixel(x, y + 1, Color.FromArgb(r2, g2, b2));
+                }
+            }
+            bmp = newbmp;
+            newbmp = new Bitmap(bmp);
+            //Perform one horizontal pass
+            for (y = 0; y < h; y ++)
+            {
+                for (x = 0; x < w; x+=2)
+                {
+                    s1 = bmp.GetPixel(x/2, y);
+                    s2 = bmp.GetPixel(x/2 + w/2, y);
+
+                    r1 = s1.R - 128; g1 = s1.G - 128; b1 = s1.B - 128;
+                    r2 = s2.R - 128; g2 = s2.G - 128; b2 = s2.B - 128;
+                    r1 = (r1 - r2 / 2); g1 = (g1 - g2 / 2); b1 = (b1 - b2 / 2);
+
+                    if (r1 < -128) r1 += 256; if (r1 > 127) r1 -= 256;
+                    if (g1 < -128) g1 += 256; if (g1 > 127) g1 -= 256;
+                    if (b1 < -128) b1 += 256; if (b1 > 127) b1 -= 256;
+                    r2 = (r2 + r1); g2 = (g2 + g1); b2 = (b2 + b1);
+
+                    if (r2 < -128) r2 += 256; if (r2 > 127) r2 -= 256;
+                    if (g2 < -128) g2 += 256; if (g2 > 127) g2 -= 256;
+                    if (b2 < -128) b2 += 256; if (b2 > 127) b2 -= 256;
+                    r1 += 128; g1 += 128; b1 += 128;
+                    r2 += 128; g2 += 128; b2 += 128;
+
+                    newbmp.SetPixel(x, y, Color.FromArgb(r1, g1, b1));
+                    newbmp.SetPixel(x+1, y, Color.FromArgb(r2, g2, b2));
+                }
+            }
+            bmp = newbmp;
             return bmp;
         }
     }
+
 }

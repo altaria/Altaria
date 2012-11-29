@@ -75,11 +75,26 @@ namespace Altaria
                     //start embed of watermark
                     //step 1: Two images are taken as input
                     AltariaImage wm = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName);
-                    AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text];
+                    AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text]; 
+                    
                     //step 2: The sizes of the images are extracted
-                    //step 3: Normalize and reshape the logo
+                    // this is already done in AltariaImage on creation.
+                    int wm_height = wm.dimensions[0];
+                    int wm_width  = wm.dimensions[1];
+                    int ci_height = wm.dimensions[0];
+                    int ci_width  = wm.dimensions[1];
+                    
+                    //step 3: Normalize and reshape the watermark
+                    //Normalize ??
+                    MemoryStream ms = new MemoryStream();
+                    //not sure whether this will impact graphics quality
+                    wm.bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] reshaped_wm = ms.ToArray();
+
                     //step 4: Transforming the cover image into wavelet domain using DWT
-                    //step 5: Calculate the length of transformed cover length and 1D logo
+                    ci.HaarTransform();
+
+                    //step 5: Calculate the length of transformed cover length and 1D watermark
                     //step 6: Calculate the size of each sub domain decomposed cover image and reshape them in to 1D
                     //step 7: Determine the maximum coefficient value of each of the 4 sub domain.
                     //step 8: Finding the position to hide the information logo into the transformed logo
