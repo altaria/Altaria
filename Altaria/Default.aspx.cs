@@ -17,7 +17,7 @@ namespace Altaria
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            step2image.Visible = false;
         }
         protected List<AltariaImage> ai = new List<AltariaImage>();
         public List<AltariaImage> getImages()
@@ -57,8 +57,15 @@ namespace Altaria
                     }
                 }
                 UploadedImages.DataSource = ai;
+                step2image.Visible = true;
                 UploadedImages.DataBind();
             }
+        }
+        
+        //upload watermark
+        protected void uploadwm_onclick(object sender, EventArgs e)
+        {
+            HttpFileCollection hfc = Request.Files;
         }
 
         protected void UploadedImages_ItemDataBound(object sender, RepeaterItemEventArgs riea)

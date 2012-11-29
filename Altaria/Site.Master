@@ -6,7 +6,7 @@
     <title></title>
     <link href="~/Styles/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="~/Styles/main.css" rel="stylesheet" type="text/css" />
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -16,7 +16,10 @@
     <div class="container">
         <div class="row-fluid">
             <div class="span12">
-            <h1 class="logo center">Altaria</h1>
+            <span class="center">
+                <h1 class="logo">Altaria</h1>
+                <h5 class="subheader">A proof of concept on various watermarking and identification techniques.</h5>
+            </span>
                 <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
             </div>
         </div>
