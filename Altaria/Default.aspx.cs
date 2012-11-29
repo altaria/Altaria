@@ -18,12 +18,12 @@ namespace Altaria
         protected void Page_Load(object sender, EventArgs e)
         {
             step2.Visible = false;
+            if (Session["ai"] != null)
+            {
+                ai = (List<AltariaImage>)Session["ai"];
+            }
         }
         protected List<AltariaImage> ai = new List<AltariaImage>();
-        public List<AltariaImage> getImages()
-        {
-            return ai;
-        }
         //Upload file
         protected void upload_onclick(object sender, EventArgs e)
         {
@@ -57,6 +57,7 @@ namespace Altaria
                     }
                 }
                 UploadedImages.DataSource = ai;
+                Session.Add("ai", ai);
                 step2.Visible = true;
                 UploadedImages.DataBind();
             }
@@ -69,6 +70,23 @@ namespace Altaria
             FileUpload fu = ri.FindControl("fu") as FileUpload;
             if (fu.HasFile)
             {
+                //validate whether is image
+                if (Validation.isImage(fu.PostedFile.ContentType))
+                {
+                    //start embed of watermark
+                    //step 1: Two images are taken as input
+                    AltariaImage wm = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName);
+                    //step 2: The sizes of the images are extracted
+                    //step 3: Normalize and reshape the logo
+                    //step 4: Transforming the cover image into wavelet domain using DWT
+                    //step 5: Calculate the length of transformed cover length and 1D logo
+                    //step 6: Calculate the size of each sub domain decomposed cover image and reshape them in to 1D
+                    //step 7: Determine the maximum coefficient value of each of the 4 sub domain.
+                    //step 8: Finding the position to hide the information logo into the transformed logo
+                    //step 9: Hiding a number of sets of same information logo in HL and LH domains.
+                    //step 10: Reshaping the decomposed image back to its normal dimensions
+                    //step 11: Write the watermarked file to a file and display it.
+                }
             }
         }
 
@@ -76,7 +94,7 @@ namespace Altaria
         {
             step1.Visible = false;
             if (riea.Item.ItemType == ListItemType.Item || riea.Item.ItemType == ListItemType.AlternatingItem)
-            {
+            {   
                 AltariaImage ai = riea.Item.DataItem as AltariaImage;
                 if (ai.isWatermarked)
                 {
