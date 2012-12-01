@@ -89,9 +89,11 @@ namespace Altaria
                     int[] reshaped_wm = wm.Reshape();
                     
                     //step 4: Transforming the cover image into wavelet domain using DWT
-                    ci.HaarTransform();
+                    Bitmap transformed_ci = ci.HaarTransform();
 
                     //step 5: Calculate the length of transformed cover length and 1D watermark
+                    int reshaped_wm_length = reshaped_wm.Length;
+
                     //step 6: Calculate the size of each sub domain decomposed cover image and reshape them in to 1D
                     //step 7: Determine the maximum coefficient value of each of the 4 sub domain.
                     //step 8: Finding the position to hide the information logo into the transformed logo
