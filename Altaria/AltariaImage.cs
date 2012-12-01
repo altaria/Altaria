@@ -183,6 +183,34 @@ namespace Altaria
             bmp = newbmp;
             return bmp;
         }
+        public int[] Reshape()
+        {
+            //Normalize the image to 0 and 1
+            Color c;
+            int[] reshaped_image = new int[bmp.Height * bmp.Width];
+            int count = 0;
+            for (int y = 0; y < bmp.Height; y++)
+            {
+                for (int x = 0; x < bmp.Width; x++)
+                {
+                    c = bmp.GetPixel(x, y);
+                    int total = c.R + c.G + c.B;
+                    //255*3=765
+                    if (total >= 765 / 2)
+                    {
+                        //set int to 1. (white color)
+                        reshaped_image[count] = 1;
+                    }
+                    else
+                    {
+                        //set int to 0. (black color)
+                        reshaped_image[count] = 0;
+                    }
+                    count++;
+                }
+            }
+            return reshaped_image;
+        }
     }
 
 }

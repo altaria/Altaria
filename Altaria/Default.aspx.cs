@@ -85,12 +85,9 @@ namespace Altaria
                     int ci_width  = wm.dimensions[1];
                     
                     //step 3: Normalize and reshape the watermark
-                    //Normalize ??
-                    MemoryStream ms = new MemoryStream();
-                    //not sure whether this will impact graphics quality
-                    wm.bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    byte[] reshaped_wm = ms.ToArray();
-
+                    //Normalize and reshape to array of zero and ones
+                    int[] reshaped_wm = wm.Reshape();
+                    
                     //step 4: Transforming the cover image into wavelet domain using DWT
                     ci.HaarTransform();
 
