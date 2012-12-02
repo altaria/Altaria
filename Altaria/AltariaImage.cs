@@ -25,11 +25,18 @@ namespace Altaria
         public bool isWatermarked    { get; private set; }
 
         //four subdomains of the transformed image by haar.
-        public int[] hh { get; private set;}
-        public int[] lh { get; private set; }
-        public int[] hl { get; private set; } 
-        public int[] ll { get; private set; } 
+        public int[] hh   { get; private set; }
+        public int max_hh { get; private set; }
         
+        public int[] lh   { get; private set; }
+        public int max_lh { get; private set; }
+        
+        public int[] hl   { get; private set; }
+        public int max_hl { get; private set; }
+
+        public int[] ll   { get; private set; }
+        public int max_ll { get; private set; }
+
         public string name { get; private set; }
         //constructor
         public AltariaImage(Bitmap bmp, string name)
@@ -123,6 +130,7 @@ namespace Altaria
             this.transformedbmp = newbmp;
             //Converting the bmp into 1D, via the 4 subdomains.
             this.hh = this.hl = this.lh = this.ll = new int[(w / 2) * (h / 2)];
+            this.max_hh = this.max_hl = this.max_lh = this.max_ll = 0;
             //Since the image is grayscale, the range will be 0-255. (will the different color channels vary across the same grayscale?)
             
             //top left quarter of bmp is hh.
@@ -131,7 +139,10 @@ namespace Altaria
             {
                 for (int j = 0; j < h / 2; j++)
                 {
-                    hh[count] = this.transformedbmp.GetPixel(i, j).R;
+                    int value = this.transformedbmp.GetPixel(i, j).R;
+                    hh[count] = value;
+                    if (max_hh < value)
+                        max_hh = value;
                     count++;
                 }
             }
@@ -142,7 +153,10 @@ namespace Altaria
             {
                 for (int j = 0; j < h / 2; j++)
                 {
-                    hl[count] = this.transformedbmp.GetPixel(i, j).R;
+                    int value = this.transformedbmp.GetPixel(i, j).R;
+                    hl[count] = value;
+                    if (max_hl < value)
+                        max_hl = value;
                     count++;
                 }
             }
@@ -152,7 +166,10 @@ namespace Altaria
             {
                 for (int j = h / 2; j < h; j++)
                 {
-                    lh[count] = this.transformedbmp.GetPixel(i, j).R;
+                    int value = this.transformedbmp.GetPixel(i, j).R;
+                    lh[count] = value;
+                    if (max_lh < value)
+                        max_lh = value;
                     count++;
                 }
             }
@@ -162,7 +179,10 @@ namespace Altaria
             {
                 for (int j = h / 2; j < h; j++)
                 {
-                    ll[count] = this.transformedbmp.GetPixel(i, j).R;
+                    int value = this.transformedbmp.GetPixel(i, j).R;
+                    ll[count] = value;
+                    if (max_ll < value)
+                        max_ll = value;
                     count++;
                 }
             }
