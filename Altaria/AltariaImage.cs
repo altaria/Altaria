@@ -42,8 +42,9 @@ namespace Altaria
 
         public Bitmap HaarTransform()
         {
-            // scale is set to 1 as only one level of wavelet decomposition is done in this example.
-            int x, y, w = bmp.Width, h = bmp.Height;
+            int scale = 1;
+            //scale is 1 by default
+            int x, y, w = bmp.Width/scale, h = bmp.Height/scale;
             int r1, g1, b1, r2, g2, b2;
             //samples from image
             Color s1, s2;
@@ -117,7 +118,8 @@ namespace Altaria
         }
         public static Bitmap HaarRestore(Bitmap bmp)
         {
-            int x, y, w = bmp.Width, h = bmp.Height;
+            int scale = 1;
+            int x, y, w = bmp.Width/scale, h = bmp.Height/scale;
             int r1, g1, b1, r2, g2, b2;
 
             //samples from image
