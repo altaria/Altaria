@@ -103,12 +103,14 @@ namespace Altaria
 
                     //step 8: Finding the position to hide the information logo into the transformed logo
                     //The position for hiding the binary logo in each sub domain must be in between zero and the maximum
-                    //coefficient value of that sub domain.
+                    //coefficient value of that sub domain. (max_hh), (max_hl), (max_lh), (max_ll)
+
+                    //Encryption: Random Key XOR logo zero intensity position (???)
 
                     //step 9: Hiding a number of sets of same information logo in HL and LH domains.
                     //More than one set of same information is being hidden in HL and LH band or domain for 
                     //easier and good quality recovery. The hiding  process in each of these domains follows a 
-                    //specific formula. The formula is that the black  dots in each sets of 1D information logo is 
+                    //specific formula. The formula is that the black dots in each sets of 1D information logo is 
                     //hidden in a position of information logo position from where a constant value is subtracted.
                     
                     //step 10: Reshaping the decomposed image back to its normal dimensions
