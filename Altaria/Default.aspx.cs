@@ -89,8 +89,9 @@ namespace Altaria
                     int[] reshaped_wm = wm.Reshape();
                     
                     //step 4: Transforming the cover image into wavelet domain using DWT
-                    Bitmap transformed_ci = ci.HaarTransform();
-                    transformed_ci.Save("C:\\temp\\asdf.bmp");
+                    ci.HaarTransform();
+
+                    //transformed_ci.Save("C:\\temp\\asdf.bmp");
                     //step 5: Calculate the length of transformed cover length and 1D watermark
                     int reshaped_wm_length = reshaped_wm.Length;
 

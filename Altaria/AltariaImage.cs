@@ -9,21 +9,32 @@ namespace Altaria
     public class AltariaImage
     {
         //variables
-        public Bitmap bmp { get; private set; }
-        public Int32[] dimensions { get; private set; }
-        public bool isWatermarked { get; private set; }
+        ///<summary>The original bmp.</summary>
+        public Bitmap originalbmp    { get; private set; } 
+        /// <summary>
+        /// The transformed bmp after HaarTransform.
+        /// </summary>
+        public Bitmap transformedbmp { get; private set; }
+        /// <summary>
+        /// The dimensions of the originalbmp. transformedbmp should also have the same dimensions.
+        /// </summary>
+        public Int32[] dimensions    { get; private set; }
+        /// <summary>
+        /// Gets whether the image has been watermarked already.
+        /// </summary>
+        public bool isWatermarked    { get; private set; }
 
         //four subdomains of the transformed image by haar.
-        public List<double> hh { get; private set;}
-        public List<double> lh { get; private set; }
-        public List<double> hl { get; private set; } 
-        public List<double> ll { get; private set; } 
+        public int[] hh { get; private set;}
+        public int[] lh { get; private set; }
+        public int[] hl { get; private set; } 
+        public int[] ll { get; private set; } 
         
         public string name { get; private set; }
         //constructor
         public AltariaImage(Bitmap bmp, string name)
         {
-            this.bmp = bmp; //original image
+            this.originalbmp = bmp; //original image
             this.dimensions = new Int32[2]{ bmp.Height, bmp.Width };
             this.name = name;
             this.isWatermarked = false;
@@ -40,22 +51,22 @@ namespace Altaria
  * *
  */
 
-        public Bitmap HaarTransform()
+        public void HaarTransform()
         {
             int scale = 1;
             //scale is 1 by default
-            int x, y, w = bmp.Width/scale, h = bmp.Height/scale;
+            int x, y, w = originalbmp.Width/scale, h = originalbmp.Height/scale;
             int r1, g1, b1, r2, g2, b2;
             //samples from image
             Color s1, s2;
 
-            Bitmap newbmp = new Bitmap(bmp);
+            Bitmap newbmp = new Bitmap(originalbmp);
             //Apply the 2D haar wavelet transform; perform one horizontal pass
             for (y = 0; y < h; y++)
             {
                 for (x = 0; x < w; x += 2)
                 {
-                    s1 = bmp.GetPixel(x, y); s2 = bmp.GetPixel(x + 1, y);
+                    s1 = originalbmp.GetPixel(x, y); s2 = originalbmp.GetPixel(x + 1, y);
                     r2 = (s2.R - s1.R); g2 = (s2.G - s1.G); b2 = (s2.B - s1.B);
 
                     if (r2 < -128) r2 += 256; if (r2 > 127) r2 -= 256;
@@ -77,15 +88,15 @@ namespace Altaria
                     newbmp.SetPixel(x / 2 + w / 2, y, Color.FromArgb(r2, b2, g2));
                 }
             }
-            bmp = newbmp;
-            newbmp = new Bitmap(bmp);
+            originalbmp = newbmp;
+            newbmp = new Bitmap(originalbmp);
 
             //perform one vertical pass
             for (y = 0; y < h; y += 2)
             {
                 for (x = 0; x < w; x++)
                 {
-                    s1 = bmp.GetPixel(x, y); s2 = bmp.GetPixel(x, y + 1);
+                    s1 = originalbmp.GetPixel(x, y); s2 = originalbmp.GetPixel(x, y + 1);
                     r2 = (s2.R - s1.R); g2 = (s2.G - s1.G); b2 = (s2.B - s1.B);
 
                     if (r2 < -128) r2 += 256; if (r2 > 127) r2 -= 256;
@@ -109,15 +120,58 @@ namespace Altaria
                 }
             }
 
-            bmp = newbmp;
-            //top left quarter of bmp is hh,
-            //top right quarter of bmp is hl,
-            //bottom left quarter of bmp is lh,
-            //bottom right quarter of bmp is ll
-            return bmp;
+            this.transformedbmp = newbmp;
+            //Converting the bmp into 1D, via the 4 subdomains.
+            this.hh = this.hl = this.lh = this.ll = new int[(w / 2) * (h / 2)];
+            //Since the image is grayscale, the range will be 0-255. (will the different color channels vary across the same grayscale?)
+            
+            //top left quarter of bmp is hh.
+            int count = 0;
+            for (int i = 0; i < w / 2; i++)
+            {
+                for (int j = 0; j < h / 2; j++)
+                {
+                    hh[count] = this.transformedbmp.GetPixel(i, j).R;
+                    count++;
+                }
+            }
+            
+            //top right quarter of bmp is hl.
+            count = 0;
+            for (int i = w / 2; i < w; i++)
+            {
+                for (int j = 0; j < h / 2; j++)
+                {
+                    hl[count] = this.transformedbmp.GetPixel(i, j).R;
+                    count++;
+                }
+            }
+            //bottom left quarter of bmp is lh.
+            count = 0;
+            for (int i = 0; i < w / 2; i++)
+            {
+                for (int j = h / 2; j < h; j++)
+                {
+                    lh[count] = this.transformedbmp.GetPixel(i, j).R;
+                    count++;
+                }
+            }
+            //bottom right quarter of bmp is ll.
+            count = 0;
+            for (int i = w / 2; i < w; i++)
+            {
+                for (int j = h / 2; j < h; j++)
+                {
+                    ll[count] = this.transformedbmp.GetPixel(i, j).R;
+                    count++;
+                }
+            }
         }
-        public static Bitmap HaarRestore(Bitmap bmp)
+
+        //Reverse of HaarTransform. Returns a bitmap to prevent overriding of original bmp.
+        public Bitmap HaarRestore()
         {
+            Bitmap bmp = this.transformedbmp;
             int scale = 1;
             int x, y, w = bmp.Width/scale, h = bmp.Height/scale;
             int r1, g1, b1, r2, g2, b2;
@@ -189,13 +243,13 @@ namespace Altaria
         {
             //Normalize the image to 0 and 1
             Color c;
-            int[] reshaped_image = new int[bmp.Height * bmp.Width];
+            int[] reshaped_image = new int[originalbmp.Height * originalbmp.Width];
             int count = 0;
-            for (int y = 0; y < bmp.Height; y++)
+            for (int y = 0; y < originalbmp.Height; y++)
             {
-                for (int x = 0; x < bmp.Width; x++)
+                for (int x = 0; x < originalbmp.Width; x++)
                 {
-                    c = bmp.GetPixel(x, y);
+                    c = originalbmp.GetPixel(x, y);
                     int total = c.R + c.G + c.B;
                     //255*3=765
                     if (total >= 765 / 2)
