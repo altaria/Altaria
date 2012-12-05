@@ -81,40 +81,14 @@ namespace Altaria
                     // this is already done in AltariaImage on creation.
                     int wm_height = wm.dimensions[0];
                     int wm_width  = wm.dimensions[1];
-                    int ci_height = wm.dimensions[0];
-                    int ci_width  = wm.dimensions[1];
+                    int ci_height = ci.dimensions[0];
+                    int ci_width  = ci.dimensions[1];
                     
                     //step 3: Normalize and reshape the watermark
-                    //Normalize and reshape to array of zero and ones
                     int[] reshaped_wm = wm.Reshape();
                     
                     //step 4: Transforming the cover image into wavelet domain using DWT
-                    ci.HaarTransform();
-
-                    //transformed_ci.Save("C:\\temp\\asdf.bmp");
-                    //step 5: Calculate the length of transformed cover length and 1D watermark
-                    int reshaped_wm_length = reshaped_wm.Length;
-
-                    //step 6: Calculate the size of each sub domain decomposed cover image and reshape them in to 1D
-                    // this is done @ ci.HaarTransform();
-
-                    //step 7: Determine the maximum coefficient value (minimum intensity) of each of the 4 sub domain.
-                    // this is done @ ci.HaarTransform();
-
-                    //step 8: Finding the position to hide the information logo into the transformed logo
-                    //The position for hiding the binary logo in each sub domain must be in between zero and the maximum
-                    //coefficient value of that sub domain. (max_hh), (max_hl), (max_lh), (max_ll)
-
-                    //Encryption: Random Key XOR logo zero intensity position (???)
-
-                    //step 9: Hiding a number of sets of same information logo in HL and LH domains.
-                    //More than one set of same information is being hidden in HL and LH band or domain for 
-                    //easier and good quality recovery. The hiding  process in each of these domains follows a 
-                    //specific formula. The formula is that the black dots in each sets of 1D information logo is 
-                    //hidden in a position of information logo position from where a constant value is subtracted.
-                    
-                    //step 10: Reshaping the decomposed image back to its normal dimensions
-                    //step 11: Write the watermarked file to a file and display it.
+                    ci.HaarTransform(null, 2); //two levels
                 }
             }
         }

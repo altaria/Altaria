@@ -15,6 +15,7 @@ namespace Altaria
         /// The transformed bmp after HaarTransform.
         /// </summary>
         public Bitmap transformedbmp { get; private set; }
+        public bool transformed = false;
         /// <summary>
         /// The dimensions of the originalbmp. transformedbmp should also have the same dimensions.
         /// </summary>
@@ -25,18 +26,6 @@ namespace Altaria
         public bool isWatermarked    { get; private set; }
 
         //four subdomains of the transformed image by haar.
-        public int[] hh   { get; private set; }
-        public int max_hh { get; private set; }
-        
-        public int[] lh   { get; private set; }
-        public int max_lh { get; private set; }
-        
-        public int[] hl   { get; private set; }
-        public int max_hl { get; private set; }
-
-        public int[] ll   { get; private set; }
-        public int max_ll { get; private set; }
-
         public string name { get; private set; }
         //constructor
         public AltariaImage(Bitmap bmp, string name)
@@ -58,11 +47,21 @@ namespace Altaria
  * *
  */
 
-        public void HaarTransform()
+        /// <summary>
+        /// Transforms the image with Haar DWT. 
+        /// </summary>
+        /// <param name="bmp">The bitmap to transform. If none is provided, originalbmp will be used.</param>
+        /// <param name="level">The number of times to perform Haar Transform.</param>
+        /// <param name="scale">The starting scale. Defaults to 1.</param>
+        public void HaarTransform(Bitmap bmp, int level, int scale = 1)
         {
-            int scale = 1;
-            //scale is 1 by default
-            int x, y, w = originalbmp.Width/scale, h = originalbmp.Height/scale;
+            Bitmap originalbmp = bmp;
+            if (bmp == null)
+            {
+                originalbmp = this.originalbmp;
+            }
+            //scale should be 1 by default
+            int x, y, w = originalbmp.Width / scale, h = originalbmp.Height / scale;
             int r1, g1, b1, r2, g2, b2;
             //samples from image
             Color s1, s2;
@@ -126,65 +125,16 @@ namespace Altaria
 
                 }
             }
-
             this.transformedbmp = newbmp;
-            //Converting the bmp into 1D, via the 4 subdomains.
-            this.hh = this.hl = this.lh = this.ll = new int[(w / 2) * (h / 2)];
-            this.max_hh = this.max_hl = this.max_lh = this.max_ll = 0;
-            //Since the image is grayscale, the range will be 0-255. (will the different color channels vary across the same grayscale?)
-            
-            //top left quarter of bmp is hh.
-            int count = 0;
-            for (int i = 0; i < w / 2; i++)
+            if (level > scale)
             {
-                for (int j = 0; j < h / 2; j++)
-                {
-                    int value = this.transformedbmp.GetPixel(i, j).R;
-                    hh[count] = value;
-                    if (max_hh < value)
-                        max_hh = value;
-                    count++;
-                }
+                //if level is more than scale, call function one more time.
+                HaarTransform(transformedbmp, level, scale+1);
             }
-            
-            //top right quarter of bmp is hl.
-            count = 0;
-            for (int i = w / 2; i < w; i++)
+            else
             {
-                for (int j = 0; j < h / 2; j++)
-                {
-                    int value = this.transformedbmp.GetPixel(i, j).R;
-                    hl[count] = value;
-                    if (max_hl < value)
-                        max_hl = value;
-                    count++;
-                }
-            }
-            //bottom left quarter of bmp is lh.
-            count = 0;
-            for (int i = 0; i < w / 2; i++)
-            {
-                for (int j = h / 2; j < h; j++)
-                {
-                    int value = this.transformedbmp.GetPixel(i, j).R;
-                    lh[count] = value;
-                    if (max_lh < value)
-                        max_lh = value;
-                    count++;
-                }
-            }
-            //bottom right quarter of bmp is ll.
-            count = 0;
-            for (int i = w / 2; i < w; i++)
-            {
-                for (int j = h / 2; j < h; j++)
-                {
-                    int value = this.transformedbmp.GetPixel(i, j).R;
-                    ll[count] = value;
-                    if (max_ll < value)
-                        max_ll = value;
-                    count++;
-                }
+                //save to test
+                this.transformedbmp.Save("C:\\temp\\asdf.bmp");
             }
         }
 
