@@ -243,9 +243,9 @@ namespace Altaria
         /// is of a higher quality. It is an approximation to human perception of reconstruction quality.
         /// </summary>
         /// <param name="normal"></param>
-        /// <param name="watermarked"></param>
+        /// <param name="wm"></param>
         /// <returns></returns>
-        public static double PSNR(Bitmap normal, Bitmap watermarked){
+        public static double PSNR(Bitmap normal, Bitmap wm){
             int m = normal.Height;
             int n = normal.Width;
             //MSE = mean square error; it is for 2 m*n monochrome images I and K where one image is considered a noisy
@@ -256,11 +256,11 @@ namespace Altaria
             {
                 for (int j = 0; j < n; j++)
                 {
-                    MSE += (normal.GetPixel(j, i).R - watermarked.GetPixel(j, i).R)*(normal.GetPixel(j, i).R - watermarked.GetPixel(j, i).R);
+                    MSE += Math.Pow((normal.GetPixel(j, i).R - wm.GetPixel(j, i).R),2);
                     if (normal.GetPixel(j, i).R > MAX)
                         MAX = normal.GetPixel(j,i).R;
-                    if (watermarked.GetPixel(j,i).R > MAX)
-                        MAX = watermarked.GetPixel(j,i).R;
+                    if (wm.GetPixel(j,i).R > MAX)
+                        MAX = wm.GetPixel(j,i).R;
                 }
             }
             MSE *= 1 / (m * n);
@@ -268,6 +268,59 @@ namespace Altaria
             return PSNR;
         }
 
+        /// <summary>
+        /// Structural Similarity Index Measure; measures the similarity between two images. A value of 1 means that the images
+        /// are exactly the same.
+        /// </summary>
+        /// <param name="normal">The original image</param>
+        /// <param name="wm">The watermarked image</param>
+        /// <returns>A value between -1 and 1.</returns>
+        public static double SSIM(Bitmap normal, Bitmap wm)
+        {
+            //normal and wm has to be the same image with the dimensions n*n.
+            if (normal.Height == normal.Width && wm.Height == wm.Width && normal.Height == wm.Height)
+            {
+                double sum_normal = 0, sum_wm = 0, mean_normal, mean_wm, variance_normal, variance_wm, covariance = 0;
+                double L = Math.Pow(2, 8) - 1;
+                double k1 = 0.01;
+                double k2 = 0.03;
+                double c1 = Math.Pow(k1 * L, 2);
+                double c2 = Math.Pow(k2 * L, 2);
+                int n = normal.Height;
+
+                //find sum
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        sum_normal += normal.GetPixel(i, j).R;
+                        sum_wm += wm.GetPixel(i, j).R;
+                    }
+                }
+                mean_normal = sum_normal / (n * n);
+                mean_wm = sum_wm / (n * n);
+
+                //find variance and covariance
+                double diff_normal_squared = 0, diff_wm_squared = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        diff_normal_squared += Math.Pow((normal.GetPixel(i, j).R - mean_normal), 2);
+                        diff_wm_squared += Math.Pow((wm.GetPixel(i, j).R - mean_wm), 2);
+                        covariance += ((normal.GetPixel(i, j).R - mean_normal) * (wm.GetPixel(i, j).R - mean_wm))/(n*n);
+                    }
+                }
+                variance_normal = diff_normal_squared / (n * n);
+                variance_wm = diff_wm_squared / (n * n);
+                return (((2 * mean_normal * mean_wm + c1) * (2 * covariance + c2)) / ((mean_normal * mean_normal + mean_wm * mean_wm + c1)*(variance_normal + variance_wm + c2)));
+            }
+            else
+            {
+                throw new InvalidOperationException("The images have to be of the same dimensions of n*n.");
+            }
+            
+        }
     }
 
 }
