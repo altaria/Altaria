@@ -88,7 +88,8 @@ namespace Altaria
                     int[] reshaped_wm = wm.Reshape();
                     
                     //step 4: Transforming the cover image into wavelet domain using DWT
-                    ci.HaarTransform(null, 2); //two levels
+                    //first level decomposition
+                    ci.HaarTransform(null, 1);
                 }
             }
         }

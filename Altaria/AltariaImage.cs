@@ -134,7 +134,7 @@ namespace Altaria
             else
             {
                 //save to test
-                this.transformedbmp.Save("C:\\temp\\asdf.bmp");
+                //this.transformedbmp.Save("C:\\temp\\asdf.bmp");
             }
         }
 
@@ -237,6 +237,37 @@ namespace Altaria
             }
             return reshaped_image;
         }
+
+        /// <summary>
+        /// Function to obtain the Peak Signal-to-Noise Ratio. A higher value would normally indicate that the reconstruction
+        /// is of a higher quality. It is an approximation to human perception of reconstruction quality.
+        /// </summary>
+        /// <param name="normal"></param>
+        /// <param name="watermarked"></param>
+        /// <returns></returns>
+        public static double PSNR(Bitmap normal, Bitmap watermarked){
+            int m = normal.Height;
+            int n = normal.Width;
+            //MSE = mean square error; it is for 2 m*n monochrome images I and K where one image is considered a noisy
+            //approximation of the other
+            double MSE = 0;
+            int MAX = 0;
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    MSE += (normal.GetPixel(j, i).R - watermarked.GetPixel(j, i).R)*(normal.GetPixel(j, i).R - watermarked.GetPixel(j, i).R);
+                    if (normal.GetPixel(j, i).R > MAX)
+                        MAX = normal.GetPixel(j,i).R;
+                    if (watermarked.GetPixel(j,i).R > MAX)
+                        MAX = watermarked.GetPixel(j,i).R;
+                }
+            }
+            MSE *= 1 / (m * n);
+            double PSNR = 20 * Math.Log10(MAX / Math.Sqrt(MSE));
+            return PSNR;
+        }
+
     }
 
 }
