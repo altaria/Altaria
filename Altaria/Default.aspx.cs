@@ -54,8 +54,8 @@ namespace Altaria
                     {
                         // random file type.
                     }
-
                 }
+
                 UploadedImages.DataSource = ai;
                 step2.Visible = true;
                 UploadedImages.DataBind();
@@ -73,6 +73,9 @@ namespace Altaria
                 if (Validation.isImage(fu.PostedFile.ContentType))
                 {
                     //start embed of watermark
+
+                    //this follows "Watermarking Experiments Baed on Wavelet Transforms" paper
+                    //--------------------------------------START------------------------------------------------------//
                     //step 1: Two images are taken as input
                     AltariaImage wm = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName);
                     AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text]; 
@@ -83,13 +86,45 @@ namespace Altaria
                     int wm_width  = wm.dimensions[1];
                     int ci_height = ci.dimensions[0];
                     int ci_width  = ci.dimensions[1];
-                    
+                    //the watermark height and width 
                     //step 3: Normalize and reshape the watermark
-                    int[] reshaped_wm = wm.Reshape();
+                    //int[] reshaped_wm = wm.Reshape();
                     
-                    //step 4: Transforming the cover image into wavelet domain using DWT
-                    //first level decomposition
-                    ci.HaarTransform(null, 1);
+                    // CRITERIA: 
+                    // The images have to be square with dimensions of multiples of 2, and the watermark dimensions has
+                    // to be 1/8 of the cover image dimensions.
+
+                    if (ci_height % 2 == 0 && wm_height == wm_width && ci_height == ci_width && wm_height * 8 == ci_height)
+                    {
+                        //step 4: Transforming the cover image into wavelet domain using DWT
+                        //perform 3 level decomposition
+                        ci.HaarTransform(null, 3);
+
+                        //step 5: Embed the watermark
+                        //ci.EmbedWatermark(wm);
+
+                        //step 6: Restore the image
+                        ci.HaarRestore(null, 3);
+
+                        //step 7: Allow the user to download the watermarked image
+                    }
+                    else
+                    {
+                        List<string> errors = new List<string>();
+                        //todo: display error message on return
+                        if (ci_height % 2 != 0)
+                            errors.Add("Cover image has dimensions that are not divisible by 2.");
+
+                        if (wm_height != wm_width)
+                            errors.Add("Watermark is not a square.");
+
+                        if (ci_height != ci_width)
+                            errors.Add("Cover image is not a square.");
+
+                        if (wm_height * 8 != ci_height)
+                            errors.Add("Watermark dimensions should be 1/8 of the cover image.");
+                    }
+                    //---------------------------------------END-------------------------------------------------------//
                 }
             }
         }
@@ -100,7 +135,7 @@ namespace Altaria
             if (riea.Item.ItemType == ListItemType.Item || riea.Item.ItemType == ListItemType.AlternatingItem)
             {   
                 AltariaImage ai = riea.Item.DataItem as AltariaImage;
-                if (ai.isWatermarked)
+                if (ai.watermarked)
                 {
                     //watermarked
                     riea.Item.FindControl("wm_form").Visible = false;

@@ -20,10 +20,12 @@ namespace Altaria
         /// The dimensions of the originalbmp. transformedbmp should also have the same dimensions.
         /// </summary>
         public Int32[] dimensions    { get; private set; }
+
         /// <summary>
-        /// Gets whether the image has been watermarked already.
+        /// The watermarkedbmp after EmbedWatermark
         /// </summary>
-        public bool isWatermarked    { get; private set; }
+        public Bitmap watermarkedbmp { get; private set; }
+        public bool watermarked    { get; private set; }
 
         //four subdomains of the transformed image by haar.
         public string name { get; private set; }
@@ -33,7 +35,7 @@ namespace Altaria
             this.originalbmp = bmp; //original image
             this.dimensions = new Int32[2]{ bmp.Height, bmp.Width };
             this.name = name;
-            this.isWatermarked = false;
+            this.watermarked = false;
         }
         
 /* The Haar Transform is performed in two stages. First, each row is transformed. Then each column is transformed. The coefficients
@@ -134,15 +136,28 @@ namespace Altaria
             else
             {
                 //save to test
-                //this.transformedbmp.Save("C:\\temp\\asdf.bmp");
+                this.transformedbmp.Save("C:\\temp\\inverse.bmp");
             }
         }
 
-        //Reverse of HaarTransform. Returns a bitmap to prevent overriding of original bmp.
-        public Bitmap HaarRestore()
+        /// <summary>
+        /// Does a reverse of the Haar DWT.
+        /// </summary>
+        /// <param name="bmp">The bitmap to reverse.</param>
+        /// <param name="level">The number of times to perform the inverse, depending on level of decomposition.</param>
+        /// <returns>The restored bitmap from the watermarkedbmp.</returns>
+        public Bitmap HaarRestore(Bitmap bbmp, int level)
         {
-            Bitmap bmp = this.transformedbmp;
-            int scale = 1;
+            int scale = level;
+            Bitmap bmp = bbmp;
+            if (bmp == null)
+            {
+                if (watermarked)
+                    bmp = this.watermarkedbmp;
+                else
+                    bmp = this.transformedbmp;
+            }
+
             int x, y, w = bmp.Width/scale, h = bmp.Height/scale;
             int r1, g1, b1, r2, g2, b2;
 
@@ -207,6 +222,16 @@ namespace Altaria
                 }
             }
             bmp = newbmp;
+            if (level > 1)
+            {
+                //if level is more than scale, call function one more time.
+                HaarRestore(bmp, level - 1);
+            }
+            else
+            {
+                //save to test
+                bmp.Save("C:\\temp\\restore.bmp");
+            }
             return bmp;
         }
         public int[] Reshape()
@@ -238,6 +263,34 @@ namespace Altaria
             return reshaped_image;
         }
 
+        public void EmbedWatermark(AltariaImage watermark)
+        {
+                Bitmap b = new Bitmap(this.transformedbmp);
+                Bitmap wm = new Bitmap(watermark.originalbmp);
+                //double alpha = 0.2;
+                /*
+                 * the below code is based on putmark.c
+                */
+                int n3 = b.Height / 8;
+                int n2 = n3 * 2;
+                int color = 0;
+                for (int i = 0; i < n3; i++)
+                    for (int j = n3; j < n2; j++){
+                        //color = (int)(b.GetPixel(i, j).R * (1 + alpha * (double)(wm.GetPixel(i,j - n3).R)));
+                        color = wm.GetPixel(i, j - n3).R;
+                        b.SetPixel(i, j, Color.FromArgb(color, color, color));
+                    }
+                for (int i = n3; i < n2; i++)
+                    for (int j = 0; j < n3; j++)
+                    {
+                        //color = (int)(b.GetPixel(i,j).R * (1 - alpha * (double)(wm.GetPixel(i - n3, j).R)));
+                        color = wm.GetPixel(i - n3, j).R;
+                        b.SetPixel(i, j, Color.FromArgb(color, color, color));
+                    }
+
+                this.watermarked = true;
+                this.watermarkedbmp = b;
+        }
         /// <summary>
         /// Function to obtain the Peak Signal-to-Noise Ratio. A higher value would normally indicate that the reconstruction
         /// is of a higher quality. It is an approximation to human perception of reconstruction quality.
