@@ -261,7 +261,7 @@ namespace Altaria
             else
             {
                 //save to test
-                this.transformedbmp.Save("C:\\temp\\transformed.bmp");
+                this.transformedbmp.Save("C:\\temp\\transformed" + name + ".bmp");
             }
         }
 
@@ -364,9 +364,9 @@ namespace Altaria
             {
                 //save to test
                 if (is_watermarked)
-                    bmp.Save("C:\\temp\\watermarked.bmp");
+                    bmp.Save("C:\\temp\\watermarked" + name + ".bmp");
                 else
-                    bmp.Save("C:\\temp\\restored.bmp");
+                    bmp.Save("C:\\temp\\restored" + name +".bmp");
             }
         }
         /// <summary>
@@ -377,15 +377,9 @@ namespace Altaria
         public void EmbedWatermark(AltariaImage watermark, int level)
         {
             Bitmap b = new Bitmap(this.transformedbmp);
-            Bitmap wm = new Bitmap(watermark.originalbmp);
-            //todo: find the lowest LH and HL, depending on level of decomposition.
-
-            //LH3
-            /*for (int i = 64; i < 128; i++)
-                for (int j = 0; j < 64; j++)
-                    b.SetPixel(i, j, Color.Gray);*/
-            //HL3
-            b.Save("C:\\temp\\test.bmp");
+            Bitmap wm = new Bitmap(watermark.transformedbmp);
+            
+            //Perform watermarking by alpha blending
             this.is_watermarked = true;
             this.watermarkedbmp = b;
         }

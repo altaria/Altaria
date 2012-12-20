@@ -19,7 +19,8 @@ namespace Altaria
         {
             step2.Visible = false;
         }
-        protected List<AltariaImage> ai = new List<AltariaImage>();
+        //protected List<AltariaImage> ai = new List<AltariaImage>();
+        protected List<NewAltariaImage> ai = new List<NewAltariaImage>();
         //Upload file
         protected void upload_onclick(object sender, EventArgs e)
         {
@@ -45,8 +46,9 @@ namespace Altaria
                     }
                     else if (Validation.isImage(type))
                     {
-                        AltariaImage temp_ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
+                        //AltariaImage temp_ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
                         //AltariaImage temp_ai = new AltariaImage(file.InputStream, file.FileName);
+                        NewAltariaImage temp_ai = new NewAltariaImage(new Bitmap(file.InputStream), file.FileName);
                         ai.Add(temp_ai);
                         //add uploaded file to session
                         Session.Add(file.FileName, temp_ai);
@@ -74,20 +76,22 @@ namespace Altaria
                 if (Validation.isImage(fu.PostedFile.ContentType))
                 {
                     //start embed of watermark
-
-                    //this follows "Watermarking Experiments Baed on Wavelet Transforms" paper
                     //--------------------------------------START------------------------------------------------------//
                     //step 1: Two images are taken as input
-                    AltariaImage wm = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName);
+                    NewAltariaImage wm = new NewAltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName);
+                    //AltariaImage wm = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName);
                     //AltariaImage wm = new AltariaImage(fu.PostedFile.InputStream, fu.PostedFile.FileName);
-                    AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text]; 
-                    
+                    //AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text]; 
+                    NewAltariaImage ci = (NewAltariaImage)Session[((Label)(ri.FindControl("ci"))).Text];
+                    ci.HaarTransform();
+                    ci.HaarRestore();
+                    ci.ConcatPlanes();
                     //step 2: The sizes of the images are extracted
                     // this is already done in AltariaImage on creation.
-                    int wm_height = wm.dimensions[0];
-                    int wm_width  = wm.dimensions[1];
-                    int ci_height = ci.dimensions[0];
-                    int ci_width  = ci.dimensions[1];
+                    //int wm_height = wm.dimensions[0];
+                    //int wm_width  = wm.dimensions[1];
+                    //int ci_height = ci.dimensions[0];
+                    //int ci_width  = ci.dimensions[1];
                     //the watermark height and width 
                     //step 3: Normalize and reshape the watermark
                     //int[] reshaped_wm = wm.Reshape();
@@ -96,18 +100,20 @@ namespace Altaria
                     // The images have to be square with dimensions of multiples of 2, and the watermark dimensions has
                     // to be 1/8 of the cover image dimensions.
 
-                    if (ci_height % 2 == 0 && wm_height == wm_width && ci_height == ci_width && wm_height * 8 == ci_height)
+                    /*if (ci_height % 2 == 0 && wm_height == wm_width && ci_height == ci_width && wm_height * 8 == ci_height)
                     {
                         //step 4: Transforming the cover image into wavelet domain using DWT
                         //perform 3 level decomposition
-                        ci.HaarTransform(3);
-                        ci.HaarRestore(3); //to get the restored bmp for demonstration
+                        //ci.HaarTransform(3);
+                        //ci.HaarRestore(3); //to get the restored bmp for demonstration
+                        //wm.HaarTransform(3); //decompose watermark for use
+                        //wm.HaarRestore(3); // to get the restored bmp for demonstration
                         //ci.NewHaarTransform(3);
                         //step 5: Embed the watermark
-                        ci.EmbedWatermark(wm, 3);
+                        //ci.EmbedWatermark(wm, 3);
                         //ci.NewEmbedWatermark(wm);
                         //step 6: Restore the image
-                        ci.HaarRestore(3);
+                        //ci.HaarRestore(3);
                         //ci.NewHaarRestore(3);
                         //step 7: Allow the user to download the watermarked image
                     }
@@ -126,7 +132,7 @@ namespace Altaria
 
                         if (wm_height * 8 != ci_height)
                             errors.Add("Watermark dimensions should be 1/8 of the cover image.");
-                    }
+                    }*/
                     //---------------------------------------END-------------------------------------------------------//
                 }
             }
@@ -137,8 +143,9 @@ namespace Altaria
             step1.Visible = false;
             if (riea.Item.ItemType == ListItemType.Item || riea.Item.ItemType == ListItemType.AlternatingItem)
             {   
-                AltariaImage ai = riea.Item.DataItem as AltariaImage;
-                if (ai.is_watermarked)
+                //AltariaImage ai = riea.Item.DataItem as AltariaImage;
+                NewAltariaImage ai = riea.Item.DataItem as NewAltariaImage;
+                if (ai.watermarked)
                 {
                     //watermarked
                     riea.Item.FindControl("wm_form").Visible = false;
