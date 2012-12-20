@@ -107,7 +107,7 @@ namespace Altaria
                         ci.EmbedWatermark(wm, 3);
                         //ci.NewEmbedWatermark(wm);
                         //step 6: Restore the image
-                        //ci.HaarRestore(3);
+                        ci.HaarRestore(3);
                         //ci.NewHaarRestore(3);
                         //step 7: Allow the user to download the watermarked image
                     }

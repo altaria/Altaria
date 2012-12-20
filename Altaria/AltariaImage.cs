@@ -381,11 +381,11 @@ namespace Altaria
             //todo: find the lowest LH and HL, depending on level of decomposition.
 
             //LH3
-            for (int i = 16; i < 32; i++)
-                for (int j = 0; j < 16; j++)
-                    b.SetPixel(i, j, Color.Black);
-            b.Save("C:\\temp\\test.bmp");
+            /*for (int i = 64; i < 128; i++)
+                for (int j = 0; j < 64; j++)
+                    b.SetPixel(i, j, Color.Gray);*/
             //HL3
+            b.Save("C:\\temp\\test.bmp");
             this.is_watermarked = true;
             this.watermarkedbmp = b;
         }
