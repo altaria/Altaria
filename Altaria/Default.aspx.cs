@@ -46,6 +46,7 @@ namespace Altaria
                     else if (Validation.isImage(type))
                     {
                         AltariaImage temp_ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
+                        //AltariaImage temp_ai = new AltariaImage(file.InputStream, file.FileName);
                         ai.Add(temp_ai);
                         //add uploaded file to session
                         Session.Add(file.FileName, temp_ai);
@@ -78,6 +79,7 @@ namespace Altaria
                     //--------------------------------------START------------------------------------------------------//
                     //step 1: Two images are taken as input
                     AltariaImage wm = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName);
+                    //AltariaImage wm = new AltariaImage(fu.PostedFile.InputStream, fu.PostedFile.FileName);
                     AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text]; 
                     
                     //step 2: The sizes of the images are extracted
@@ -99,13 +101,13 @@ namespace Altaria
                         //step 4: Transforming the cover image into wavelet domain using DWT
                         //perform 3 level decomposition
                         ci.HaarTransform(null, 3);
-
+                        //ci.NewHaarTransform(3);
                         //step 5: Embed the watermark
-                        //ci.EmbedWatermark(wm);
-
+                        ci.EmbedWatermark(wm);
+                        //ci.NewEmbedWatermark(wm);
                         //step 6: Restore the image
                         ci.HaarRestore(null, 3);
-
+                        //ci.NewHaarRestore(3);
                         //step 7: Allow the user to download the watermarked image
                     }
                     else
@@ -135,7 +137,7 @@ namespace Altaria
             if (riea.Item.ItemType == ListItemType.Item || riea.Item.ItemType == ListItemType.AlternatingItem)
             {   
                 AltariaImage ai = riea.Item.DataItem as AltariaImage;
-                if (ai.watermarked)
+                if (ai.is_watermarked)
                 {
                     //watermarked
                     riea.Item.FindControl("wm_form").Visible = false;
