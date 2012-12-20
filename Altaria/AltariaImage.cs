@@ -287,7 +287,11 @@ namespace Altaria
                     bmp = this.transformedbmp;
             }
 
-            int x, y, w = bmp.Width/scale, h = bmp.Height/scale;
+            int realscale = (scale - 1) * 2;
+            if (realscale == 0)
+                realscale = 1;
+
+            int x, y, w = bmp.Width/realscale, h = bmp.Height/realscale;
             int r1, g1, b1, r2, g2, b2;
 
             //samples from image
