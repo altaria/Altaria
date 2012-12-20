@@ -162,6 +162,10 @@ namespace Altaria
  * http://books.google.com.sg/books?id=IGtIWmM2GWIC&pg=PA164&lpg=PA164&dq=c%23+haar+transform&source=bl&ots=eCFYSo3h7R&sig=PX_k3bV4emlrHclPqhUzKN6M9qU&hl=en&sa=X&ei=C2GwUJ_NA82mrAf65oHYBg&ved=0CCwQ6AEwAA#v=onepage&q=c%23%20haar%20transform&f=false
  */
 
+        public void HaarTransform(int level)
+        {
+            HaarTransform(null, level);
+        }
         /// <summary>
         /// Transforms the image with Haar DWT. 
         /// </summary>
@@ -249,17 +253,21 @@ namespace Altaria
             else
             {
                 //save to test
-                this.transformedbmp.Save("C:\\temp\\inverse.bmp");
+                this.transformedbmp.Save("C:\\temp\\transformed.bmp");
             }
         }
 
+        public void HaarRestore(int level)
+        {
+            HaarRestore(null, level);
+        }
         /// <summary>
         /// Does a reverse of the Haar DWT.
         /// </summary>
         /// <param name="bmp">The bitmap to reverse.</param>
         /// <param name="level">The number of times to perform the inverse, depending on level of decomposition.</param>
         /// <returns>The restored bitmap from the watermarkedbmp.</returns>
-        public Bitmap HaarRestore(Bitmap bbmp, int level)
+        public void HaarRestore(Bitmap bbmp, int level)
         {
             int scale = level;
             Bitmap bmp = bbmp;
@@ -343,20 +351,25 @@ namespace Altaria
             else
             {
                 //save to test
-                bmp.Save("C:\\temp\\restore.bmp");
+                if (is_watermarked)
+                    bmp.Save("C:\\temp\\watermarked.bmp");
+                else
+                    bmp.Save("C:\\temp\\restored.bmp");
             }
-            return bmp;
         }
         /// <summary>
-        /// Not working yet.
+        /// Embeds the watermark into the transformed bmp.
         /// </summary>
-        /// <param name="watermark"></param>
-        public void EmbedWatermark(AltariaImage watermark)
+        /// <param name="watermark">The watermark to embed</param>
+        /// <param name="level">The level of subband to embed it in. This assumes that the bmp has already been transformed to the similar level.</param>
+        public void EmbedWatermark(AltariaImage watermark, int level)
         {
-                Bitmap b = new Bitmap(this.transformedbmp);
-                Bitmap wm = new Bitmap(watermark.originalbmp);
-                this.is_watermarked = true;
-                this.watermarkedbmp = b;
+            Bitmap b = new Bitmap(this.transformedbmp);
+            Bitmap wm = new Bitmap(watermark.originalbmp);
+            //find the lowest LH and HL, depending on level of decomposition.
+    
+            this.is_watermarked = true;
+            this.watermarkedbmp = b;
         }
 
         /// <summary>

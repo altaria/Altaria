@@ -100,13 +100,14 @@ namespace Altaria
                     {
                         //step 4: Transforming the cover image into wavelet domain using DWT
                         //perform 3 level decomposition
-                        ci.HaarTransform(null, 3);
+                        ci.HaarTransform(3);
+                        ci.HaarRestore(3); //to get the restored bmp for demonstration
                         //ci.NewHaarTransform(3);
                         //step 5: Embed the watermark
-                        ci.EmbedWatermark(wm);
+                        ci.EmbedWatermark(wm, 3);
                         //ci.NewEmbedWatermark(wm);
                         //step 6: Restore the image
-                        ci.HaarRestore(null, 3);
+                        ci.HaarRestore(3);
                         //ci.NewHaarRestore(3);
                         //step 7: Allow the user to download the watermarked image
                     }
