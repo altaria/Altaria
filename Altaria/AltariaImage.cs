@@ -177,10 +177,18 @@ namespace Altaria
             Bitmap originalbmp = bmp;
             if (bmp == null)
             {
-                originalbmp = this.originalbmp;
+                originalbmp = new Bitmap(this.originalbmp);
+            }
+            else
+            {
+                originalbmp = new Bitmap(bmp);
             }
             //scale should be 1 by default
-            int x, y, w = originalbmp.Width / scale, h = originalbmp.Height / scale;
+            //1,2,4,8,16
+            int realscale = (scale - 1) * 2;
+            if (realscale == 0)
+                realscale = 1;
+            int x, y, w = originalbmp.Width / realscale, h = originalbmp.Height / realscale;
             int r1, g1, b1, r2, g2, b2;
             //samples from image
             Color s1, s2;
@@ -366,8 +374,14 @@ namespace Altaria
         {
             Bitmap b = new Bitmap(this.transformedbmp);
             Bitmap wm = new Bitmap(watermark.originalbmp);
-            //find the lowest LH and HL, depending on level of decomposition.
-    
+            //todo: find the lowest LH and HL, depending on level of decomposition.
+
+            //LH3
+            for (int i = 16; i < 32; i++)
+                for (int j = 0; j < 16; j++)
+                    b.SetPixel(i, j, Color.Black);
+            b.Save("C:\\temp\\test.bmp");
+            //HL3
             this.is_watermarked = true;
             this.watermarkedbmp = b;
         }
