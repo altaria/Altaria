@@ -10,7 +10,6 @@ namespace Altaria
 {
     public class AltariaImage
     {
-<<<<<<< HEAD
         //private const double alpha = 0.2;
         //private const double c0 = 0.7071067;
         //private const double c1 = 0.7071067;
@@ -27,36 +26,14 @@ namespace Altaria
         public string name              { get; private set; }
 
         public AltariaImage(Bitmap bmp, string name)
-=======
-        private const double alpha = 0.2;
-        private const double c0 = 0.7071067;
-        private const double c1 = 0.7071067;
-       // public Bitmap originalbmp    { get; private set; } 
-       // public Bitmap transformedbmp { get; private set; }
-        public Int32[] dimensions    { get; private set; }
-       // public Bitmap watermarkedbmp { get; private set; }
-        public bool is_transformed      { get; private set; }
-        public bool is_watermarked      { get; private set; }
-        public double[,] original       { get; private set; }
-        private double[,] placeholder;
-        public double[,] transformed    { get; private set; }
-        public string name              { get; private set; }
-
-      /*  public AltariaImage(Bitmap bmp, string name)
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
         {
             this.originalbmp = bmp; //original image
             this.dimensions = new Int32[2]{ bmp.Height, bmp.Width };
             this.name = name;
             this.is_watermarked = false;
         }
-<<<<<<< HEAD
-      
-        /*public AltariaImage(Stream filestream, string filename)
-=======
-      */
+        /*
         public AltariaImage(Stream filestream, string filename)
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
         {
             Bitmap bmp = new Bitmap(filestream);
             filestream.Position = 0;
@@ -69,21 +46,13 @@ namespace Altaria
                 for (int j = 0; j < bmp.Width; j++)
                     original[i,j] = filestream.ReadByte();
             is_watermarked = false;
-<<<<<<< HEAD
-        }*/
-=======
         }
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
-
+        */
         /// <summary>
         /// Based on putmark.c
         /// </summary>
         /// <param name="level">The number of times to decompose.</param>
-<<<<<<< HEAD
         /*public void NewHaarTransform(int level)
-=======
-        public void NewHaarTransform(int level)
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
         {
             transformed = original;
             int ix, jy;
@@ -113,19 +82,12 @@ namespace Altaria
                 L = Lh;
                 Lh = L / 2;
             }
-<<<<<<< HEAD
         }*/
-=======
-        }
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
         /// <summary>
         /// Based on putmark.c
         /// </summary>
         /// <param name="level">The number of times to decompose</param>
-<<<<<<< HEAD
         /*
-=======
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
         public void NewHaarRestore(int level)
         {
             int Lh = (int)(original.GetLength(0) / Math.Pow(2, level));
@@ -146,10 +108,6 @@ namespace Altaria
                         transformed[i,j] = c0 * placeholder[i,j] + c0 * placeholder[i,j + 1];
                         transformed[i,j + 1] = c1 * placeholder[i,j] - c1 * placeholder[i,j + 1];
                     }
-<<<<<<< HEAD
-=======
-                /* Y <-- (P^-1)*X,  X <-- W'*Y        */
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
                 for (int j = 0; j < L; j++)
                     for (int i = 0; i < L; i += 2)
                     {
@@ -181,15 +139,9 @@ namespace Altaria
                 enc.Frames.Add(BitmapFrame.Create(bms));
                 enc.Save(ms);
                 new Bitmap(ms).Save("C:\\temp\\watermarked.bmp");
-<<<<<<< HEAD
             }
         }*/
         /*
-=======
-            }*/
-        }
-
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
         public void NewEmbedWatermark(AltariaImage wm)
         {
             int n3 = original.GetLength(0) / 8;
@@ -205,12 +157,7 @@ namespace Altaria
                     transformed[i, j] *= (1.0 - alpha * wm.original[i - n3, j]);
                 }
             is_watermarked = true;
-<<<<<<< HEAD
         }*/
-=======
-        }
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
-
 /* 
  * http://books.google.com.sg/books?id=IGtIWmM2GWIC&pg=PA164&lpg=PA164&dq=c%23+haar+transform&source=bl&ots=eCFYSo3h7R&sig=PX_k3bV4emlrHclPqhUzKN6M9qU&hl=en&sa=X&ei=C2GwUJ_NA82mrAf65oHYBg&ved=0CCwQ6AEwAA#v=onepage&q=c%23%20haar%20transform&f=false
  */
@@ -221,7 +168,7 @@ namespace Altaria
         /// <param name="bmp">The bitmap to transform. If none is provided, originalbmp will be used.</param>
         /// <param name="level">The number of times to perform Haar Transform.</param>
         /// <param name="scale">The starting scale. Defaults to 1.</param>
-        /*public void HaarTransform(Bitmap bmp, int level, int scale = 1)
+        public void HaarTransform(Bitmap bmp, int level, int scale = 1)
         {
             Bitmap originalbmp = bmp;
             if (bmp == null)
@@ -400,79 +347,17 @@ namespace Altaria
             }
             return bmp;
         }
-<<<<<<< HEAD
-        
-=======
-        public int[] Reshape()
-        {
-            //Normalize the image to 0 and 1
-            Color c;
-            int[] reshaped_image = new int[originalbmp.Height * originalbmp.Width];
-            int count = 0;
-            for (int y = 0; y < originalbmp.Height; y++)
-            {
-                for (int x = 0; x < originalbmp.Width; x++)
-                {
-                    c = originalbmp.GetPixel(x, y);
-                    int total = c.R + c.G + c.B;
-                    //255*3=765
-                    if (total >= 765 / 2)
-                    {
-                        //set int to 1. (white color)
-                        reshaped_image[count] = 1;
-                    }
-                    else
-                    {
-                        //set int to 0. (black color)
-                        reshaped_image[count] = 0;
-                    }
-                    count++;
-                }
-            }
-            return reshaped_image;
-        }*/
-
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
         /// <summary>
         /// Not working yet.
         /// </summary>
         /// <param name="watermark"></param>
-<<<<<<< HEAD
-=======
-        /*
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
         public void EmbedWatermark(AltariaImage watermark)
         {
                 Bitmap b = new Bitmap(this.transformedbmp);
                 Bitmap wm = new Bitmap(watermark.originalbmp);
-<<<<<<< HEAD
                 this.is_watermarked = true;
                 this.watermarkedbmp = b;
         }
-         
-=======
-                int n3 = b.Height / 8;
-                int n2 = n3 * 2;
-                int color = 0;
-                for (int i = 0; i < n3; i++)
-                    for (int j = n3; j < n2; j++){
-                        //color = (int)(b.GetPixel(i, j).R * (1 + alpha * (double)(wm.GetPixel(i,j - n3).R)));
-                        color = wm.GetPixel(i, j - n3).R;
-                        b.SetPixel(i, j, Color.FromArgb(color, color, color));
-                    }
-                for (int i = n3; i < n2; i++)
-                    for (int j = 0; j < n3; j++)
-                    {
-                        //color = (int)(b.GetPixel(i,j).R * (1 - alpha * (double)(wm.GetPixel(i - n3, j).R)));
-                        color = wm.GetPixel(i - n3, j).R;
-                        b.SetPixel(i, j, Color.FromArgb(color, color, color));
-                    }
-
-                this.watermarked = true;
-                this.watermarkedbmp = b;
-        }
-         */
->>>>>>> ae3eae2b01983a555fad0484c0c6cd43ff63de3d
 
         /// <summary>
         /// Function to obtain the Peak Signal-to-Noise Ratio. A higher value would normally indicate that the reconstruction
