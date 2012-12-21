@@ -84,6 +84,8 @@ namespace Altaria
                     //AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text]; 
                     NewAltariaImage ci = (NewAltariaImage)Session[((Label)(ri.FindControl("ci"))).Text];
                     ci.HaarTransform();
+                    wm.HaarTransform();
+                    ci.EmbedWatermark(wm);
                     ci.HaarRestore();
                     ci.ConcatPlanes();
                     //step 2: The sizes of the images are extracted
