@@ -174,9 +174,19 @@ namespace Altaria
         {
             if (transformed)
             {
-                Bitmap rbmp = r_plane;
-                Bitmap gbmp = g_plane;
-                Bitmap bbmp = b_plane;
+                Bitmap rbmp, gbmp, bbmp;
+                if (watermarked)
+                {
+                    rbmp = er_plane;
+                    gbmp = eg_plane;
+                    bbmp = eb_plane;
+                }
+                else
+                {
+                    rbmp = r_plane;
+                    gbmp = g_plane;
+                    bbmp = b_plane;
+                }
                 //bitmap has been transformed. restoring is possible
                 int x, y, w = rbmp.Width, h = rbmp.Height; //dimensions should be the same across the planes
                 int r1, g1, b1, r2, g2, b2;
@@ -322,19 +332,6 @@ namespace Altaria
                         newbmp_b.SetPixel(x + 1, y, Color.FromArgb(b2, b2, b2));
                     }
                 }
-                if (watermarked)
-                {
-                    er_plane = newbmp_r;
-                    eg_plane = newbmp_g;
-                    eb_plane = newbmp_b;
-
-                    //write to files
-                    er_plane.Save("C:\\temp\\restored_wm_r_" + Name + ".bmp");
-                    eg_plane.Save("C:\\temp\\restored_wm_g_" + Name + ".bmp");
-                    eb_plane.Save("C:\\temp\\restored_wm_b_" + Name + ".bmp");
-                }
-                else
-                {
                     rr_plane = newbmp_r;
                     rg_plane = newbmp_g;
                     rb_plane = newbmp_b;
@@ -343,7 +340,6 @@ namespace Altaria
                     rr_plane.Save("C:\\temp\\restored_r_" + Name + ".bmp");
                     rg_plane.Save("C:\\temp\\restored_g_" + Name + ".bmp");
                     rb_plane.Save("C:\\temp\\restored_b_" + Name + ".bmp");
-                }
             }
             else
             {
@@ -354,13 +350,14 @@ namespace Altaria
         /// <summary>
         /// Embeds a watermark to the planes
         /// </summary>
-        /// <param name="wm"></param>
-        public void EmbedWatermark(NewAltariaImage wm)
+        /// <param name="wm">The watermark to embed</param>
+        /// <param name="alpha">alpha. defaults to 0.9.</param>
+        public void EmbedWatermark(NewAltariaImage wm, double alpha = 0.9)
         {
             if (wm.IsTransformed())
             {
                 // SII=alpha*(CI) + (1.0-alpha)*(SI)
-                double alpha = 0.2;
+                //alpha ranges from 0.0 to 1.0
                 Bitmap rbmp = new Bitmap(wm.r_plane);
                 Bitmap gbmp = new Bitmap(wm.g_plane);
                 Bitmap bbmp = new Bitmap(wm.b_plane);
@@ -371,7 +368,7 @@ namespace Altaria
                 
                 double finalpixel = 0;
                 //Final pixel = alpha * (First image's source pixel) + (1.0-alpha) * (Second image's source pixel)
-
+                
                 //embed r_plane into all planes
                 for (int i = 0; i < Width; i++)
                     for (int j = 0; j < Height; j++)
@@ -393,6 +390,83 @@ namespace Altaria
                         finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
                         eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                     }
+                
+                //embed r_plane into lh and hl
+                /*
+                for (int i = Width / 2; i < Width; i++)
+                {
+                    for (int j = 0; j < Height / 2; j++) //hl
+                    {
+                        finalpixel = alpha * r_plane.GetPixel(i, j).R + (1.0 - alpha) * rbmp.GetPixel(i, j).R;
+                        er_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    for (int j = Height / 2; j < Height; j++) //hh
+                    {
+                        er_plane.SetPixel(i, j, r_plane.GetPixel(i, j));
+                    }
+                }
+                for (int i = 0; i < Width / 2; i++)
+                {
+                    for (int j = Height / 2; j < Height; j++) //lh
+                    {
+                        finalpixel = alpha * r_plane.GetPixel(i, j).R + (1.0 - alpha) * rbmp.GetPixel(i, j).R;
+                        er_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    for (int j = 0; j < Height / 2; j++) //ll
+                    {
+                        er_plane.SetPixel(i, j, r_plane.GetPixel(i, j));
+                    }
+                }
+                //embed g_plane into lh and hl
+                for (int i = Width / 2; i < Width; i++)
+                {
+                    for (int j = 0; j < Height / 2; j++) //hl
+                    {
+                        finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
+                        eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    for (int j = Height / 2; j < Height; j++) //hh
+                    {
+                        eg_plane.SetPixel(i, j, g_plane.GetPixel(i, j));
+                    }
+                }
+                for (int i = 0; i < Width / 2; i++)
+                {
+                    for (int j = Height / 2; j < Height; j++) //lh
+                    {
+                        finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
+                        eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    for (int j = 0; j < Height / 2; j++) //ll
+                    {
+                        eg_plane.SetPixel(i, j, g_plane.GetPixel(i, j));
+                    }
+                }
+                //embed b_plane into lh and hl
+                for (int i = Width / 2; i < Width; i++)
+                {
+                    for (int j = 0; j < Height / 2; j++) //hl
+                    {
+                        finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
+                        eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    for (int j = Height / 2; j < Height; j++) //hh
+                    {
+                        eb_plane.SetPixel(i, j, b_plane.GetPixel(i, j));
+                    }
+                }
+                for (int i = 0; i < Width / 2; i++)
+                {
+                    for (int j = Height / 2; j < Height; j++) //lh
+                    {
+                        finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * rbmp.GetPixel(i, j).B;
+                        eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    for (int j = 0; j < Height / 2; j++) //ll
+                    {
+                        eb_plane.SetPixel(i, j, b_plane.GetPixel(i, j));
+                    }
+                }*/
                 watermarked = true;
             }
         }
@@ -405,12 +479,7 @@ namespace Altaria
             concatbmp = new Bitmap(Width, Height);
             for (int i = 0; i < Height; i++)
                 for (int j = 0; j < Width; j++)
-                {
-                    if (watermarked)
-                        concatbmp.SetPixel(j, i, Color.FromArgb(er_plane.GetPixel(j, i).R, eg_plane.GetPixel(j, i).G, eb_plane.GetPixel(j, i).B));
-                    else
-                        concatbmp.SetPixel(j, i, Color.FromArgb(rr_plane.GetPixel(j, i).R, rg_plane.GetPixel(j, i).G, rb_plane.GetPixel(j, i).B));
-                }
+                    concatbmp.SetPixel(j, i, Color.FromArgb(rr_plane.GetPixel(j, i).R, rg_plane.GetPixel(j, i).G, rb_plane.GetPixel(j, i).B));
             if (watermarked)
                 concatbmp.Save("C:\\temp\\concated_wm_" + Name + ".bmp");
             else
