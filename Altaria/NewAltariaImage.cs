@@ -162,9 +162,9 @@ namespace Altaria
             g_plane = newbmp_g;
             b_plane = newbmp_b;
             //save to test
-            r_plane.Save("C:\\temp\\transformed_r_" + Name + ".bmp");
-            g_plane.Save("C:\\temp\\transformed_g_" + Name + ".bmp");
-            b_plane.Save("C:\\temp\\transformed_b_" + Name + ".bmp");
+            //r_plane.Save("C:\\temp\\transformed_r_" + Name + ".bmp");
+            //g_plane.Save("C:\\temp\\transformed_g_" + Name + ".bmp");
+            //b_plane.Save("C:\\temp\\transformed_b_" + Name + ".bmp");
             transformed = true;
         }
         /// <summary>
@@ -337,9 +337,9 @@ namespace Altaria
                     rb_plane = newbmp_b;
 
                     //write to files
-                    rr_plane.Save("C:\\temp\\restored_r_" + Name + ".bmp");
-                    rg_plane.Save("C:\\temp\\restored_g_" + Name + ".bmp");
-                    rb_plane.Save("C:\\temp\\restored_b_" + Name + ".bmp");
+                    //rr_plane.Save("C:\\temp\\restored_r_" + Name + ".bmp");
+                    //rg_plane.Save("C:\\temp\\restored_g_" + Name + ".bmp");
+                    //rb_plane.Save("C:\\temp\\restored_b_" + Name + ".bmp");
             }
             else
             {
@@ -480,10 +480,10 @@ namespace Altaria
             for (int i = 0; i < Height; i++)
                 for (int j = 0; j < Width; j++)
                     concatbmp.SetPixel(j, i, Color.FromArgb(rr_plane.GetPixel(j, i).R, rg_plane.GetPixel(j, i).G, rb_plane.GetPixel(j, i).B));
-            if (watermarked)
-                concatbmp.Save("C:\\temp\\concated_wm_" + Name + ".bmp");
-            else
-                concatbmp.Save("C:\\temp\\concated_" + Name + ".bmp");
+            //if (watermarked)
+            //    concatbmp.Save("C:\\temp\\concated_wm_" + Name + ".bmp");
+            //else
+            //    concatbmp.Save("C:\\temp\\concated_" + Name + ".bmp");
         }
     }
 }

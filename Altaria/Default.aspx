@@ -44,7 +44,6 @@
             </ItemTemplate>
         </asp:Repeater>
         <!-- End Step 2 for YJ -->
-
         <!-- Start Step 2 for Gwendoline -->
         <!-- End Step 2 for Gwendoline -->
         
@@ -56,5 +55,16 @@
         Back to first step
         </asp:LinkButton>
         </div>
+        <!-- Start Step 3: Results -->
+        <div runat="server" id="step3">
+        <asp:Label Text="Alpha Blending: All sub bands" runat="server"></asp:Label>
+        <br />
+        <asp:Image runat="server" ID="alphablending_all_img"/>
+        <hr />
+        <asp:Label Text="Alpha Blending: LH and HL only" runat="server"></asp:Label>
+        <br />
+        <asp:Image runat="server" ID="alphablending_hllh_img" />
+        </div>
+        <!-- End Step 3 for YJ -->
     </div>
 </asp:Content>
