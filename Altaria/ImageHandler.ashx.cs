@@ -17,6 +17,7 @@ namespace Altaria
         {
             string filename = context.Request.QueryString["file"];
             string wmname = context.Request.QueryString["wm"];
+            string mode = context.Request.QueryString["mode"];
             //start embed of watermark
             //--------------------------------------START------------------------------------------------------//
             //step 1: Two images are taken as input
@@ -28,11 +29,14 @@ namespace Altaria
             NewAltariaImage ci = (NewAltariaImage)context.Session[filename];
             ci.HaarTransform();
             wm.HaarTransform();
-            ci.EmbedWatermark(wm);
-            ci.HaarRestore();
-            ci.ConcatPlanes();
             context.Response.ContentType = "image/bmp";
-            ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
+            if (mode == "aball")
+            {
+                ci.AlphaBlend(wm);
+                ci.HaarRestore();
+                ci.ConcatPlanes();
+                ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
+            }
             //step 2: The sizes of the images are extracted
             // this is already done in AltariaImage on creation.
             //int wm_height = wm.dimensions[0];

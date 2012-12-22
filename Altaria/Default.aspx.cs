@@ -78,7 +78,19 @@ namespace Altaria
                 {
                     Session.Add(fu.PostedFile.FileName, fu.PostedFile);
                     step3.Visible = true;
-                    alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm="+ fu.PostedFile.FileName;
+                    //Alpha Blending for all subbands
+                    //mode = aball
+                    alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm="+ fu.PostedFile.FileName+"&mode="+"aball";
+                    //Alpha Blending for lh and hl subbands
+                    //mode = abhllh
+
+                    //Alpha Blending for single plane, using grayscale watermark
+                    //mode = absp
+
+                    //Alpha Blending for lh and hl subbands, but embedding with full watermark (non transformed).
+                    //The watermark pixels will be spread out with a formula and is grayscale
+                    //mode = abfull
+
                 }
             }
         }

@@ -348,11 +348,12 @@ namespace Altaria
         }
         
         /// <summary>
-        /// Embeds a watermark to the planes
+        /// Embeds a watermark to the planes with alpha blending.
         /// </summary>
         /// <param name="wm">The watermark to embed</param>
         /// <param name="alpha">alpha. defaults to 0.9.</param>
-        public void EmbedWatermark(NewAltariaImage wm, double alpha = 0.9)
+        /// <param name="mode">the mode to alpha blend. 1 is ll, 2 is lh, 3 is hl, 4 is hh. defaults to 10 (meaning all planes)</param>
+        public void AlphaBlend(NewAltariaImage wm, double alpha = 0.9, int mode = 10)
         {
             if (wm.IsTransformed())
             {
@@ -370,27 +371,29 @@ namespace Altaria
                 //Final pixel = alpha * (First image's source pixel) + (1.0-alpha) * (Second image's source pixel)
                 
                 //embed r_plane into all planes
-                for (int i = 0; i < Width; i++)
-                    for (int j = 0; j < Height; j++)
-                    {
-                        finalpixel = alpha * r_plane.GetPixel(i, j).R + (1.0 - alpha) * rbmp.GetPixel(i, j).R;
-                        er_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                    }
-                //embed g_plane into all planes
-                for (int i = 0; i < Width; i++)
-                    for (int j = 0; j < Height; j++)
-                    {
-                        finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
-                        eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                    }
-                //embed b_plane into all planes
-                for (int i = 0; i < Width; i++)
-                    for (int j = 0; j < Height; j++)
-                    {
-                        finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
-                        eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                    }
-                
+                if (mode == 10)
+                {
+                    for (int i = 0; i < Width; i++)
+                        for (int j = 0; j < Height; j++)
+                        {
+                            finalpixel = alpha * r_plane.GetPixel(i, j).R + (1.0 - alpha) * rbmp.GetPixel(i, j).R;
+                            er_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        }
+                    //embed g_plane into all planes
+                    for (int i = 0; i < Width; i++)
+                        for (int j = 0; j < Height; j++)
+                        {
+                            finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
+                            eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        }
+                    //embed b_plane into all planes
+                    for (int i = 0; i < Width; i++)
+                        for (int j = 0; j < Height; j++)
+                        {
+                            finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
+                            eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        }
+                }
                 //embed r_plane into lh and hl
                 /*
                 for (int i = Width / 2; i < Width; i++)
@@ -471,6 +474,31 @@ namespace Altaria
             }
         }
 
+        /// <summary>
+        /// Perform a series of alpha blending with alpha from 0.1 to 0.9 and specified mode.
+        /// </summary>
+        /// <param name="wm">The watermark to perform tests on</param>
+        /// <param name="mode">optional. defaults to 10</param>
+        public Bitmap AlphaBlendTest(NewAltariaImage wm, int mode = 10)
+        {
+            List<Bitmap> concated_bmps = new List<Bitmap>();
+            for (double i = 0.1; i < 1.0; i += 0.2)
+            {
+                AlphaBlend(wm, i, mode);
+                this.HaarRestore();
+                this.ConcatPlanes();
+                concated_bmps.Add(concatbmp);
+            }
+            Bitmap all = new Bitmap(Width * concated_bmps.Count, Height * concated_bmps.Count);
+            using (Graphics g = Graphics.FromImage(all))
+            {
+                for (int i = 0; i < concated_bmps.Count; i++)
+                {
+                    g.DrawImage(concated_bmps[i], i * Width, 0);
+                }
+            }
+            return all;
+        }
         /// <summary>
         /// Concatenate the color planes to restore the colored image.
         /// </summary>
