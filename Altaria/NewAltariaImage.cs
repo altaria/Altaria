@@ -47,6 +47,10 @@ namespace Altaria
             Name = name;
             Height = bmp.Height;
             Width = bmp.Width;
+
+            er_plane = new Bitmap(Width, Height);
+            eg_plane = new Bitmap(Width, Height);
+            eb_plane = new Bitmap(Width, Height);
         }
 
         public bool IsTransformed()
@@ -362,10 +366,6 @@ namespace Altaria
                 Bitmap rbmp = new Bitmap(wm.r_plane);
                 Bitmap gbmp = new Bitmap(wm.g_plane);
                 Bitmap bbmp = new Bitmap(wm.b_plane);
-
-                this.er_plane = new Bitmap(Width, Height);
-                this.eg_plane = new Bitmap(Width, Height);
-                this.eb_plane = new Bitmap(Width, Height);
                 
                 double finalpixel = 0;
                 //Final pixel = alpha * (First image's source pixel) + (1.0-alpha) * (Second image's source pixel)
@@ -391,82 +391,6 @@ namespace Altaria
                                 finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
                                 eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                             }
-                //embed r_plane into lh and hl
-                /*
-                for (int i = Width / 2; i < Width; i++)
-                {
-                    for (int j = 0; j < Height / 2; j++) //hl
-                    {
-                        finalpixel = alpha * r_plane.GetPixel(i, j).R + (1.0 - alpha) * rbmp.GetPixel(i, j).R;
-                        er_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                    }
-                    for (int j = Height / 2; j < Height; j++) //hh
-                    {
-                        er_plane.SetPixel(i, j, r_plane.GetPixel(i, j));
-                    }
-                }
-                for (int i = 0; i < Width / 2; i++)
-                {
-                    for (int j = Height / 2; j < Height; j++) //lh
-                    {
-                        finalpixel = alpha * r_plane.GetPixel(i, j).R + (1.0 - alpha) * rbmp.GetPixel(i, j).R;
-                        er_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                    }
-                    for (int j = 0; j < Height / 2; j++) //ll
-                    {
-                        er_plane.SetPixel(i, j, r_plane.GetPixel(i, j));
-                    }
-                }
-                //embed g_plane into lh and hl
-                for (int i = Width / 2; i < Width; i++)
-                {
-                    for (int j = 0; j < Height / 2; j++) //hl
-                    {
-                        finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
-                        eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                    }
-                    for (int j = Height / 2; j < Height; j++) //hh
-                    {
-                        eg_plane.SetPixel(i, j, g_plane.GetPixel(i, j));
-                    }
-                }
-                for (int i = 0; i < Width / 2; i++)
-                {
-                    for (int j = Height / 2; j < Height; j++) //lh
-                    {
-                        finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
-                        eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                    }
-                    for (int j = 0; j < Height / 2; j++) //ll
-                    {
-                        eg_plane.SetPixel(i, j, g_plane.GetPixel(i, j));
-                    }
-                }
-                //embed b_plane into lh and hl
-                for (int i = Width / 2; i < Width; i++)
-                {
-                    for (int j = 0; j < Height / 2; j++) //hl
-                    {
-                        finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
-                        eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                    }
-                    for (int j = Height / 2; j < Height; j++) //hh
-                    {
-                        eb_plane.SetPixel(i, j, b_plane.GetPixel(i, j));
-                    }
-                }
-                for (int i = 0; i < Width / 2; i++)
-                {
-                    for (int j = Height / 2; j < Height; j++) //lh
-                    {
-                        finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * rbmp.GetPixel(i, j).B;
-                        eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                    }
-                    for (int j = 0; j < Height / 2; j++) //ll
-                    {
-                        eb_plane.SetPixel(i, j, b_plane.GetPixel(i, j));
-                    }
-                }*/
                 watermarked = true;
             }
         }
@@ -552,6 +476,28 @@ namespace Altaria
                 hh_b = b_plane.Clone(hh_crop, b_plane.PixelFormat);
 
                 //embed into hl and lh planes
+                for (int i = 0; i < wm.Width; i++)
+                    for (int j = 0; j < wm.Height; j++)
+                    {
+                        //hl
+                        finalpixel = alpha * hl_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                        hl_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * hl_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                        hl_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * hl_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                        hl_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+
+                        //lh
+                        finalpixel = alpha * lh_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                        lh_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * lh_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                        lh_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * lh_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                        lh_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+
+                //merge the planes back
+                
             }
         }
     }
