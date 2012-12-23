@@ -78,6 +78,7 @@ namespace Altaria
                 {
                     Session.Add(fu.PostedFile.FileName, new NewAltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
                     step3.Visible = true;
+                    extract.Visible = false;
                     //Alpha Blending for all subbands
                     //mode = aball
                     alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm="+ fu.PostedFile.FileName+"&mode=aball";
@@ -85,6 +86,25 @@ namespace Altaria
                     //The watermark pixels will be spread out with a formula and is grayscale
                     //mode = abfull
                     alphablending_full_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull";
+                }
+            }
+        }
+
+        protected void uploadorigin_onclick(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            RepeaterItem ri = btn.NamingContainer as RepeaterItem;
+            FileUpload fu = ri.FindControl("fu") as FileUpload;
+            if (fu.HasFile)
+            {
+                //validate whether is image
+                if (Validation.isImage(fu.PostedFile.ContentType))
+                {
+                    Session.Add(fu.PostedFile.FileName, new NewAltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
+                    step3.Visible = true;
+                    embed.Visible = false;
+                    //Extract watermark
+                    extracted_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_ex";
                 }
             }
         }

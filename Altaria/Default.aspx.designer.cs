@@ -85,6 +85,15 @@ namespace Altaria {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl step3;
         
         /// <summary>
+        /// embed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl embed;
+        
+        /// <summary>
         /// alphablending_all_img control.
         /// </summary>
         /// <remarks>
@@ -101,5 +110,23 @@ namespace Altaria {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image alphablending_full_img;
+        
+        /// <summary>
+        /// extract control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl extract;
+        
+        /// <summary>
+        /// extracted_img control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image extracted_img;
     }
 }

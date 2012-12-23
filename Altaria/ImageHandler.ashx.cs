@@ -36,12 +36,15 @@ namespace Altaria
             context.Response.ContentType = "image/bmp";  
             if (mode == "aball")
             {
-                //Alpha Blending for all sub bands
                 ci.AlphaBlend(wm);
             }
             else if (mode == "abfull")
             {
                 ci.AdvancedAlphaBlend();
+            }
+            else if (mode == "abfull_ex")
+            {
+                ci.ExtractWatermark(wm);
             }
             ci.HaarRestore();
             ci.ConcatPlanes();

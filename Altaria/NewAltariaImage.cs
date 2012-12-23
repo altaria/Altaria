@@ -167,9 +167,9 @@ namespace Altaria
             g_plane = newbmp_g;
             b_plane = newbmp_b;
             //save to test
-            //r_plane.Save("C:\\temp\\transformed_r_" + Name + ".bmp");
-            //g_plane.Save("C:\\temp\\transformed_g_" + Name + ".bmp");
-            //b_plane.Save("C:\\temp\\transformed_b_" + Name + ".bmp");
+            r_plane.Save("C:\\temp\\transformed_r_" + Name + ".bmp");
+            g_plane.Save("C:\\temp\\transformed_g_" + Name + ".bmp");
+            b_plane.Save("C:\\temp\\transformed_b_" + Name + ".bmp");
             transformed = true;
         }
         /// <summary>
@@ -496,9 +496,63 @@ namespace Altaria
                         lh_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                     }
 
-                //merge the planes back
-                
+                //merge the subbands back
+                using (Graphics g = Graphics.FromImage(er_plane))
+                {
+                    g.DrawImage(ll_r, 0, 0);
+                    g.DrawImage(hl_r, Width / 2, 0);
+                    g.DrawImage(lh_r, 0, Height / 2);
+                    g.DrawImage(hh_r, Width / 2, Height / 2);
+                }
+
+                using (Graphics g = Graphics.FromImage(eg_plane))
+                {
+                    g.DrawImage(ll_g, 0, 0);
+                    g.DrawImage(hl_g, Width / 2, 0);
+                    g.DrawImage(lh_g, 0, Height / 2);
+                    g.DrawImage(hh_g, Width / 2, Height / 2);
+                }
+
+                using (Graphics g = Graphics.FromImage(eb_plane))
+                {
+                    g.DrawImage(ll_b, 0, 0);
+                    g.DrawImage(hl_b, Width / 2, 0);
+                    g.DrawImage(lh_b, 0, Height / 2);
+                    g.DrawImage(hh_b, Width / 2, Height / 2);
+                }
             }
+            //er_plane.Save("C:\\temp\\transformed_aab_r_" + Name + ".bmp");
+            //eg_plane.Save("C:\\temp\\transformed_aab_g_" + Name + ".bmp");
+            //eb_plane.Save("C:\\temp\\transformed_aab_b_" + Name + ".bmp");
+            watermarked = true;
+        }
+
+        /// <summary>
+        /// Extract the watermark
+        /// </summary>
+        /// <param name="origin">The original image to compare with the watermarked image</param>
+        /// <param name="wm_height">optional. specifies the watermark height. defaults to 32.</param>
+        /// <param name="wm_width">optional. specifies the watermark width. defaults to 32.</param>
+        public void ExtractWatermark(NewAltariaImage origin, int wm_height = 32, int wm_width = 32)
+        {
+            //get hl and lh of the planes as individual bitmaps
+            Bitmap hl_r, lh_r;
+            Bitmap hl_g, lh_g;
+            Bitmap hl_b, lh_b;
+            Rectangle hl_crop = new Rectangle(Width / 2, 0, Width / 2, Height / 2);
+            Rectangle lh_crop = new Rectangle(0, Height / 2, Width / 2, Height / 2);
+
+            // r_plane
+            hl_r = r_plane.Clone(hl_crop, r_plane.PixelFormat);
+            lh_r = r_plane.Clone(lh_crop, r_plane.PixelFormat);
+
+            // g_plane
+            hl_g = g_plane.Clone(hl_crop, g_plane.PixelFormat);
+            lh_g = g_plane.Clone(lh_crop, g_plane.PixelFormat);
+
+            // r_plane
+            hl_b = b_plane.Clone(hl_crop, b_plane.PixelFormat);
+            lh_b = b_plane.Clone(lh_crop, b_plane.PixelFormat);
         }
     }
 }
