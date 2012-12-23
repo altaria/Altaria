@@ -61,18 +61,33 @@
         <!-- Start Step 3: Results -->
         <div runat="server" id="step3">
             <div runat="server" id="embed">
-                <asp:Label Text="Alpha Blending: All sub bands" runat="server"></asp:Label>
-                <br />
-                <asp:Image runat="server" ID="alphablending_all_img" />
-                <hr />
-                <asp:Label Text="Alpha Blending for lh and hl subbands, with non-transformed grayscale watermark."
-                    runat="server"></asp:Label>
-                <br />
-                <asp:Image runat="server" ID="alphablending_full_img" />
+                <div class="row-fluid">
+                    <div class="span6">
+                        <asp:Label Text="Transformed Red Plane of Original" runat="server"></asp:Label>
+                        <br />
+                        <asp:Image runat="server" ID="rplane_img" />
+                        <hr />
+                        <asp:Label ID="Label2" Text="Alpha Blending: All sub bands with varying alphas of 0.9 and 0.7"
+                            runat="server"></asp:Label>
+                        <br />
+                        <asp:Image runat="server" ID="alphablending_all_img" />
+                        <hr />
+                    </div>
+                    <div class="span6">
+                        <asp:Label ID="Label1" Text="Embedded Watermark in Transformed Plane" runat="server"></asp:Label>
+                        <br />
+                        <asp:Image runat="server" ID="erplane_img" />
+                        <hr />
+                        <asp:Label Text="Alpha Blending for lh and hl sub bands, with varying alphas, with non-transformed grayscale watermark."
+                            runat="server"></asp:Label>
+                        <br />
+                        <asp:Image runat="server" ID="alphablending_full_img" />
+                    </div>
+                </div>
             </div>
             <div runat="server" id="extract">
                 <asp:Label Text="Results" runat="server" />
-                <br />
+                <hr />
                 <asp:Image runat="server" ID="extracted_img" />
             </div>
         </div>

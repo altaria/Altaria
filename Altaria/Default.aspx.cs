@@ -79,6 +79,8 @@ namespace Altaria
                     Session.Add(fu.PostedFile.FileName, new NewAltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
                     step3.Visible = true;
                     extract.Visible = false;
+                    rplane_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=rplane";
+                    erplane_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_plane";
                     //Alpha Blending for all subbands
                     //mode = aball
                     alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm="+ fu.PostedFile.FileName+"&mode=aball";

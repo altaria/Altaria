@@ -167,9 +167,9 @@ namespace Altaria
             g_plane = newbmp_g;
             b_plane = newbmp_b;
             //save to test
-            r_plane.Save("C:\\temp\\transformed_r_" + Name + ".bmp");
-            g_plane.Save("C:\\temp\\transformed_g_" + Name + ".bmp");
-            b_plane.Save("C:\\temp\\transformed_b_" + Name + ".bmp");
+            //r_plane.Save("C:\\temp\\transformed_r_" + Name + ".bmp");
+            //g_plane.Save("C:\\temp\\transformed_g_" + Name + ".bmp");
+            //b_plane.Save("C:\\temp\\transformed_b_" + Name + ".bmp");
             transformed = true;
         }
         /// <summary>
@@ -403,14 +403,14 @@ namespace Altaria
         public Bitmap AlphaBlendTest(NewAltariaImage wm)
         {
             List<Bitmap> concated_bmps = new List<Bitmap>();
-            for (double i = 0.1; i < 1.0; i += 0.2)
+            for (double i = 0.9; i > 0.6; i -= 0.2)
             {
                 AlphaBlend(wm, i);
                 this.HaarRestore();
                 this.ConcatPlanes();
                 concated_bmps.Add(concatbmp);
             }
-            Bitmap all = new Bitmap(Width * concated_bmps.Count, Height * concated_bmps.Count);
+            Bitmap all = new Bitmap(Width * concated_bmps.Count, Height);
             using (Graphics g = Graphics.FromImage(all))
             {
                 for (int i = 0; i < concated_bmps.Count; i++)
