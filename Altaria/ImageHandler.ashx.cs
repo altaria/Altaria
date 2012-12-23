@@ -44,11 +44,16 @@ namespace Altaria
             }
             else if (mode == "abfull_ex")
             {
-                ci.ExtractWatermark(wm);
+                Bitmap ex_wm = ci.ExtractWatermark(wm);
+                ex_wm.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
             }
-            ci.HaarRestore();
-            ci.ConcatPlanes();
-            ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
+
+            if (mode == "aball" || mode == "abfull")
+            {
+                ci.HaarRestore();
+                ci.ConcatPlanes();
+                ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
+            }
             //step 2: The sizes of the images are extracted
             // this is already done in AltariaImage on creation.
             //int wm_height = wm.dimensions[0];

@@ -533,26 +533,59 @@ namespace Altaria
         /// <param name="origin">The original image to compare with the watermarked image</param>
         /// <param name="wm_height">optional. specifies the watermark height. defaults to 32.</param>
         /// <param name="wm_width">optional. specifies the watermark width. defaults to 32.</param>
-        public void ExtractWatermark(NewAltariaImage origin, int wm_height = 32, int wm_width = 32)
+        public Bitmap ExtractWatermark(NewAltariaImage origin, int wm_height = 32, int wm_width = 32)
         {
             //get hl and lh of the planes as individual bitmaps
             Bitmap hl_r, lh_r;
             Bitmap hl_g, lh_g;
             Bitmap hl_b, lh_b;
+            Bitmap origin_hl_r, origin_lh_r;
+            Bitmap origin_hl_g, origin_lh_g;
+            Bitmap origin_hl_b, origin_lh_b;
+
+            double alpha = 0.9;
+            double finalpixel_r = 0, finalpixel_g = 0, finalpixel_b = 0;
+
+            Bitmap result = new Bitmap(wm_width, wm_height);
             Rectangle hl_crop = new Rectangle(Width / 2, 0, Width / 2, Height / 2);
             Rectangle lh_crop = new Rectangle(0, Height / 2, Width / 2, Height / 2);
 
             // r_plane
             hl_r = r_plane.Clone(hl_crop, r_plane.PixelFormat);
             lh_r = r_plane.Clone(lh_crop, r_plane.PixelFormat);
+            origin_hl_r = origin.r_plane.Clone(hl_crop, origin.r_plane.PixelFormat);
+            origin_lh_r = origin.r_plane.Clone(lh_crop, origin.r_plane.PixelFormat);
 
             // g_plane
             hl_g = g_plane.Clone(hl_crop, g_plane.PixelFormat);
             lh_g = g_plane.Clone(lh_crop, g_plane.PixelFormat);
+            origin_hl_g = origin.g_plane.Clone(hl_crop, origin.g_plane.PixelFormat);
+            origin_lh_g = origin.g_plane.Clone(lh_crop, origin.g_plane.PixelFormat);
 
             // r_plane
             hl_b = b_plane.Clone(hl_crop, b_plane.PixelFormat);
             lh_b = b_plane.Clone(lh_crop, b_plane.PixelFormat);
+            origin_hl_b = origin.b_plane.Clone(hl_crop, origin.b_plane.PixelFormat);
+            origin_lh_b = origin.b_plane.Clone(lh_crop, origin.b_plane.PixelFormat);
+
+            //extract the watermark out
+            for (int i = 0; i < wm_width; i++)
+                for (int j = 0; j < wm_height; j++)
+                {
+                    finalpixel_r = (lh_r.GetPixel(i,j).R - alpha * origin_lh_r.GetPixel(i, j).R) / (1.0 - alpha);
+                    finalpixel_g = (lh_g.GetPixel(i, j).G - alpha * origin_lh_g.GetPixel(i, j).G) / (1.0 - alpha);
+                    finalpixel_b = (lh_b.GetPixel(i, j).B - alpha * origin_lh_b.GetPixel(i, j).B) / (1.0 - alpha);
+                    if (finalpixel_r < 0)
+                        finalpixel_r = 0;
+                    if (finalpixel_g < 0)
+                        finalpixel_g = 0;
+                    if (finalpixel_b < 0)
+                        finalpixel_b = 0;
+                    result.SetPixel(i,j, Color.FromArgb((int)finalpixel_r, (int)finalpixel_g, (int)finalpixel_b));
+                }
+            //test
+            result.Save("C:\\temp\\result.bmp");
+            return result;
         }
     }
 }
