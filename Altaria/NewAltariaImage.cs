@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Drawing;
+using System.IO;
 
 namespace Altaria
 {
@@ -352,8 +353,7 @@ namespace Altaria
         /// </summary>
         /// <param name="wm">The watermark to embed</param>
         /// <param name="alpha">alpha. defaults to 0.9.</param>
-        /// <param name="mode">the mode to alpha blend. 1 is ll, 2 is lh, 3 is hl, 4 is hh. defaults to 10 (meaning all planes)</param>
-        public void AlphaBlend(NewAltariaImage wm, double alpha = 0.9, int mode = 10)
+        public void AlphaBlend(NewAltariaImage wm, double alpha = 0.9)
         {
             if (wm.IsTransformed())
             {
@@ -370,30 +370,27 @@ namespace Altaria
                 double finalpixel = 0;
                 //Final pixel = alpha * (First image's source pixel) + (1.0-alpha) * (Second image's source pixel)
                 
-                //embed r_plane into all planes
-                if (mode == 10)
-                {
+                //embed r_plane into all sub bands
                     for (int i = 0; i < Width; i++)
                         for (int j = 0; j < Height; j++)
                         {
                             finalpixel = alpha * r_plane.GetPixel(i, j).R + (1.0 - alpha) * rbmp.GetPixel(i, j).R;
                             er_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                         }
-                    //embed g_plane into all planes
-                    for (int i = 0; i < Width; i++)
-                        for (int j = 0; j < Height; j++)
-                        {
-                            finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
-                            eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        }
-                    //embed b_plane into all planes
-                    for (int i = 0; i < Width; i++)
-                        for (int j = 0; j < Height; j++)
-                        {
-                            finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
-                            eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        }
-                }
+                        //embed g_plane into all sub bands
+                        for (int i = 0; i < Width; i++)
+                            for (int j = 0; j < Height; j++)
+                            {
+                                finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
+                                eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            }
+                        //embed b_plane into all sub bands
+                        for (int i = 0; i < Width; i++)
+                            for (int j = 0; j < Height; j++)
+                            {
+                                finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
+                                eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            }
                 //embed r_plane into lh and hl
                 /*
                 for (int i = Width / 2; i < Width; i++)
@@ -479,12 +476,12 @@ namespace Altaria
         /// </summary>
         /// <param name="wm">The watermark to perform tests on</param>
         /// <param name="mode">optional. defaults to 10</param>
-        public Bitmap AlphaBlendTest(NewAltariaImage wm, int mode = 10)
+        public Bitmap AlphaBlendTest(NewAltariaImage wm)
         {
             List<Bitmap> concated_bmps = new List<Bitmap>();
             for (double i = 0.1; i < 1.0; i += 0.2)
             {
-                AlphaBlend(wm, i, mode);
+                AlphaBlend(wm, i);
                 this.HaarRestore();
                 this.ConcatPlanes();
                 concated_bmps.Add(concatbmp);
@@ -512,6 +509,50 @@ namespace Altaria
             //    concatbmp.Save("C:\\temp\\concated_wm_" + Name + ".bmp");
             //else
             //    concatbmp.Save("C:\\temp\\concated_" + Name + ".bmp");
+        }
+
+        /// <summary>
+        /// Alpha Blending for all planes, for lh and hl subbands, but embedding with full watermark (non transformed).
+        /// The watermark pixels will be spread out with a formula and is grayscale
+        /// <param name="random">specifies whether pixel placement follows an algorithm.</param>
+        /// </summary>
+        public void AdvancedAlphaBlend(bool random = false)
+        {
+            //obtain the watermark from the file system
+            double finalpixel = 0;
+            double alpha = 0.9;
+            Bitmap wm = Bitmap.FromFile("C:\\temp\\wm.bmp") as Bitmap;
+            if (!random)
+            {
+                //get the four subbands of the planes as individual bitmaps
+                Bitmap ll_r, hl_r, lh_r, hh_r;
+                Bitmap ll_g, hl_g, lh_g, hh_g;
+                Bitmap ll_b, hl_b, lh_b, hh_b;
+                Rectangle ll_crop = new Rectangle(0, 0, Width / 2, Height / 2);
+                Rectangle hl_crop = new Rectangle(Width / 2, 0, Width / 2, Height / 2);
+                Rectangle lh_crop = new Rectangle(0, Height / 2, Width / 2, Height / 2);
+                Rectangle hh_crop = new Rectangle(Width / 2, Height / 2, Width / 2, Height / 2);
+
+                // r_plane
+                ll_r = r_plane.Clone(ll_crop, r_plane.PixelFormat);
+                hl_r = r_plane.Clone(hl_crop, r_plane.PixelFormat);
+                lh_r = r_plane.Clone(lh_crop, r_plane.PixelFormat);
+                hh_r = r_plane.Clone(hh_crop, r_plane.PixelFormat);
+
+                // g_plane
+                ll_g = g_plane.Clone(ll_crop, g_plane.PixelFormat);
+                hl_g = g_plane.Clone(hl_crop, g_plane.PixelFormat);
+                lh_g = g_plane.Clone(lh_crop, g_plane.PixelFormat);
+                hh_g = g_plane.Clone(hh_crop, g_plane.PixelFormat);
+
+                // r_plane
+                ll_b = b_plane.Clone(ll_crop, b_plane.PixelFormat);
+                hl_b = b_plane.Clone(hl_crop, b_plane.PixelFormat);
+                lh_b = b_plane.Clone(lh_crop, b_plane.PixelFormat);
+                hh_b = b_plane.Clone(hh_crop, b_plane.PixelFormat);
+
+                //embed into hl and lh planes
+            }
         }
     }
 }

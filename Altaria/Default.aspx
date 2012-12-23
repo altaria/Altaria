@@ -12,7 +12,7 @@
         <form class="form-inline" action="Default.aspx" enctype="multipart/form-data" method="post">
             <input type="file" id="uploadedfile" runat="server" clientidmode="Static" multiple="true"/>
             <span class="input-append">
-                <input id="imagename" class="input-large" type="text">
+                <input id="imagename" class="input-large" type="text" />
                 <a class="btn" onclick="$('input[id=uploadedfile]').click();">Browse</a>
             </span>
             <asp:Button type="submit" id="submit" text="Upload" runat="server" class="btn btn-success" OnClick="upload_onclick"/>
@@ -61,9 +61,9 @@
         <br />
         <asp:Image runat="server" ID="alphablending_all_img"/>
         <hr />
-        <asp:Label Text="Alpha Blending: LH and HL only" runat="server"></asp:Label>
+        <asp:Label Text="Alpha Blending for lh and hl subbands, with non-transformed grayscale watermark." runat="server"></asp:Label>
         <br />
-        <asp:Image runat="server" ID="alphablending_hllh_img" />
+        <asp:Image runat="server" ID="alphablending_full_img" />
         </div>
         <!-- End Step 3 for YJ -->
     </div>

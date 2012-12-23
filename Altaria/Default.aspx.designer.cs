@@ -94,12 +94,12 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.Image alphablending_all_img;
         
         /// <summary>
-        /// alphablending_hllh_img control.
+        /// alphablending_full_img control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image alphablending_hllh_img;
+        protected global::System.Web.UI.WebControls.Image alphablending_full_img;
     }
 }

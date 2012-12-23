@@ -76,21 +76,15 @@ namespace Altaria
                 //validate whether is image
                 if (Validation.isImage(fu.PostedFile.ContentType))
                 {
-                    Session.Add(fu.PostedFile.FileName, fu.PostedFile);
+                    Session.Add(fu.PostedFile.FileName, new NewAltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
                     step3.Visible = true;
                     //Alpha Blending for all subbands
                     //mode = aball
-                    alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm="+ fu.PostedFile.FileName+"&mode="+"aball";
-                    //Alpha Blending for lh and hl subbands
-                    //mode = abhllh
-
-                    //Alpha Blending for single plane, using grayscale watermark
-                    //mode = absp
-
+                    alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm="+ fu.PostedFile.FileName+"&mode=aball";
                     //Alpha Blending for lh and hl subbands, but embedding with full watermark (non transformed).
                     //The watermark pixels will be spread out with a formula and is grayscale
                     //mode = abfull
-
+                    alphablending_full_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull";
                 }
             }
         }
@@ -105,8 +99,7 @@ namespace Altaria
                 if (ai.watermarked)
                 {
                     //watermarked
-                    riea.Item.FindControl("wm_form").Visible = false;
-                    
+                    riea.Item.FindControl("wm_form").Visible = false;                    
                 }
                 else
                 {

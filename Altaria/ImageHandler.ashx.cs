@@ -21,22 +21,31 @@ namespace Altaria
             //start embed of watermark
             //--------------------------------------START------------------------------------------------------//
             //step 1: Two images are taken as input
-            HttpPostedFile hpf_wm = (HttpPostedFile)context.Session[wmname];
-            NewAltariaImage wm = new NewAltariaImage(new Bitmap(hpf_wm.InputStream), hpf_wm.FileName);
             //AltariaImage wm = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName);
             //AltariaImage wm = new AltariaImage(fu.PostedFile.InputStream, fu.PostedFile.FileName);
             //AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text]; 
+            NewAltariaImage wm = (NewAltariaImage)context.Session[wmname];
             NewAltariaImage ci = (NewAltariaImage)context.Session[filename];
-            ci.HaarTransform();
-            wm.HaarTransform();
-            context.Response.ContentType = "image/bmp";
+            if (!ci.IsTransformed())
+                ci.HaarTransform();
+            if (!wm.IsTransformed())
+                wm.HaarTransform();
+            //save the transform to session to avoid transformation again
+            context.Session[filename] = ci;
+            context.Session[wmname] = wm;
+            context.Response.ContentType = "image/bmp";  
             if (mode == "aball")
             {
+                //Alpha Blending for all sub bands
                 ci.AlphaBlend(wm);
-                ci.HaarRestore();
-                ci.ConcatPlanes();
-                ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
             }
+            else if (mode == "abfull")
+            {
+                ci.AdvancedAlphaBlend();
+            }
+            ci.HaarRestore();
+            ci.ConcatPlanes();
+            ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
             //step 2: The sizes of the images are extracted
             // this is already done in AltariaImage on creation.
             //int wm_height = wm.dimensions[0];
