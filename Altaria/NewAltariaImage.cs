@@ -544,7 +544,7 @@ namespace Altaria
             Bitmap origin_hl_b, origin_lh_b;
 
             double alpha = 0.9;
-            double finalpixel_r = 0, finalpixel_g = 0, finalpixel_b = 0;
+            double finalpixel = 0;
 
             Bitmap result = new Bitmap(wm_width, wm_height);
             Rectangle hl_crop = new Rectangle(Width / 2, 0, Width / 2, Height / 2);
@@ -568,24 +568,78 @@ namespace Altaria
             origin_hl_b = origin.b_plane.Clone(hl_crop, origin.b_plane.PixelFormat);
             origin_lh_b = origin.b_plane.Clone(lh_crop, origin.b_plane.PixelFormat);
 
-            //extract the watermark out
+            List<Bitmap> watermarks = new List<Bitmap>();
+            //extract the embedded watermarks
             for (int i = 0; i < wm_width; i++)
                 for (int j = 0; j < wm_height; j++)
                 {
-                    finalpixel_r = (lh_r.GetPixel(i,j).R - alpha * origin_lh_r.GetPixel(i, j).R) / (1.0 - alpha);
-                    finalpixel_g = (lh_g.GetPixel(i, j).G - alpha * origin_lh_g.GetPixel(i, j).G) / (1.0 - alpha);
-                    finalpixel_b = (lh_b.GetPixel(i, j).B - alpha * origin_lh_b.GetPixel(i, j).B) / (1.0 - alpha);
-                    if (finalpixel_r < 0)
-                        finalpixel_r = 0;
-                    if (finalpixel_g < 0)
-                        finalpixel_g = 0;
-                    if (finalpixel_b < 0)
-                        finalpixel_b = 0;
-                    result.SetPixel(i,j, Color.FromArgb((int)finalpixel_r, (int)finalpixel_g, (int)finalpixel_b));
+                    //lh_r
+                    finalpixel = (lh_r.GetPixel(i,j).R - alpha * origin_lh_r.GetPixel(i, j).R) / (1.0 - alpha);
+                    if (finalpixel < 0) finalpixel = 0;
+                    result.SetPixel(i,j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                 }
+            watermarks.Add(result);
+            for (int i = 0; i < wm_width; i++)
+                for (int j = 0; j < wm_height; j++)
+                {
+                    //hl_r
+                    finalpixel = (hl_r.GetPixel(i, j).R - alpha * origin_hl_r.GetPixel(i, j).R) / (1.0 - alpha);
+                    if (finalpixel < 0) finalpixel = 0;
+                    result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                }
+            watermarks.Add(result);
+
+            for (int i = 0; i < wm_width; i++)
+                for (int j = 0; j < wm_height; j++)
+                {
+                    //lh_g
+                    finalpixel = (lh_g.GetPixel(i, j).G - alpha * origin_lh_g.GetPixel(i, j).G) / (1.0 - alpha);
+                    if (finalpixel < 0) finalpixel = 0;
+                    result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                }
+            watermarks.Add(result);
+            for (int i = 0; i < wm_width; i++)
+                for (int j = 0; j < wm_height; j++)
+                {
+                    //hl_g
+                    finalpixel = (hl_g.GetPixel(i, j).G - alpha * origin_hl_g.GetPixel(i, j).G) / (1.0 - alpha);
+                    if (finalpixel < 0) finalpixel = 0;
+                    result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                }
+            watermarks.Add(result);
+
+            for (int i = 0; i < wm_width; i++)
+                for (int j = 0; j < wm_height; j++)
+                {
+                    //lh_b
+                    finalpixel = (lh_b.GetPixel(i, j).B - alpha * origin_lh_b.GetPixel(i, j).B) / (1.0 - alpha);
+                    if (finalpixel < 0) finalpixel = 0;
+                    result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                }
+            watermarks.Add(result);
+            for (int i = 0; i < wm_width; i++)
+                for (int j = 0; j < wm_height; j++)
+                {
+                    //hl_b
+                    finalpixel = (hl_b.GetPixel(i, j).B - alpha * origin_hl_b.GetPixel(i, j).B) / (1.0 - alpha);
+                    if (finalpixel < 0) finalpixel = 0;
+                    result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                }
+            watermarks.Add(result);
+
+            Bitmap finalresult = new Bitmap(wm_width * 3, wm_height * 2);
+
+            using (Graphics g = Graphics.FromImage(finalresult))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    g.DrawImage(watermarks[i], i * wm_width, 0);
+                    g.DrawImage(watermarks[i + 3], i * wm_width, wm_height);
+                }
+            }
             //test
-            result.Save("C:\\temp\\result.bmp");
-            return result;
+            finalresult.Save("C:\\temp\\result.bmp");
+            return finalresult;
         }
     }
 }
