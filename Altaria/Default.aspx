@@ -81,7 +81,7 @@
                         <asp:Label Text="Alpha Blending for all sub bands, with non-transformed grayscale watermark." runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_full_img_all" />
-                        <br />
+                        <hr />
                         <asp:Label Text="Alpha Blending for lh and hl sub bands, with non-transformed grayscale watermark."
                             runat="server"></asp:Label>
                         <br />
