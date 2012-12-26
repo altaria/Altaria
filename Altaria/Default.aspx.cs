@@ -88,6 +88,10 @@ namespace Altaria
                     //The watermark pixels will be spread out with a formula and is grayscale
                     //mode = abfull
                     alphablending_full_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull";
+                    //like abfull, but the placement is randomized.
+                    alphablending_full_random_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_rand";
+                    //like abfull, but for all sub bands
+                    alphablending_full_img_all.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_all";
                 }
             }
         }

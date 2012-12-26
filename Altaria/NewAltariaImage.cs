@@ -15,7 +15,7 @@ namespace Altaria
     public class NewAltariaImage
     {
         public Bitmap originalbmp { get; private set; }
-        
+        private double alpha = 0.7;
         //transformed color planes
         public Bitmap r_plane { get; private set; }
         public Bitmap g_plane { get; private set; }
@@ -439,43 +439,44 @@ namespace Altaria
         /// Alpha Blending for all planes, for lh and hl subbands, but embedding with full watermark (non transformed).
         /// The watermark pixels will be spread out with a formula and is grayscale
         /// <param name="random">specifies whether pixel placement follows an algorithm.</param>
+        /// <param name="allplanes">specifies whether the watermark will be added into all the planes. defaults to false.</param>
         /// </summary>
-        public void AdvancedAlphaBlend(bool random = false)
+        public void AdvancedAlphaBlend(bool random = false, bool allplanes = false)
         {
             //obtain the watermark from the file system
             double finalpixel = 0;
-            double alpha = 0.9;
             Bitmap wm = Bitmap.FromFile("C:\\temp\\wm.bmp") as Bitmap;
+            //get the four subbands of the planes as individual bitmaps
+            
+            Bitmap ll_r, hl_r, lh_r, hh_r;
+            Bitmap ll_g, hl_g, lh_g, hh_g;
+            Bitmap ll_b, hl_b, lh_b, hh_b;
+            Rectangle ll_crop = new Rectangle(0, 0, Width / 2, Height / 2);
+            Rectangle hl_crop = new Rectangle(Width / 2, 0, Width / 2, Height / 2);
+            Rectangle lh_crop = new Rectangle(0, Height / 2, Width / 2, Height / 2);
+            Rectangle hh_crop = new Rectangle(Width / 2, Height / 2, Width / 2, Height / 2);
+
+            // r_plane
+            ll_r = r_plane.Clone(ll_crop, r_plane.PixelFormat);
+            hl_r = r_plane.Clone(hl_crop, r_plane.PixelFormat);
+            lh_r = r_plane.Clone(lh_crop, r_plane.PixelFormat);
+            hh_r = r_plane.Clone(hh_crop, r_plane.PixelFormat);
+
+            // g_plane
+            ll_g = g_plane.Clone(ll_crop, g_plane.PixelFormat);
+            hl_g = g_plane.Clone(hl_crop, g_plane.PixelFormat);
+            lh_g = g_plane.Clone(lh_crop, g_plane.PixelFormat);
+            hh_g = g_plane.Clone(hh_crop, g_plane.PixelFormat);
+
+            // r_plane
+            ll_b = b_plane.Clone(ll_crop, b_plane.PixelFormat);
+            hl_b = b_plane.Clone(hl_crop, b_plane.PixelFormat);
+            lh_b = b_plane.Clone(lh_crop, b_plane.PixelFormat);
+            hh_b = b_plane.Clone(hh_crop, b_plane.PixelFormat);
+
             if (!random)
             {
-                //get the four subbands of the planes as individual bitmaps
-                Bitmap ll_r, hl_r, lh_r, hh_r;
-                Bitmap ll_g, hl_g, lh_g, hh_g;
-                Bitmap ll_b, hl_b, lh_b, hh_b;
-                Rectangle ll_crop = new Rectangle(0, 0, Width / 2, Height / 2);
-                Rectangle hl_crop = new Rectangle(Width / 2, 0, Width / 2, Height / 2);
-                Rectangle lh_crop = new Rectangle(0, Height / 2, Width / 2, Height / 2);
-                Rectangle hh_crop = new Rectangle(Width / 2, Height / 2, Width / 2, Height / 2);
-
-                // r_plane
-                ll_r = r_plane.Clone(ll_crop, r_plane.PixelFormat);
-                hl_r = r_plane.Clone(hl_crop, r_plane.PixelFormat);
-                lh_r = r_plane.Clone(lh_crop, r_plane.PixelFormat);
-                hh_r = r_plane.Clone(hh_crop, r_plane.PixelFormat);
-
-                // g_plane
-                ll_g = g_plane.Clone(ll_crop, g_plane.PixelFormat);
-                hl_g = g_plane.Clone(hl_crop, g_plane.PixelFormat);
-                lh_g = g_plane.Clone(lh_crop, g_plane.PixelFormat);
-                hh_g = g_plane.Clone(hh_crop, g_plane.PixelFormat);
-
-                // r_plane
-                ll_b = b_plane.Clone(ll_crop, b_plane.PixelFormat);
-                hl_b = b_plane.Clone(hl_crop, b_plane.PixelFormat);
-                lh_b = b_plane.Clone(lh_crop, b_plane.PixelFormat);
-                hh_b = b_plane.Clone(hh_crop, b_plane.PixelFormat);
-
-                //embed into hl and lh planes
+                //embed
                 for (int i = 0; i < wm.Width; i++)
                     for (int j = 0; j < wm.Height; j++)
                     {
@@ -494,32 +495,74 @@ namespace Altaria
                         lh_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                         finalpixel = alpha * lh_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
                         lh_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+
+                        if (allplanes)
+                        {
+                            //ll
+                            finalpixel = alpha * ll_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                            ll_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            finalpixel = alpha * ll_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                            ll_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            finalpixel = alpha * ll_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                            ll_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            //hh
+                            finalpixel = alpha * hh_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                            hh_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            finalpixel = alpha * hh_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                            hh_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            finalpixel = alpha * hh_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                            hh_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        }
                     }
+            }
+            else
+            {
+                //embed evenly through the plane
+                int w_interval = hl_r.Width / wm.Width, h_interval = hl_r.Height / wm.Height;
+                for (int i = 0, ii = 0; i < wm.Width && ii < hl_r.Width; i++, ii+=w_interval)
+                    for (int j = 0, jj = 0; j < wm.Height && jj < hl_r.Height; j++, jj+=h_interval)
+                    {
+                        //hl
+                        finalpixel = alpha * hl_r.GetPixel(ii, jj).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                        hl_r.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * hl_g.GetPixel(ii, jj).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                        hl_g.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * hl_b.GetPixel(ii, jj).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                        hl_b.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
 
-                //merge the subbands back
-                using (Graphics g = Graphics.FromImage(er_plane))
-                {
-                    g.DrawImage(ll_r, 0, 0);
-                    g.DrawImage(hl_r, Width / 2, 0);
-                    g.DrawImage(lh_r, 0, Height / 2);
-                    g.DrawImage(hh_r, Width / 2, Height / 2);
-                }
+                        //lh
+                        finalpixel = alpha * lh_r.GetPixel(ii, jj).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                        lh_r.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * lh_g.GetPixel(ii, jj).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                        lh_g.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * lh_b.GetPixel(ii, jj).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                        lh_b.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+            }
+            
+            //merge the subbands back
+            using (Graphics g = Graphics.FromImage(er_plane))
+            {
+                g.DrawImage(ll_r, 0, 0);
+                g.DrawImage(hl_r, Width / 2, 0);
+                g.DrawImage(lh_r, 0, Height / 2);
+                g.DrawImage(hh_r, Width / 2, Height / 2);
+            }
 
-                using (Graphics g = Graphics.FromImage(eg_plane))
-                {
-                    g.DrawImage(ll_g, 0, 0);
-                    g.DrawImage(hl_g, Width / 2, 0);
-                    g.DrawImage(lh_g, 0, Height / 2);
-                    g.DrawImage(hh_g, Width / 2, Height / 2);
-                }
+            using (Graphics g = Graphics.FromImage(eg_plane))
+            {
+                g.DrawImage(ll_g, 0, 0);
+                g.DrawImage(hl_g, Width / 2, 0);
+                g.DrawImage(lh_g, 0, Height / 2);
+                g.DrawImage(hh_g, Width / 2, Height / 2);
+            }
 
-                using (Graphics g = Graphics.FromImage(eb_plane))
-                {
-                    g.DrawImage(ll_b, 0, 0);
-                    g.DrawImage(hl_b, Width / 2, 0);
-                    g.DrawImage(lh_b, 0, Height / 2);
-                    g.DrawImage(hh_b, Width / 2, Height / 2);
-                }
+            using (Graphics g = Graphics.FromImage(eb_plane))
+            {
+                g.DrawImage(ll_b, 0, 0);
+                g.DrawImage(hl_b, Width / 2, 0);
+                g.DrawImage(lh_b, 0, Height / 2);
+                g.DrawImage(hh_b, Width / 2, Height / 2);
             }
             //er_plane.Save("C:\\temp\\transformed_aab_r_" + Name + ".bmp");
             //eg_plane.Save("C:\\temp\\transformed_aab_g_" + Name + ".bmp");
@@ -543,7 +586,6 @@ namespace Altaria
             Bitmap origin_hl_g, origin_lh_g;
             Bitmap origin_hl_b, origin_lh_b;
 
-            double alpha = 0.9;
             double finalpixel = 0;
 
             Bitmap result = new Bitmap(wm_width, wm_height);
