@@ -81,15 +81,18 @@
                         <asp:Label Text="Alpha Blending for all sub bands, with non-transformed grayscale watermark." runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_full_img_all" />
+                        <asp:Image runat="server" ID="alphablending_full_obv_img_all" />
                         <hr />
                         <asp:Label Text="Alpha Blending for lh and hl sub bands, with non-transformed grayscale watermark."
                             runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_full_img" />
+                        <asp:Image runat="server" ID="alphablending_full_obv_img" />
                         <hr />
                         <asp:Label Text="Alpha Blending for lh and hl sub bands, with randomized placement of non-transformed grayscale watermark." runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_full_random_img" />
+                        <asp:Image runat="server" ID="alphablending_full_random_obv_img" />
                     </div>
                 </div>
             </div>

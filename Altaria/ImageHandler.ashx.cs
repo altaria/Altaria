@@ -46,21 +46,48 @@ namespace Altaria
                 }
                 else if (mode == "abfull")
                 {
-                    ci.AdvancedAlphaBlend();
+                    try
+                    {
+                        string alpha = context.Request.QueryString["alpha"];
+                        double a = Convert.ToDouble(alpha) / 10.0;
+                        ci.AdvancedAlphaBlend(alpha: a);
+                    }
+                    catch (Exception)
+                    {
+                        ci.AdvancedAlphaBlend();
+                    }
                     ci.HaarRestore();
                     ci.ConcatPlanes();
                     ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
                 }
                 else if (mode == "abfull_all")
                 {
-                    ci.AdvancedAlphaBlend(allplanes: true);
+                    try
+                    {
+                        string alpha = context.Request.QueryString["alpha"];
+                        double a = Convert.ToDouble(alpha) / 10.0;
+                        ci.AdvancedAlphaBlend(alpha: a, allplanes: true);
+                    }
+                    catch (Exception)
+                    {
+                        ci.AdvancedAlphaBlend(allplanes: true);
+                    }
                     ci.HaarRestore();
                     ci.ConcatPlanes();
                     ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
                 }
                 else if (mode == "abfull_rand")
                 {
-                    ci.AdvancedAlphaBlend(random: true);
+                    try
+                    {
+                        string alpha = context.Request.QueryString["alpha"];
+                        double a = Convert.ToDouble(alpha) / 10.0;
+                        ci.AdvancedAlphaBlend(alpha: a, random: true);
+                    }
+                    catch (Exception)
+                    {
+                        ci.AdvancedAlphaBlend(random: true);
+                    }
                     ci.HaarRestore();
                     ci.ConcatPlanes();
                     ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
@@ -75,7 +102,11 @@ namespace Altaria
                     Bitmap ex_wm = ci.ExtractWatermark(wm);
                     ex_wm.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
                 }
-
+                else if (mode == "abfull_ex_rand")
+                {
+                    Bitmap ex_wm = ci.ExtractWatermark(wm, true);
+                    ex_wm.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
+                }
                 //step 2: The sizes of the images are extracted
                 // this is already done in AltariaImage on creation.
                 //int wm_height = wm.dimensions[0];

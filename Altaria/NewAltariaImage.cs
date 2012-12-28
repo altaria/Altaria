@@ -15,7 +15,7 @@ namespace Altaria
     public class NewAltariaImage
     {
         public Bitmap originalbmp { get; private set; }
-        private double alpha = 0.7;
+        private const double alpha = 0.9;
         //transformed color planes
         public Bitmap r_plane { get; private set; }
         public Bitmap g_plane { get; private set; }
@@ -136,8 +136,8 @@ namespace Altaria
                     if (g2 < -128) g2 += 256; if (g2 > 127) g2 -= 256;
                     g1 = (s1.G - 128 + g2 / 2);
                     if (g1 < -128) g1 += 256; if (g1 > 127) g1 -= 256;
-                    g1 += 128; 
-                    g2 += 128; 
+                    g1 += 128;
+                    g2 += 128;
 
                     newbmp_g.SetPixel(x, y / 2, Color.FromArgb(g1, g1, g1));
                     newbmp_g.SetPixel(x, y / 2 + h / 2, Color.FromArgb(g2, g2, g2));
@@ -276,12 +276,12 @@ namespace Altaria
                         s1 = rbmp.GetPixel(x / 2, y);
                         s2 = rbmp.GetPixel(x / 2 + w / 2, y);
 
-                        r1 = s1.R - 128; 
+                        r1 = s1.R - 128;
                         r2 = s2.R - 128;
                         r1 = (r1 - r2 / 2);
 
                         if (r1 < -128) r1 += 256; if (r1 > 127) r1 -= 256;
-                        r2 = (r2 + r1); 
+                        r2 = (r2 + r1);
 
                         if (r2 < -128) r2 += 256; if (r2 > 127) r2 -= 256;
                         r1 += 128;
@@ -337,21 +337,21 @@ namespace Altaria
                         newbmp_b.SetPixel(x + 1, y, Color.FromArgb(b2, b2, b2));
                     }
                 }
-                    rr_plane = newbmp_r;
-                    rg_plane = newbmp_g;
-                    rb_plane = newbmp_b;
+                rr_plane = newbmp_r;
+                rg_plane = newbmp_g;
+                rb_plane = newbmp_b;
 
-                    //write to files
-                    //rr_plane.Save("C:\\temp\\restored_r_" + Name + ".bmp");
-                    //rg_plane.Save("C:\\temp\\restored_g_" + Name + ".bmp");
-                    //rb_plane.Save("C:\\temp\\restored_b_" + Name + ".bmp");
+                //write to files
+                //rr_plane.Save("C:\\temp\\restored_r_" + Name + ".bmp");
+                rg_plane.Save("C:\\temp\\restored_g_" + Name + ".bmp");
+                //rb_plane.Save("C:\\temp\\restored_b_" + Name + ".bmp");
             }
             else
             {
                 //...
             }
         }
-        
+
         /// <summary>
         /// Embeds a watermark to the planes with alpha blending.
         /// </summary>
@@ -366,31 +366,31 @@ namespace Altaria
                 Bitmap rbmp = new Bitmap(wm.r_plane);
                 Bitmap gbmp = new Bitmap(wm.g_plane);
                 Bitmap bbmp = new Bitmap(wm.b_plane);
-                
+
                 double finalpixel = 0;
                 //Final pixel = alpha * (First image's source pixel) + (1.0-alpha) * (Second image's source pixel)
-                
+
                 //embed r_plane into all sub bands
-                    for (int i = 0; i < Width; i++)
-                        for (int j = 0; j < Height; j++)
-                        {
-                            finalpixel = alpha * r_plane.GetPixel(i, j).R + (1.0 - alpha) * rbmp.GetPixel(i, j).R;
-                            er_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        }
-                        //embed g_plane into all sub bands
-                        for (int i = 0; i < Width; i++)
-                            for (int j = 0; j < Height; j++)
-                            {
-                                finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
-                                eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                            }
-                        //embed b_plane into all sub bands
-                        for (int i = 0; i < Width; i++)
-                            for (int j = 0; j < Height; j++)
-                            {
-                                finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
-                                eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                            }
+                for (int i = 0; i < Width; i++)
+                    for (int j = 0; j < Height; j++)
+                    {
+                        finalpixel = alpha * r_plane.GetPixel(i, j).R + (1.0 - alpha) * rbmp.GetPixel(i, j).R;
+                        er_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                //embed g_plane into all sub bands
+                for (int i = 0; i < Width; i++)
+                    for (int j = 0; j < Height; j++)
+                    {
+                        finalpixel = alpha * g_plane.GetPixel(i, j).G + (1.0 - alpha) * gbmp.GetPixel(i, j).G;
+                        eg_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                //embed b_plane into all sub bands
+                for (int i = 0; i < Width; i++)
+                    for (int j = 0; j < Height; j++)
+                    {
+                        finalpixel = alpha * b_plane.GetPixel(i, j).B + (1.0 - alpha) * bbmp.GetPixel(i, j).B;
+                        eb_plane.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
                 watermarked = true;
             }
         }
@@ -426,9 +426,9 @@ namespace Altaria
         public void ConcatPlanes()
         {
             concatbmp = new Bitmap(Width, Height);
-            for (int i = 0; i < Height; i++)
-                for (int j = 0; j < Width; j++)
-                    concatbmp.SetPixel(j, i, Color.FromArgb(rr_plane.GetPixel(j, i).R, rg_plane.GetPixel(j, i).G, rb_plane.GetPixel(j, i).B));
+            for (int i = 0; i < Width; i++)
+                for (int j = 0; j < Height; j++)
+                    concatbmp.SetPixel(i, j, Color.FromArgb(rr_plane.GetPixel(i, j).R, rg_plane.GetPixel(i, j).G, rb_plane.GetPixel(i, j).B));
             //if (watermarked)
             //    concatbmp.Save("C:\\temp\\concated_wm_" + Name + ".bmp");
             //else
@@ -438,16 +438,17 @@ namespace Altaria
         /// <summary>
         /// Alpha Blending for all planes, for lh and hl subbands, but embedding with full watermark (non transformed).
         /// The watermark pixels will be spread out with a formula and is grayscale
+        /// <param name="alpha">specifies the alpha. defaults to alpha of NewAltariaImage.</param>
         /// <param name="random">specifies whether pixel placement follows an algorithm.</param>
         /// <param name="allplanes">specifies whether the watermark will be added into all the planes. defaults to false.</param>
         /// </summary>
-        public void AdvancedAlphaBlend(bool random = false, bool allplanes = false)
+        public void AdvancedAlphaBlend(double alpha = alpha, bool random = false, bool allplanes = false)
         {
             //obtain the watermark from the file system
             double finalpixel = 0;
             Bitmap wm = Bitmap.FromFile("C:\\temp\\wm.bmp") as Bitmap;
             //get the four subbands of the planes as individual bitmaps
-            
+
             Bitmap ll_r, hl_r, lh_r, hh_r;
             Bitmap ll_g, hl_g, lh_g, hh_g;
             Bitmap ll_b, hl_b, lh_b, hh_b;
@@ -517,29 +518,75 @@ namespace Altaria
             }
             else
             {
-                //embed evenly through the plane
-                int w_interval = hl_r.Width / wm.Width, h_interval = hl_r.Height / wm.Height;
-                for (int i = 0, ii = 0; i < wm.Width && ii < hl_r.Width; i++, ii+=w_interval)
-                    for (int j = 0, jj = 0; j < wm.Height && jj < hl_r.Height; j++, jj+=h_interval)
+                //determine the position of placement based on maximum coefficient of original image
+                int max_hl_r = 0, max_hl_g = 0, max_hl_b = 0;
+                int max_lh_r = 0, max_lh_g = 0, max_lh_b = 0;
+                for (int i = 0; i < hl_r.Width; i++)
+                    for (int j = 0; j < hl_r.Height; j++)
                     {
+                        int temp = hl_r.GetPixel(i, j).R;
+                        //oh yeah ternary operations because I am lazy
                         //hl
-                        finalpixel = alpha * hl_r.GetPixel(ii, jj).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
-                        hl_r.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        finalpixel = alpha * hl_g.GetPixel(ii, jj).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
-                        hl_g.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        finalpixel = alpha * hl_b.GetPixel(ii, jj).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
-                        hl_b.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-
+                        max_hl_r = temp > max_hl_r ? temp : max_hl_r;
+                        temp = hl_g.GetPixel(i, j).G;
+                        max_hl_g = temp > max_hl_g ? temp : max_hl_g;
+                        temp = hl_b.GetPixel(i, j).B;
+                        max_hl_b = temp > max_hl_b ? temp : max_hl_b;
                         //lh
-                        finalpixel = alpha * lh_r.GetPixel(ii, jj).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
-                        lh_r.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        finalpixel = alpha * lh_g.GetPixel(ii, jj).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
-                        lh_g.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        finalpixel = alpha * lh_b.GetPixel(ii, jj).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
-                        lh_b.SetPixel(ii, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        temp = lh_r.GetPixel(i, j).R;
+                        max_lh_r = temp > max_lh_r ? temp : max_lh_r;
+                        temp = lh_g.GetPixel(i, j).G;
+                        max_lh_g = temp > max_lh_g ? temp : max_lh_g;
+                        temp = lh_b.GetPixel(i, j).B;
+                        max_lh_b = temp > max_lh_b ? temp : max_lh_b;
                     }
+                //setting the watermark
+                for (int i = 0, ii = hl_r.Width - wm.Width; i < wm.Width; i++, ii++)
+                {
+                    //hl_r
+                    for (int j = 0, start = max_hl_r; j < wm.Height; j++, start++)
+                    {
+                        int s = start % hl_r.Width;
+                        finalpixel = alpha * hl_r.GetPixel(i, s).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                        hl_r.SetPixel(i, s, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    //hl_g
+                    for (int j = 0, start = max_hl_g; j < wm.Height; j++, start++)
+                    {
+                        int s = start % hl_g.Width;
+                        finalpixel = alpha * hl_g.GetPixel(ii, s).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                        hl_g.SetPixel(ii, s, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    //hl_b
+                    for (int j = 0, jj = hl_b.Height - wm.Height, start = max_hl_b; j < wm.Height; j++, start++, jj++)
+                    {
+                        finalpixel = alpha * hl_b.GetPixel(i, jj).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                        hl_b.SetPixel(i, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+
+                    //lh_r
+                    for (int j = 0, start = max_lh_r; j < wm.Height; j++, start++)
+                    {
+                        int s = start % lh_r.Width;
+                        finalpixel = alpha * lh_r.GetPixel(i, s).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                        lh_r.SetPixel(i, s, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    //lh_g
+                    for (int j = 0, start = max_lh_g; j < wm.Height; j++, start++)
+                    {
+                        int s = start % lh_g.Width;
+                        finalpixel = alpha * lh_g.GetPixel(ii, s).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                        lh_g.SetPixel(ii, s, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                    //lh_b
+                    for (int j = 0, jj = lh_b.Height - wm.Height, start = max_lh_b; j < wm.Height; j++, start++, jj++)
+                    {
+                        finalpixel = alpha * lh_b.GetPixel(i, jj).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                        lh_b.SetPixel(i, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    }
+                }
             }
-            
+
             //merge the subbands back
             using (Graphics g = Graphics.FromImage(er_plane))
             {
@@ -564,9 +611,9 @@ namespace Altaria
                 g.DrawImage(lh_b, 0, Height / 2);
                 g.DrawImage(hh_b, Width / 2, Height / 2);
             }
-            //er_plane.Save("C:\\temp\\transformed_aab_r_" + Name + ".bmp");
-            //eg_plane.Save("C:\\temp\\transformed_aab_g_" + Name + ".bmp");
-            //eb_plane.Save("C:\\temp\\transformed_aab_b_" + Name + ".bmp");
+            er_plane.Save("C:\\temp\\transformed_aab_r_" + Name + ".bmp");
+            eg_plane.Save("C:\\temp\\transformed_aab_g_" + Name + ".bmp");
+            eb_plane.Save("C:\\temp\\transformed_aab_b_" + Name + ".bmp");
             watermarked = true;
         }
 
@@ -576,7 +623,8 @@ namespace Altaria
         /// <param name="origin">The original image to compare with the watermarked image</param>
         /// <param name="wm_height">optional. specifies the watermark height. defaults to 32.</param>
         /// <param name="wm_width">optional. specifies the watermark width. defaults to 32.</param>
-        public Bitmap ExtractWatermark(NewAltariaImage origin, int wm_height = 32, int wm_width = 32)
+        /// <param name="random">optional. specifies whether the watermark has been embedded randomly. defaults to false.</param>
+        public Bitmap ExtractWatermark(NewAltariaImage origin, bool random = false, int wm_height = 32, int wm_width = 32)
         {
             //get hl and lh of the planes as individual bitmaps
             Bitmap hl_r, lh_r;
@@ -616,9 +664,9 @@ namespace Altaria
                 for (int j = 0; j < wm_height; j++)
                 {
                     //lh_r
-                    finalpixel = (lh_r.GetPixel(i,j).R - alpha * origin_lh_r.GetPixel(i, j).R) / (1.0 - alpha);
-                    if (finalpixel < 0) finalpixel = 0;
-                    result.SetPixel(i,j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                    finalpixel = (lh_r.GetPixel(i, j).R - alpha * origin_lh_r.GetPixel(i, j).R) / (1.0 - alpha);
+                    if (finalpixel < 0 || finalpixel > 255) finalpixel = 0;
+                    result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                 }
             watermarks.Add(result);
             for (int i = 0; i < wm_width; i++)
@@ -626,7 +674,7 @@ namespace Altaria
                 {
                     //hl_r
                     finalpixel = (hl_r.GetPixel(i, j).R - alpha * origin_hl_r.GetPixel(i, j).R) / (1.0 - alpha);
-                    if (finalpixel < 0) finalpixel = 0;
+                    if (finalpixel < 0 || finalpixel > 255) finalpixel = 0;
                     result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                 }
             watermarks.Add(result);
@@ -636,7 +684,7 @@ namespace Altaria
                 {
                     //lh_g
                     finalpixel = (lh_g.GetPixel(i, j).G - alpha * origin_lh_g.GetPixel(i, j).G) / (1.0 - alpha);
-                    if (finalpixel < 0) finalpixel = 0;
+                    if (finalpixel < 0 || finalpixel > 255) finalpixel = 0;
                     result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                 }
             watermarks.Add(result);
@@ -645,7 +693,7 @@ namespace Altaria
                 {
                     //hl_g
                     finalpixel = (hl_g.GetPixel(i, j).G - alpha * origin_hl_g.GetPixel(i, j).G) / (1.0 - alpha);
-                    if (finalpixel < 0) finalpixel = 0;
+                    if (finalpixel < 0 || finalpixel > 255) finalpixel = 0;
                     result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                 }
             watermarks.Add(result);
@@ -655,7 +703,7 @@ namespace Altaria
                 {
                     //lh_b
                     finalpixel = (lh_b.GetPixel(i, j).B - alpha * origin_lh_b.GetPixel(i, j).B) / (1.0 - alpha);
-                    if (finalpixel < 0) finalpixel = 0;
+                    if (finalpixel < 0 || finalpixel > 255) finalpixel = 0;
                     result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                 }
             watermarks.Add(result);
@@ -664,7 +712,7 @@ namespace Altaria
                 {
                     //hl_b
                     finalpixel = (hl_b.GetPixel(i, j).B - alpha * origin_hl_b.GetPixel(i, j).B) / (1.0 - alpha);
-                    if (finalpixel < 0) finalpixel = 0;
+                    if (finalpixel < 0 || finalpixel > 255) finalpixel = 0;
                     result.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                 }
             watermarks.Add(result);

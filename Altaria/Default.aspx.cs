@@ -87,11 +87,14 @@ namespace Altaria
                     //Alpha Blending for lh and hl subbands, but embedding with full watermark (non transformed).
                     //The watermark pixels will be spread out with a formula and is grayscale
                     //mode = abfull
-                    alphablending_full_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull";
-                    //like abfull, but the placement is randomized.
-                    alphablending_full_random_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_rand";
+                    alphablending_full_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull&alpha=9";
+                    alphablending_full_obv_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull&alpha=7";
                     //like abfull, but for all sub bands
-                    alphablending_full_img_all.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_all";
+                    alphablending_full_img_all.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_all&alpha=9";
+                    alphablending_full_obv_img_all.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_all&alpha=7";
+                    //like abfull, but the placement is randomized.
+                    alphablending_full_random_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_rand&alpha=9";
+                    alphablending_full_random_obv_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_rand&alpha=7";
                 }
             }
         }

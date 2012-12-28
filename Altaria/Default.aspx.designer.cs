@@ -148,6 +148,15 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.Image alphablending_full_img_all;
         
         /// <summary>
+        /// alphablending_full_obv_img_all control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image alphablending_full_obv_img_all;
+        
+        /// <summary>
         /// alphablending_full_img control.
         /// </summary>
         /// <remarks>
@@ -157,6 +166,15 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.Image alphablending_full_img;
         
         /// <summary>
+        /// alphablending_full_obv_img control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image alphablending_full_obv_img;
+        
+        /// <summary>
         /// alphablending_full_random_img control.
         /// </summary>
         /// <remarks>
@@ -164,6 +182,15 @@ namespace Altaria {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image alphablending_full_random_img;
+        
+        /// <summary>
+        /// alphablending_full_random_obv_img control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image alphablending_full_random_obv_img;
         
         /// <summary>
         /// extract control.
