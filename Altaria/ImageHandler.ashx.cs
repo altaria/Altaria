@@ -104,7 +104,17 @@ namespace Altaria
                 }
                 else if (mode == "abfull_ex_rand")
                 {
-                    Bitmap ex_wm = ci.ExtractWatermark(wm, true);
+                    Bitmap ex_wm;
+                    try
+                    {
+                        string alpha = context.Request.QueryString["alpha"];
+                        double a = Convert.ToDouble(alpha) / 10.0;
+                        ex_wm = ci.ExtractWatermark(wm, true, alpha: a);
+                    }
+                    catch (Exception)
+                    {
+                        ex_wm = ci.ExtractWatermark(wm, true);
+                    }
                     ex_wm.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
                 }
                 //step 2: The sizes of the images are extracted

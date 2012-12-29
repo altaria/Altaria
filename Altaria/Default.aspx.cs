@@ -104,16 +104,22 @@ namespace Altaria
             Button btn = sender as Button;
             RepeaterItem ri = btn.NamingContainer as RepeaterItem;
             FileUpload fu = ri.FindControl("fu") as FileUpload;
+            DropDownList ddl = ri.FindControl("alpha_list") as DropDownList;
             if (fu.HasFile)
             {
                 //validate whether is image
-                if (Validation.isImage(fu.PostedFile.ContentType))
+                if (Validation.isImage(fu.PostedFile.ContentType) && ddl.SelectedIndex != 1)
                 {
                     Session.Add(fu.PostedFile.FileName, new NewAltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
                     step3.Visible = true;
                     embed.Visible = false;
                     //Extract watermark
-                    extracted_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_ex";
+                    int alpha = (int)(Convert.ToDouble(ddl.SelectedValue) * 10.0);
+                    extracted_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_ex_rand&alpha="+alpha;
+                }
+                else
+                {
+                    //do nothing
                 }
             }
         }

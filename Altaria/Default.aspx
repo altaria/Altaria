@@ -26,25 +26,41 @@
             </fieldset>
             <asp:Repeater ID="UploadedImages" runat="server" OnItemDataBound="UploadedImages_ItemDataBound">
                 <ItemTemplate>
-                    <!-- previous file -->
-                    <asp:Label runat="server" ID="ci" Text='<%# Eval("name") %>'></asp:Label>
-                    <br />
-                    <!-- watermark file -->
-                    <asp:FileUpload runat="server" ID="fu" />
-                    <span class="input-append">
-                        <input id="wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>" class="input-large"
-                            type="text">
-                        <script type="text/javascript">
-                            $('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "") %>]').change(function () {
-                                $('#wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>').val($(this).val().replace(/C:\\fakepath\\/i, ''));
-                            });
-                        </script>
-                        <a class="btn" onclick="$('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "")%>]').click();">
-                            Browse</a> </span>
-                    <asp:Button type="submit" ID="submit_wm" runat="server" OnClick="uploadwm_onclick"
-                        Text="Upload Watermark" class="btn btn-success" />
-                    <asp:Button type="submit" ID="submit_origin" runat="server" OnClick="uploadorigin_onclick"
-                        Text="Upload original to extract watermark" class="btn btn-success" />
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <!-- previous file -->
+                            <asp:Label runat="server" ID="ci" Text='<%# Eval("name") %>'></asp:Label>
+                            <br />
+                            <!-- watermark file -->
+                            <asp:FileUpload runat="server" ID="fu" />
+                            <span class="input-append">
+                                <input id="wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>" class="input-large"
+                                    type="text">
+                                <script type="text/javascript">
+                                    $('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "") %>]').change(function () {
+                                        $('#wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+                                    });
+                                </script>
+                                <a class="btn"  onclick="$('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "")%>]').click();">
+                                    Browse</a> </span>
+                            <asp:Button type="submit" ID="submit_wm" runat="server" OnClick="uploadwm_onclick"
+                                Text="Upload Watermark" class="btn btn-success" style="margin-left: 5px;"/>
+                            <asp:DropDownList ID="alpha_list" runat="server" >
+                                <asp:ListItem>select α for extraction</asp:ListItem>
+                                <asp:ListItem>0.1</asp:ListItem>
+                                <asp:ListItem>0.2</asp:ListItem>
+                                <asp:ListItem>0.3</asp:ListItem>
+                                <asp:ListItem>0.4</asp:ListItem>
+                                <asp:ListItem>0.5</asp:ListItem>
+                                <asp:ListItem>0.6</asp:ListItem>
+                                <asp:ListItem>0.7</asp:ListItem>
+                                <asp:ListItem>0.8</asp:ListItem>
+                                <asp:ListItem>0.9</asp:ListItem>
+                            </asp:DropDownList>
+                            <asp:Button type="submit" ID="submit_origin" runat="server" OnClick="uploadorigin_onclick"
+                                Text="Upload original to extract watermark" class="btn btn-success" style="float:right"/>
+                        </div>
+                    </div>
                 </ItemTemplate>
             </asp:Repeater>
             <!-- End Step 2 for YJ -->
@@ -78,7 +94,8 @@
                         <br />
                         <asp:Image runat="server" ID="erplane_img" />
                         <hr />
-                        <asp:Label Text="Alpha Blending for all sub bands, with non-transformed grayscale watermark." runat="server"></asp:Label>
+                        <asp:Label Text="Alpha Blending for all sub bands, with non-transformed grayscale watermark."
+                            runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_full_img_all" />
                         <asp:Image runat="server" ID="alphablending_full_obv_img_all" />
@@ -89,7 +106,8 @@
                         <asp:Image runat="server" ID="alphablending_full_img" />
                         <asp:Image runat="server" ID="alphablending_full_obv_img" />
                         <hr />
-                        <asp:Label Text="Alpha Blending for lh and hl sub bands, with randomized placement of non-transformed grayscale watermark." runat="server"></asp:Label>
+                        <asp:Label Text="Alpha Blending for lh and hl sub bands, with randomized placement of non-transformed grayscale watermark."
+                            runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_full_random_img" />
                         <asp:Image runat="server" ID="alphablending_full_random_obv_img" />
