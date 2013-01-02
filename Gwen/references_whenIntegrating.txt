@@ -1,0 +1,20 @@
+References:
+- MySQL.data
+- NAudio
+- codegen.dll
+
+In web.config
+<httpRuntime executionTimeout="240" maxRequestLength="2000000"/>
+
+2 Directories to be created
+1) C:\temp\uploads
+2) C:\temp\requiredFiles
+   - Add the 2 folders into the requiredFiles 
+   - pHash and codegen
+
+Follow the instructions in README.md to compile codegen.dll
+- Install FFMPEG
+- Install CMake
+- Install tagLib
+- Install boost
+- Install zlib
