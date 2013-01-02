@@ -18,3 +18,5 @@ Follow the instructions in README.md to compile codegen.dll
 - Install tagLib
 - Install boost
 - Install zlib
+
+- Download pHash (Same directory as codegen)
