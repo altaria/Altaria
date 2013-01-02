@@ -32,12 +32,33 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp, Version=5.3.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=6.6.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity, Version=6.6.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\MySql.Data.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Web, Version=6.6.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\MySql.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -53,11 +74,21 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Styles\bootstrap.css" />
     <Content Include="Default.aspx" />
+    <Content Include="Dlls\itextsharp.dll" />
+    <Content Include="Dlls\MySql.Data.dll" />
+    <Content Include="Dlls\MySql.Data.Entity.dll" />
+    <Content Include="Dlls\MySql.Web.dll" />
+    <Content Include="Dlls\NAudio.dll" />
+    <Content Include="IdentifyAudio.aspx" />
+    <Content Include="IdentifyImage.aspx" />
+    <Content Include="Styles\bootstrap.css" />
+    <Content Include="ImageWM.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Styles\main.css" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -74,12 +105,42 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="IdentifyImage.aspx.cs">
+      <DependentUpon>IdentifyImage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="IdentifyImage.aspx.designer.cs">
+      <DependentUpon>IdentifyImage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImageWM.aspx.cs">
+      <DependentUpon>ImageWM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ImageWM.aspx.designer.cs">
+      <DependentUpon>ImageWM.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="IdentifyAudio.aspx.cs">
+      <DependentUpon>IdentifyAudio.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="IdentifyAudio.aspx.designer.cs">
+      <DependentUpon>IdentifyAudio.aspx</DependentUpon>
     </Compile>
     <Compile Include="ImageHandler.ashx.cs">
       <DependentUpon>ImageHandler.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Model\Album.cs" />
+    <Compile Include="Model\Artist.cs" />
+    <Compile Include="Model\DBConnect.cs" />
+    <Compile Include="Model\ImageFingerprint.cs" />
+    <Compile Include="Model\JsonHelper.cs" />
+    <Compile Include="Model\Metadata.cs" />
+    <Compile Include="Model\SongIdentification.cs" />
+    <Compile Include="Model\SongInfo.cs" />
+    <Compile Include="Model\SongRetrieval.cs" />
     <Compile Include="NewAltariaImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
@@ -89,7 +150,6 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

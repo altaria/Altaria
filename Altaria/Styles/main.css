@@ -5,7 +5,10 @@
 .center {
   text-align: center;
 }
-
+.space 
+{
+    margin: 10px 10px;
+}
 input[type=file] 
 {
     display: none;

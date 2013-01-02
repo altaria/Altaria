@@ -18,7 +18,7 @@
             <div class="span12">
             <span class="center">
                 <h1 class="logo">Altaria</h1>
-                <h5 class="subheader">A proof of concept on various watermarking and identification techniques.</h5>
+                <h5 class="subheader">Altaria is a collection of concepts on various watermarking and identification techniques.</h5>
             </span>
                 <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
             </div>
