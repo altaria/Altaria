@@ -13,8 +13,7 @@ namespace Altaria.Model
         private string imageTitle;
         private string imageAuthor;
         private string digestId;
-        private IntPtr digestCoeffs;
-        private int digestSize;
+        private byte[] digestCoeffs;
         private ulong hash;
 
         public void setDigestId(string digestId)
@@ -27,24 +26,14 @@ namespace Altaria.Model
             return digestId;
         }
 
-        public void setDigestCoeffs(IntPtr digestCoeffs)
+        public void setDigestCoeffs(byte[] digestCoeffs)
         {
             this.digestCoeffs = digestCoeffs;
         }
 
-        public IntPtr getDigestCoeffs()
+        public byte[] getDigestCoeffs()
         {
             return digestCoeffs;
-        }
-
-        public void setDigestSize(int digestSize)
-        {
-            this.digestSize = digestSize;
-        }
-
-        public int getDigestSize()
-        {
-            return digestSize;
         }
 
         public void setImageTitle(string imageTitle)
@@ -81,13 +70,12 @@ namespace Altaria.Model
         {
         }
 
-        public ImageFingerprint(string imageTitle, string imageAuthor, string digestId, IntPtr digestCoeffs, int digestSize, ulong hash)
+        public ImageFingerprint(string imageTitle, string imageAuthor, string digestId, byte[] digestCoeffs, ulong hash)
         {
             this.imageTitle = imageTitle;
             this.imageAuthor = imageAuthor;
             this.digestId = digestId;
             this.digestCoeffs = digestCoeffs;
-            this.digestSize = digestSize;
             this.hash = hash;
         }
 
@@ -95,7 +83,7 @@ namespace Altaria.Model
         {
             DBConnect connection = new DBConnect();
 
-            string query = "INSERT INTO image(imageTitle, imageAuthor, digestId, digestCoeffs, digestSize, digestHash) VALUES(@imageTitle, @imageAuthor, @digestId, @digestCoeffs, @digestSize, @hash)";
+            string query = "INSERT INTO image(imageTitle, imageAuthor, digestId, digestHash) VALUES(@imageTitle, @imageAuthor, @digestId, @hash)";
 
             try
             {
@@ -108,11 +96,28 @@ namespace Altaria.Model
                     cmd.Parameters.AddWithValue("@digestId", this.digestId);
                 else
                     cmd.Parameters.AddWithValue("@digestId", "n");
-                cmd.Parameters.AddWithValue("@digestCoeffs", this.digestCoeffs);
-                cmd.Parameters.AddWithValue("@digestSize", this.digestSize);
                 cmd.Parameters.AddWithValue("@hash", this.hash);
 
                 cmd.ExecuteNonQuery();
+
+                query = "SELECT LAST_INSERT_ID();";
+                cmd.CommandText = query;
+                cmd.Prepare();
+
+                int imageId = Convert.ToInt32(cmd.ExecuteScalar());
+
+                for (int i = 0; i < digestCoeffs.Count(); i++)
+                {
+                    query = "INSERT INTO imageCoeffs(imageId, value) VALUES(@imageId, @value);";
+                    cmd.CommandText = query;
+                    cmd.Prepare();
+                    cmd.Parameters.AddWithValue("@imageId", imageId);
+                    cmd.Parameters.AddWithValue("@value", digestCoeffs[i]);
+
+                    cmd.ExecuteNonQuery();
+
+                    cmd.Parameters.Clear();
+                }
 
                 connection.CloseConnection();
 
@@ -128,8 +133,7 @@ namespace Altaria.Model
         {
             DBConnect connection = new DBConnect();
             ArrayList imageFingerprint = new ArrayList();
-
-            string query = "SELECT imageTitle, imageAuthor, digestId, digestCoeffs, digestSize, digestHash FROM image";
+            string query = "SELECT i.imageId, i.imageTitle, i.imageAuthor, i.digestId, i.digestHash, ic.value FROM image i INNER JOIN imageCoeffs ic ON i.imageId = ic.imageId;";
 
             try
             {
@@ -138,21 +142,31 @@ namespace Altaria.Model
                 cmd.Prepare();
 
                 MySqlDataReader dataReader = cmd.ExecuteReader();
+                int i = 0;
+                byte[] digestCoeffs = new byte[40];
 
                 while (dataReader.Read())
                 {
-                    string imageTitle = (string)dataReader[0];
-                    string imageAuthor = (string)dataReader[1];
-                    string digestId = (string)dataReader[2];
-                    int digestCoeffs = (int)dataReader[3];
-                    int digestSize = (int)dataReader[4];
-                    ulong hash = (ulong)dataReader[5];
+                    int imageId = (int)dataReader[0];
+                    string imageTitle = (string)dataReader[1];
+                    string imageAuthor = (string)dataReader[2];
+                    string digestId = (string)dataReader[3];
+                    ulong hash = (ulong)dataReader[4];
 
                     if (digestId.Equals("n"))
                         digestId = null;
 
-                    ImageFingerprint image = new ImageFingerprint(imageTitle, imageAuthor, digestId, new IntPtr(digestCoeffs), digestSize, hash);
-                    imageFingerprint.Add(image);
+                    int temp = (int)dataReader[5];
+                    digestCoeffs[i] = (byte)temp;
+                    i++;
+
+                    if (i == 40)
+                    {
+                        ImageFingerprint image = new ImageFingerprint(imageTitle, imageAuthor, digestId, digestCoeffs, hash);
+                        imageFingerprint.Add(image);
+                        i = 0;
+                        digestCoeffs = new byte[40];
+                    }
                 }
 
                 return imageFingerprint;

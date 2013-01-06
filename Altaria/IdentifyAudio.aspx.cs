@@ -48,7 +48,7 @@ namespace Altaria
                 String fileName = uploadedfile.FileName;
                 savePath += fileName;
                 uploadedfile.SaveAs(savePath);
-                
+
                 string fileExtension = Path.GetExtension(savePath);
 
                 if (!fileExtension.Equals(".mp3"))
@@ -212,7 +212,7 @@ namespace Altaria
                 }
 
                 string sumTitle = "";
-                
+
                 for (int j = 0; j < listOfResults.Count; j++)
                 {
                     SongIdentification mainObj = (SongIdentification)listOfResults[j];
@@ -240,23 +240,46 @@ namespace Altaria
 
                 if (!sumTitle.Equals(""))
                 {
-                    result.Text = "<b>File Analyzed: " + fileName + "<br/>Song Identified: " + sumTitle + "</b>";
-                    ingestFingerprint.Visible = false;
-
-                    displayedResult = displayedResult + "Conclusion<br/>=============<br/>" +
+                    if (fileExtension.Equals(".mp3"))
+                    {
+                        result.Text = "<b>File Analyzed: " + fileName + "<br/>Song Identified: " + sumTitle + "</b>";
+                        displayedResult = displayedResult + "Conclusion<br/>=============<br/>" +
                                     "Song Identified: " + sumTitle;
+                    }
+                    else
+                    {
+                        result.Text = "<b>File Analyzed: " + fileName + "<br/>The video consist of the following identified song: " + sumTitle + "</b>";
+                        displayedResult = displayedResult + "Conclusion<br/>=============<br/>" +
+                                    "The video consist of the following identified song: " + sumTitle;
+                    }
+
+                    ingestFingerprint.Visible = false;
                 }
                 else
                 {
-                    result.Text = "<b>File Analyzed: " + fileName + "<br/>Song could not be identified</b><br/><br/>To contribute, you can choose to add this song into our database.";
-                    ingestFingerprint.Visible = true;
-                    pathName.Text = savePath;
+                    if (fileExtension.Equals(".mp3"))
+                    {
+                        result.Text = "<b>File Analyzed: " + fileName + "<br/>Song could not be identified</b><br/><br/>To contribute, you can choose to add this song into our database.";
 
-                    displayedResult = displayedResult + "Title: Unidentified" + "<br/>" +
+                        displayedResult = displayedResult + "Title: Unidentified" + "<br/>" +
                                         "Album Artist: Unidentified" + "<br/>" +
                                         "Album: Unidentified" + "<br/><br/>" +
                                         "Conclusion<br/>=========<br/>" +
                                         "Song could not be identified";
+
+                        ingestFingerprint.Visible = true;
+                        pathName.Text = savePath;
+                    }
+                    else
+                    {
+                        result.Text = "<b>File Analyzed: " + fileName + "<br/>Song in the video could not be identified</b><br/>";
+
+                        displayedResult = displayedResult + "Title: Unidentified" + "<br/>" +
+                                        "Album Artist: Unidentified" + "<br/>" +
+                                        "Album: Unidentified" + "<br/><br/>" +
+                                        "Conclusion<br/>=========<br/>" +
+                                        "Song in the video could not be identified";
+                    }
                 }
 
                 exportedResults.Text = displayedResult;
@@ -280,7 +303,7 @@ namespace Altaria
         public static double[,] analyzeCodegen(string clientCode)
         {
             string[] parts = clientCode.Split(';');
-            double[,] value = new double[parts.Length-1,2];
+            double[,] value = new double[parts.Length - 1, 2];
 
             try
             {
@@ -309,7 +332,7 @@ namespace Altaria
             double[] result = new double[2];
             double matchedEvents = 0;
             double totalEvents = 0;
-            int lastRecordedValue = (int) clientCode[0, 0];
+            int lastRecordedValue = (int)clientCode[0, 0];
             //int lastRecordedValue = 0;
             bool clientStay = false;
             int masterValue = 0;
@@ -339,8 +362,8 @@ namespace Altaria
 
                 int clientTimeValue = (int)clientCode[i, 0];
                 int masterTimeValue = 0;
-                
-                if (masterValue < (masterCode.Length/2))
+
+                if (masterValue < (masterCode.Length / 2))
                     masterTimeValue = (int)masterCode[masterValue, 0];
 
                 bool timeMatched = true;
@@ -389,7 +412,7 @@ namespace Altaria
 
                 if (timeMatched)
                 {
-                    if (clientTimeValue == masterTimeValue && i < (clientCode.Length/2) && masterValue < (masterCode.Length/2))
+                    if (clientTimeValue == masterTimeValue && i < (clientCode.Length / 2) && masterValue < (masterCode.Length / 2))
                     {
                         int clientValue = i;
                         for (int j = 0; j < 6; j++)
@@ -399,7 +422,7 @@ namespace Altaria
 
                             clientValue++;
                             masterValue++;
-                            
+
                             totalEvents++;
                         }
                     }
@@ -581,7 +604,7 @@ namespace Altaria
             Paragraph heading = new Paragraph("Audio Identification Results", new Font(Font.FontFamily.HELVETICA, 18f, Font.BOLD));
             doc.Add(heading);
             doc.Add(new Paragraph(text));
-            
+
             doc.Close();
 
             Response.ContentType = "Application/pdf";
@@ -608,7 +631,7 @@ namespace Altaria
 
                 proc.Start();
                 proc.WaitForExit();
-                
+
                 return newFile;
             }
             catch (Exception ex)

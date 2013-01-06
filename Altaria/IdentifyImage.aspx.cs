@@ -15,11 +15,31 @@ namespace Altaria
     public partial class IdentifyImage1 : System.Web.UI.Page
     {
         [StructLayout(LayoutKind.Sequential)]
+        public struct DigestRaw
+        {
+            [MarshalAsAttribute(UnmanagedType.LPStr)]
+            public string id;
+            [MarshalAsAttribute(UnmanagedType.SysUInt)]
+            public IntPtr coeffs;
+            [MarshalAsAttribute(UnmanagedType.U4)]
+            public int size;
+        }
+
         public struct Digest
         {
-            public string id;
-            public IntPtr coeffs;
+            public String id;
+            public byte[] coeffs;
             public int size;
+
+            public static Digest fromRaw(DigestRaw raw)
+            {
+                Digest d = new Digest();
+                d.id = raw.id;
+                d.coeffs = new byte[raw.size];
+                Marshal.Copy(raw.coeffs, d.coeffs, 0, raw.size);
+
+                return d;
+            }
         }
 
         [DllImport(@"C:\temp\requiredFiles\pHash-0.9.4\Release\pHash.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -32,7 +52,7 @@ namespace Altaria
         public static extern int ph_hamming_distance(ref ulong hasha, ref ulong hashb);
 
         [DllImport(@"C:\temp\requiredFiles\pHash-0.9.4\Release\pHash.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ph_image_digest(string file, double sigma, double gamma, ref Digest digest, int N);
+        public static extern int ph_image_digest(string file, double sigma, double gamma, ref DigestRaw digest, int N);
 
         [DllImport(@"C:\temp\requiredFiles\pHash-0.9.4\Release\pHash.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int ph_crosscorr(ref Digest digesta, ref Digest digestb, ref double pcc, double threshold);
@@ -62,21 +82,18 @@ namespace Altaria
 
                 if (fileExtension.Equals(".jpg") || fileExtension.Equals(".png"))
                 {
-                    // Retrieve digest of input image for comparison
-                    Digest d = new Digest();
-                    ph_image_digest(savePath, 1, 1, ref d, 180);
-
-                    // Compute hash values
-                    ulong hasha = 0;
-                    ph_dct_imagehash(savePath, ref hasha);
-
                     // Retrieve all fingerprint for comparison
                     ImageFingerprint image = new ImageFingerprint();
                     ArrayList fingerprint = image.retrieveAllHashes();
 
-                    double pcc = 0.0;
+                    int pcc = 0;
                     ImageFingerprint matchingPictures = null;
-                    double highestPcc = 0;
+                    int highestPcc = 35;
+
+                    // Retrieve digest of input image for comparison
+                    DigestRaw raw = new DigestRaw();
+                    ph_image_digest(savePath, 1, 1, ref raw, 180);
+                    Digest d = Digest.fromRaw(raw);
 
                     // Compare fingerprint
                     for (int i = 0; i < fingerprint.Count; i++)
@@ -85,20 +102,21 @@ namespace Altaria
                         Digest d2 = new Digest();
                         d2.id = ((ImageFingerprint)fingerprint[i]).getDigestId();
                         d2.coeffs = ((ImageFingerprint)fingerprint[i]).getDigestCoeffs();
-                        d2.size = ((ImageFingerprint)fingerprint[i]).getDigestSize();
+                        d2.size = 40;
 
                         // Compare the results
-                        int matching = ph_crosscorr(ref d, ref d2, ref pcc, 0.9);
+                        pcc = computeSimilarities(d.coeffs, d2.coeffs);
 
-                        if (matching == 1)
+                        if (pcc >= highestPcc)
                         {
-                            if (pcc > highestPcc)
-                            {
-                                matchingPictures = (ImageFingerprint)fingerprint[i];
-                                highestPcc = pcc;
-                            }
+                            matchingPictures = (ImageFingerprint)fingerprint[i];
+                            highestPcc = pcc;
                         }
                     }
+
+                    // Compute hash values
+                    ulong hasha = 0;
+                    ph_dct_imagehash(savePath, ref hasha);
 
                     if (matchingPictures == null)
                     {
@@ -115,7 +133,7 @@ namespace Altaria
                             }
                         }
 
-                        if (minHammingDistance <= 17)
+                        if (minHammingDistance <= 15)
                         {
                             result.Text = "An image has been identified with the following information:<br/><br/>" +
                                     "Title: <b>" + matchingPictures.getImageTitle() + "</b><br/>" +
@@ -145,7 +163,7 @@ namespace Altaria
                         result.Text = "An image has been identified with the following information:<br/><br/>" +
                                     "Title: <b>" + matchingPictures.getImageTitle() + "</b><br/>" +
                                     "Author: " + matchingPictures.getImageAuthor() + "<br/>" +
-                                    "Similarities (Scale from 0 to 1): " + Math.Round(highestPcc, 2) + "<br/>";
+                                    "Similarities with copyrighted image: " + (highestPcc / 40.0) * 100 + " %<br/>";
                     }
 
                     result.Visible = true;
@@ -165,8 +183,9 @@ namespace Altaria
 
         protected void addImage_Click(object sender, EventArgs e)
         {
-            Digest d = new Digest();
-            ph_image_digest(pathName.Text, 1, 1, ref d, 180);
+            DigestRaw raw = new DigestRaw();
+            ph_image_digest(pathName.Text, 1, 1, ref raw, 180);
+            Digest d = Digest.fromRaw(raw);
 
             ulong hash = 0;
             ph_dct_imagehash(pathName.Text, ref hash);
@@ -176,7 +195,12 @@ namespace Altaria
 
             if (!String.IsNullOrEmpty(title) && !String.IsNullOrEmpty(author) && !title.Equals("Enter Title...") && !author.Equals("Enter Author..."))
             {
-                ImageFingerprint image = new ImageFingerprint(title, author, d.id, d.coeffs, d.size, hash);
+                ImageFingerprint image;
+                if (!String.IsNullOrEmpty(d.id))
+                    image = new ImageFingerprint(title, author, d.id.ToString(), d.coeffs, hash);
+                else
+                    image = new ImageFingerprint(title, author, null, d.coeffs, hash);
+
                 if (image.insertNewImage())
                     addImageResult.Text = "Image successfully added. Thank you for your contribution";
                 else
@@ -210,6 +234,24 @@ namespace Altaria
             }
 
             return dist;
+        }
+
+        private int computeSimilarities(byte[] coeffs1, byte[] coeffs2)
+        {
+            int similar = 0;
+
+            for (int i = 0; i < coeffs1.Count(); i++)
+            {
+                int highest = coeffs2[i] + 4;
+                int lowest = coeffs2[i] - 4;
+
+                if (coeffs1[i] <= highest && coeffs1[i] >= lowest)
+                {
+                    similar += 1;
+                }
+            }
+
+            return similar;
         }
     }
 }
