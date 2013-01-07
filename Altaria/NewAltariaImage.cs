@@ -446,7 +446,7 @@ namespace Altaria
         {
             //obtain the watermark from the file system
             double finalpixel = 0;
-            Bitmap wm = Bitmap.FromFile("C:\\temp\\wm.bmp") as Bitmap;
+            Bitmap wm = Bitmap.FromFile("C:\\temp\\requiredFiles\\wm.bmp") as Bitmap;
             //get the four subbands of the planes as individual bitmaps
 
             Bitmap ll_r, hl_r, lh_r, hh_r;
