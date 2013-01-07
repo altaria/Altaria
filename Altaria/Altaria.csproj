@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge.Imaging, Version=2.2.4.0, Culture=neutral, PublicKeyToken=ba8ddea9676ca48b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\AForge.Imaging.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp, Version=5.3.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dlls\itextsharp.dll</HintPath>
@@ -75,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Dlls\AForge.Imaging.dll" />
     <Content Include="Dlls\itextsharp.dll" />
     <Content Include="Dlls\MySql.Data.dll" />
     <Content Include="Dlls\MySql.Data.Entity.dll" />

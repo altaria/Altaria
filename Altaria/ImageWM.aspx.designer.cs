@@ -211,6 +211,15 @@ namespace Altaria {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl extract;
         
         /// <summary>
+        /// original_img control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image original_img;
+        
+        /// <summary>
         /// extracted_img control.
         /// </summary>
         /// <remarks>
@@ -218,5 +227,23 @@ namespace Altaria {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image extracted_img;
+        
+        /// <summary>
+        /// snp1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image snp1;
+        
+        /// <summary>
+        /// extracted_snp1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image extracted_snp1;
     }
 }

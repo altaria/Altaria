@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Drawing;
 using System.IO;
+using AForge.Imaging.Filters;
 
 namespace Altaria
 {
@@ -802,19 +803,31 @@ namespace Altaria
                     }
                 watermarks.Add(result);
             }
-            Bitmap finalresult = new Bitmap(wm_width * 3, wm_height * 2);
+            Bitmap finalresult = new Bitmap(wm_width * 6, wm_height);
 
             using (Graphics g = Graphics.FromImage(finalresult))
             {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     g.DrawImage(watermarks[i], i * wm_width, 0);
-                    g.DrawImage(watermarks[i + 3], i * wm_width, wm_height);
                 }
             }
             //test
             finalresult.Save("C:\\temp\\result.bmp");
             return finalresult;
+        }
+
+        /// <summary>
+        /// Performs a salt and pepper attack on the bmp.
+        /// </summary>
+        /// <param name="p">the intensity to perform the attack at</param>
+        /// <returns>the resulting image</returns>
+        internal NewAltariaImage SaltAndPepper(double p)
+        {
+            NewAltariaImage nai = new NewAltariaImage(new Bitmap(this.originalbmp), this.Name);
+            SaltAndPepperNoise filter = new SaltAndPepperNoise(p);
+            filter.ApplyInPlace(nai.originalbmp);
+            return nai;
         }
     }
 }

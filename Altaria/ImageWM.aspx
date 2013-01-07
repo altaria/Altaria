@@ -18,7 +18,7 @@
                 OnClick="upload_onclick" />
             </form>
             <hr />
-        <asp:LinkButton runat="server" ID="LinkButton1" PostBackUrl="~/Default.aspx" class="btn btn-warning">
+            <asp:LinkButton runat="server" ID="LinkButton1" PostBackUrl="~/Default.aspx" class="btn btn-warning">
         <i class="icon-backward"></i>
         Back to menu
             </asp:LinkButton>
@@ -42,11 +42,11 @@
                                         $('#wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>').val($(this).val().replace(/C:\\fakepath\\/i, ''));
                                     });
                                 </script>
-                                <a class="btn"  onclick="$('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "")%>]').click();">
+                                <a class="btn" onclick="$('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "")%>]').click();">
                                     Browse</a> </span>
                             <asp:Button type="submit" ID="submit_wm" runat="server" OnClick="uploadwm_onclick"
-                                Text="Upload Watermark" class="btn btn-success" style="margin-left: 5px;"/>
-                            <asp:DropDownList ID="alpha_list" runat="server" >
+                                Text="Upload Watermark" class="btn btn-success" Style="margin-left: 5px;" />
+                            <asp:DropDownList ID="alpha_list" runat="server">
                                 <asp:ListItem>select α for extraction</asp:ListItem>
                                 <asp:ListItem>0.1</asp:ListItem>
                                 <asp:ListItem>0.2</asp:ListItem>
@@ -59,7 +59,7 @@
                                 <asp:ListItem>0.9</asp:ListItem>
                             </asp:DropDownList>
                             <asp:Button type="submit" ID="submit_origin" runat="server" OnClick="uploadorigin_onclick"
-                                Text="Upload original to extract watermark" class="btn btn-success" style="float:right"/>
+                                Text="Upload original to extract watermark" class="btn btn-success" Style="float: right" />
                         </div>
                     </div>
                 </ItemTemplate>
@@ -112,7 +112,20 @@
             <div runat="server" id="extract">
                 <asp:Label Text="Results" runat="server" />
                 <hr />
-                <asp:Image runat="server" ID="extracted_img" />
+                <div class="container">
+                    <div class="row-fluid">
+                        <div class="span3">
+                            <asp:Image runat="server" ID="original_img" />
+                            <br />
+                            <asp:Image runat="server" ID="extracted_img" />
+                        </div>
+                        <div class="span3">
+                            <asp:Image runat="server" ID="snp1" />
+                            <br />
+                            <asp:Image runat="server" ID="extracted_snp1" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
