@@ -8,11 +8,6 @@
         <fieldset>
             <legend>Image Fingerprinting Library</legend>
         </fieldset>
-        <ul>
-            <li>Identify image based on uploaded content</li>
-            <li>Act as a checkpoint for individuals before they upload media content online</li>
-            <li>Lower online copyright and legal cases</li>
-        </ul>
         <b>Stage 1:</b>
         <asp:FileUpload ID="uploadedfile" runat="server" ClientIDMode="Static" Width="520px" />
         <span class="input-append">
