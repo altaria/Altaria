@@ -8,11 +8,6 @@
         <fieldset>
             <legend>Image Fingerprinting Library</legend>
         </fieldset>
-        <ul>
-            <li>Identify image based on uploaded content</li>
-            <li>Act as a checkpoint for individuals before they upload media content online</li>
-            <li>Lower online copyright and legal cases</li>
-        </ul>
         <b>Stage 1:</b>
         <asp:FileUpload ID="uploadedfile" runat="server" ClientIDMode="Static" Width="520px" />
         <span class="input-append">
@@ -29,7 +24,7 @@
         <br />
         <asp:Label runat="server" ID="result" Text="results" Visible="false"></asp:Label>
         <p>
-            <asp:TextBox ID="imageTitle" runat="server" Text="Enter Title..." Visible="false"></asp:TextBox>&nbsp;&nbsp;
+            <asp:TextBox ID="imageTitle" runat="server" Text="Enter Title..." Visible="false"></asp:TextBox>
             <asp:TextBox ID="imageAuthor" runat="server" Text="Enter Author..." Visible="false"></asp:TextBox>
             <asp:Button runat="server" ID="addImage" Text="Add Image" OnClick="addImage_Click"
                 Visible="false" />
