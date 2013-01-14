@@ -88,7 +88,7 @@ namespace Altaria
 
                     int pcc = 0;
                     ImageFingerprint matchingPictures = null;
-                    int highestPcc = 35;
+                    int highestPcc = 30;
 
                     // Retrieve digest of input image for comparison
                     DigestRaw raw = new DigestRaw();
@@ -133,7 +133,7 @@ namespace Altaria
                             }
                         }
 
-                        if (minHammingDistance <= 15)
+                        if (minHammingDistance <= 10)
                         {
                             result.Text = "An image has been identified with the following information:<br/><br/>" +
                                     "Title: <b>" + matchingPictures.getImageTitle() + "</b><br/>" +
@@ -214,7 +214,7 @@ namespace Altaria
             addImageResult.Visible = true;
         }
 
-        private int computeHammingDistance(ulong hasha, ulong hashb)
+        public static int computeHammingDistance(ulong hasha, ulong hashb)
         {
             int dist = 0;
 
@@ -236,7 +236,7 @@ namespace Altaria
             return dist;
         }
 
-        private int computeSimilarities(byte[] coeffs1, byte[] coeffs2)
+        public static int computeSimilarities(byte[] coeffs1, byte[] coeffs2)
         {
             int similar = 0;
 

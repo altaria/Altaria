@@ -58,6 +58,24 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.Label result;
         
         /// <summary>
+        /// videoTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox videoTitle;
+        
+        /// <summary>
+        /// videoAuthor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox videoAuthor;
+        
+        /// <summary>
         /// ingestFingerprint control.
         /// </summary>
         /// <remarks>

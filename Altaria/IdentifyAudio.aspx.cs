@@ -38,6 +38,9 @@ namespace Altaria
         {
             addSongResult.Visible = false;
             waiting.Visible = false;
+            ingestFingerprint.Visible = false;
+            videoAuthor.Visible = false;
+            videoTitle.Visible = false;
 
             if (uploadedfile.HasFile)
             {
@@ -63,8 +66,8 @@ namespace Altaria
 
                 double songLength = Math.Round((getMediaDuration(savePath) / 4) / 60, 2);
 
-                for (int b = 0; b < (getMediaDuration(savePath) / 4 - 2); b += 30)
-                //for(int b = 0; b < 30; b+=30)
+                //for (int b = 0; b < (getMediaDuration(savePath) / 4 - 2); b += 30)
+                for(int b = 0; b < 90; b+=30)
                 {
                     // Analyze the files (input file)
                     string filename = savePath;
@@ -201,7 +204,7 @@ namespace Altaria
                                         "Length: " + songLength + " minutes<br/>" +
                                         "Genre: " + song.metadata.genre + "<br/>" +
                                         "Bitrate: " + song.metadata.bitrate + " kbps<br/><br/>" +
-                                        "Audio Identification Results" + "<br/>=====================<br/>";
+                                        "Identification Results" + "<br/>=====================<br/>";
 
                     // If the song can be identified and the accuracy threshold is set to 20%, it will be added to be displayed as results
                     if (identifiedSong != null && accuracy > 20)
@@ -268,17 +271,132 @@ namespace Altaria
                                         "Song could not be identified";
 
                         ingestFingerprint.Visible = true;
+                        ingestFingerprint.Enabled = true;
+                        ingestFingerprint.Text = "Add Song";
                         pathName.Text = savePath;
                     }
                     else
                     {
-                        result.Text = "<b>File Analyzed: " + fileName + "<br/>Song in the video could not be identified</b><br/>";
+                        // Video format - no song identified
+                        // Extract key frames from the videos to do comparison
+                        int totalFrames = convertVideoToKeyFrames(fileName);
+                        string outputFile = @"C:\temp\uploads\output";
 
-                        displayedResult = displayedResult + "Title: Unidentified" + "<br/>" +
-                                        "Album Artist: Unidentified" + "<br/>" +
-                                        "Album: Unidentified" + "<br/><br/>" +
-                                        "Conclusion<br/>=========<br/>" +
-                                        "Song in the video could not be identified";
+                        // Retrieve all fingerprint for comparison
+                        ImageFingerprint image = new ImageFingerprint();
+                        ArrayList fingerprint = image.retrieveAllHashes();
+
+                        int pcc = 0;
+                        ImageFingerprint matchingPictures = null;
+                        int highestPcc = 35;
+                        bool identified = false;
+
+                        for (int i = 1; i < totalFrames; i++)
+                        {
+                            string fileCount = i.ToString();
+                            while (fileCount.Count() < 3)
+                            {
+                                fileCount = "0" + fileCount;
+                            }
+                            outputFile = outputFile + fileCount + ".jpg";
+
+                            // Retrieve digest of input image for comparison
+                            IdentifyImage1.DigestRaw raw = new IdentifyImage1.DigestRaw();
+                            IdentifyImage1.ph_image_digest(outputFile, 1, 1, ref raw, 180);
+                            IdentifyImage1.Digest d = IdentifyImage1.Digest.fromRaw(raw);
+
+                            for (int j = 0; j < fingerprint.Count; j++)
+                            {
+                                // Generate a struct for comparison from database
+                                IdentifyImage1.Digest d2 = new IdentifyImage1.Digest();
+                                d2.id = ((ImageFingerprint)fingerprint[j]).getDigestId();
+                                d2.coeffs = ((ImageFingerprint)fingerprint[j]).getDigestCoeffs();
+                                d2.size = 40;
+
+                                // Compare the results
+                                pcc = IdentifyImage1.computeSimilarities(d.coeffs, d2.coeffs);
+
+                                if (pcc > highestPcc)
+                                {
+                                    matchingPictures = (ImageFingerprint)fingerprint[j];
+                                    highestPcc = pcc;
+                                }
+                            }
+
+                            if (matchingPictures == null)
+                            {
+                                ulong hasha = 0;
+                                IdentifyImage1.ph_dct_imagehash(outputFile, ref hasha);
+
+                                int minHammingDistance = 20;
+                                for (int a = 0; a < fingerprint.Count; a++)
+                                {
+                                    // Compute Hamming Distance
+                                    int hammingDistance = IdentifyImage1.computeHammingDistance(hasha, ((ImageFingerprint)fingerprint[a]).getHash());
+
+                                    if (hammingDistance < minHammingDistance)
+                                    {
+                                        matchingPictures = (ImageFingerprint)fingerprint[a];
+                                        minHammingDistance = hammingDistance;
+                                    }
+                                }
+
+                                if (minHammingDistance < 10)
+                                {
+                                    identified = true;
+                                }
+                            }
+                            else
+                                identified = true;
+
+                            if (identified)
+                                break;
+                            else
+                            {
+                                highestPcc = 35;
+                                outputFile = @"C:\temp\uploads\output";
+                                matchingPictures = null;
+                            }
+                        }
+
+                        if (identified)
+                        {
+                            result.Text = "<b>File Analyzed: " + fileName + "<br/>Song in the video could not be identified but identical key frames from videos has been identified to be identical to copyrighted videos</b><br/>";
+                            displayedResult = displayedResult + "Title: Unidentified" + "<br/>" +
+                                            "Album Artist: Unidentified" + "<br/>" +
+                                            "Album: Unidentified" + "<br/>" +
+                                            "Key Frames: Identified to be identical to copyrighted videos" + "<br/><br/>" +
+                                            "Conclusion<br/>=========<br/>" +
+                                            "Song from the video could not be identified but key frames are identified to be identical to copyrighted videos.";
+                        }
+                        else
+                        {
+                            result.Text = "<b>File Analyzed: " + fileName + "<br/>Song and key frames from video could not be identified</b>";
+
+                            displayedResult = displayedResult + "Title: Unidentified" + "<br/>" +
+                                            "Album Artist: Unidentified" + "<br/>" +
+                                            "Album: Unidentified" + "<br/>" +
+                                            "Key Frames: Unidentified" + "<br/><br/>" +
+                                            "Conclusion<br/>=========<br/>" +
+                                            "Song and key frames from the video could not be identified.";
+
+                            ingestFingerprint.Visible = true;
+                            ingestFingerprint.Enabled = true;
+                            ingestFingerprint.Text = "Add Video";
+                            pathName.Text = savePath + ";" + totalFrames;
+
+                            videoAuthor.Visible = true;
+                            videoTitle.Visible = true;
+
+                            videoTitle.Text = "Enter Title...";
+                            videoAuthor.Text = "Enter Author...";
+
+                            videoTitle.Attributes.Add("onfocus", "if(this.value == 'Enter Title...') this.value='';");
+                            videoTitle.Attributes.Add("onblur", "if(this.value == '' || this.value == ' ') this.value='Enter Title...'");
+
+                            videoAuthor.Attributes.Add("onfocus", "if(this.value == 'Enter Author...') this.value='';");
+                            videoAuthor.Attributes.Add("onblur", "if(this.value == '' || this.value == ' ') this.value='Enter Author...'");
+                        }
                     }
                 }
 
@@ -333,7 +451,6 @@ namespace Altaria
             double matchedEvents = 0;
             double totalEvents = 0;
             int lastRecordedValue = (int)clientCode[0, 0];
-            //int lastRecordedValue = 0;
             bool clientStay = false;
             int masterValue = 0;
             int initialValue = (int)clientCode[0, 0];
@@ -464,17 +581,89 @@ namespace Altaria
         protected void ingestFingerprint_Click(object sender, EventArgs e)
         {
             bool success = false;
+            string text = ingestFingerprint.Text;
 
             if (!pathName.Text.Equals(""))
             {
-                success = addNewFingerprint(pathName.Text);
-                if (success)
+                if(text.Equals("Add Song"))
                 {
-                    addSongResult.Text = "Song has been added successfully. Thank you for your contribution";
-                    ingestFingerprint.Enabled = false;
+                    success = addNewFingerprint(pathName.Text);
+                    if (success)
+                    {
+                        addSongResult.Text = "Song has been added successfully. Thank you for your contribution";
+                        ingestFingerprint.Enabled = false;
+                    }
+                    else
+                        addSongResult.Text = "Required meta data fields has been left empty. Please fill in associated meta data";
                 }
                 else
-                    addSongResult.Text = "Required meta data fields has been left empty. Please fill in associated meta data";
+                {
+                    // Add video - add both song and keyframes
+                    // Retrieve path name for song and keyframes (Format: filename;totalNumOfKeyFrames)
+                    string pathParam = pathName.Text;
+                    int index = pathName.Text.IndexOf(";");
+                    int totalFrames = Convert.ToInt32(pathParam.Substring(index+1));
+                    string path = pathName.Text.Substring(0, index);
+
+                    string title = videoTitle.Text;
+                    string author = videoAuthor.Text;
+
+                    if (!String.IsNullOrEmpty(title) && !String.IsNullOrEmpty(author) && !title.Equals("Enter Title...") && !author.Equals("Enter Author..."))
+                    {
+                        // Add song fingerprint
+                        success = addNewFingerprint(path);
+
+                        if (success)
+                        {
+                            // Carry out addition of key frames
+                            string outputFile = @"C:\temp\uploads\output";
+                            for (int i = 1; i < totalFrames; i++)
+                            {
+                                string fileCount = i.ToString();
+                                while (fileCount.Count() < 3)
+                                {
+                                    fileCount = "0" + fileCount;
+                                }
+                                outputFile = outputFile + fileCount + ".jpg";
+
+                                IdentifyImage1.DigestRaw raw = new IdentifyImage1.DigestRaw();
+                                IdentifyImage1.ph_image_digest(outputFile, 1, 1, ref raw, 180);
+                                IdentifyImage1.Digest d = IdentifyImage1.Digest.fromRaw(raw);
+
+                                ulong hash = 0;
+                                IdentifyImage1.ph_dct_imagehash(outputFile, ref hash);
+
+                                outputFile = @"C:\temp\uploads\output";
+
+                                ImageFingerprint image;
+                                if (!String.IsNullOrEmpty(d.id))
+                                    image = new ImageFingerprint(title, author, d.id.ToString(), d.coeffs, hash);
+                                else
+                                    image = new ImageFingerprint(title, author, null, d.coeffs, hash);
+
+                                success = image.insertNewImage();
+
+                                if (success)
+                                {
+                                    addSongResult.Text = "Video has been added successfully. Thank you for your contribution";
+                                    ingestFingerprint.Enabled = false;
+                                }
+                                else
+                                {
+                                    addSongResult.Text = "Error in adding videos. Please try again later.";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            addSongResult.Text = "Required meta data fields has been left empty. Please fill in associated meta data";
+                        }
+                    }
+                    else
+                    {
+                        addSongResult.Text = "Please fill in associated fields about this video.";
+                    }
+                }
             }
             else
             {
@@ -503,7 +692,11 @@ namespace Altaria
                 SongInfo song2 = JsonHelper.JsonDeserializer<SongInfo>(analysisResults2);
 
                 if (song2.metadata.title.Equals("") || song2.metadata.artist.Equals("") || song2.metadata.release.Equals(""))
-                    return false;
+                {
+                    song2.metadata.title = videoTitle.Text;
+                    song2.metadata.artist = videoAuthor.Text;
+                    song2.metadata.release = videoTitle.Text;
+                }
 
                 if (i == 0)
                 {
@@ -601,7 +794,7 @@ namespace Altaria
             string filePath = Server.MapPath("Analysis Results.pdf");
             PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
             doc.Open();
-            Paragraph heading = new Paragraph("Audio Identification Results", new Font(Font.FontFamily.HELVETICA, 18f, Font.BOLD));
+            Paragraph heading = new Paragraph("Audio/Video Identification Results", new Font(Font.FontFamily.HELVETICA, 18f, Font.BOLD));
             doc.Add(heading);
             doc.Add(new Paragraph(text));
 
@@ -637,6 +830,36 @@ namespace Altaria
             catch (Exception ex)
             {
                 return "";
+            }
+        }
+
+        public int convertVideoToKeyFrames(string filename)
+        {
+            string ffmpegPath = Path.GetFullPath("cmd.exe");
+            filename = @"C:\temp\uploads\" + filename;
+            string command = @"/c ffmpeg -i """ + filename + @"""" + @" -filter:v select=""not(mod(n\,10))"",setpts=""N/(29.97*TB)"" C:\temp\uploads\output%03d.jpg";
+
+            try
+            {
+                Process proc = new Process();
+                proc.StartInfo.FileName = ffmpegPath;
+                proc.StartInfo.Arguments = command;
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.RedirectStandardOutput = false;
+                proc.StartInfo.RedirectStandardError = true;
+                proc.StartInfo.CreateNoWindow = false;
+
+                proc.Start();
+                string log = proc.StandardError.ReadToEnd();
+                proc.WaitForExit();
+
+                int index = log.LastIndexOf("drop") + 5;
+                int totalFrames = Convert.ToInt32(log.Substring(index, 3).Trim());
+                return totalFrames;
+            }
+            catch (Exception ex)
+            {
+                return -1;
             }
         }
     }
