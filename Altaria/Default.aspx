@@ -8,7 +8,8 @@
         <fieldset>
             <legend>Choose an avenue</legend>
         </fieldset>
-        <a href="ImageWM.aspx" class="btn btn-success">Image Watermarking</a> <a href="IdentifyAudio.aspx"
+        <a href="ImageWM.aspx" class="btn btn-success">Image Watermarking</a> 
+        <a href="AudioWM.aspx" class="btn btn-primary">Embed Audio DRM</a> <a href="AudioVerify.aspx" class="btn btn-danger">Verify Audio DRM</a> <a href="IdentifyAudio.aspx"
             class="btn btn-warning">Audio Fingerprinting</a> <a href="IdentifyImage.aspx" class="btn btn-info">
                 Image Fingerprinting</a>
     </div>
