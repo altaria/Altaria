@@ -8,13 +8,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="well">
         <fieldset>
-            <legend>Audio Fingerprinting Library</legend>
+            <legend>Audio/Video Fingerprinting Library</legend>
         </fieldset>
-        <ul>
-            <li>Identify audio track based on uploaded content</li>
-            <li>Act as a checkpoint for individuals before they upload media content online</li>
-            <li>Lower online copyright and legal cases</li>
-        </ul>
         <div class="space">
             <b>Stage 1:</b>
             <asp:FileUpload ID="uploadedfile" runat="server" ClientIDMode="Static" Width="520px" />
@@ -34,7 +29,9 @@
                 <asp:Button runat="server" ID="exportToPdf" Text="Results Analysis (PDF)" OnClick="exportToPdf_Click"
                     Visible="True" Enabled="false" class="btn" /></b><br />
             <br />
-            <asp:Label runat="server" ID="result" Text="Results Analysis" Visible="false"></asp:Label>
+            <asp:Label runat="server" ID="result" Text="Results Analysis" Visible="false"></asp:Label><br />
+            <asp:TextBox ID="videoTitle" runat="server" Text="Enter Title..." Visible="false"></asp:TextBox>&nbsp;&nbsp;
+            <asp:TextBox ID="videoAuthor" runat="server" Text="Enter Author..." Visible="false"></asp:TextBox>
             <asp:Button runat="server" ID="ingestFingerprint" Text="Add Song" OnClick="ingestFingerprint_Click"
                 Visible="False" />
             <asp:Label runat="server" ID="addSongResult" Text="Result" Visible="false"></asp:Label>
