@@ -8,12 +8,6 @@
         <fieldset>
             <legend>Choose an avenue</legend>
         </fieldset>
-<<<<<<< HEAD
-        <a href="ImageWM.aspx" class="btn btn-success">Image Watermarking</a> 
-        <a href="AudioWM.aspx" class="btn btn-primary">Embed Audio DRM</a> <a href="AudioVerify.aspx" class="btn btn-danger">Verify Audio DRM</a> <a href="IdentifyAudio.aspx"
-            class="btn btn-warning">Audio Fingerprinting</a> <a href="IdentifyImage.aspx" class="btn btn-info">
-                Image Fingerprinting</a>
-=======
         <ul class="thumbnails">
             <li class="span4">
                 <div class="thumbnail">
@@ -50,6 +44,32 @@
                 </div>
             </li>
         </ul>
->>>>>>> 99f4a057d39b1fec4efab660adc2e89d6165ce4c
+        <ul class="thumbnails">
+            <li class="span6">
+                <div class="thumbnail">
+                    <img src="" alt="">
+                    <p>
+                        Embeds DRM in audio files</p>
+                    <p>
+                        A key is generated unique to user which would be embedded in the audio file</p>
+                    <p>
+                        Watermarks a unique key into an audio file</p>
+                    <a href="AudioWM.aspx" class="btn btn-primary">Embed Audio DRM</a>
+                </div>
+            </li>
+            <li class="span6">
+                <div class="thumbnail">
+                    <img src="" alt="">
+                    <p>
+                        Verifies Embedded DRM in audio files</p>
+                    <p>
+                        Cross checks Embedded key with existing key in the database</p>
+                    <p>
+                        Assists in verfication of ownership of audio files</p>
+                    <a href="AudioVerify.aspx" class="btn btn-danger">Verify Audio DRM</a>
+                </div>
+            </li>
+
+        </ul>
     </div>
 </asp:Content>

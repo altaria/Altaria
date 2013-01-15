@@ -13,6 +13,15 @@ namespace Altaria {
     public partial class AudioVerify {
         
         /// <summary>
+        /// step1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl step1;
+        
+        /// <summary>
         /// uploadedfile control.
         /// </summary>
         /// <remarks>
@@ -22,13 +31,13 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.FileUpload uploadedfile;
         
         /// <summary>
-        /// scanAudio control.
+        /// uploadAudio control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button scanAudio;
+        protected global::System.Web.UI.WebControls.Button uploadAudio;
         
         /// <summary>
         /// LinkButton1 control.
@@ -38,5 +47,41 @@ namespace Altaria {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+        
+        /// <summary>
+        /// step2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl step2;
+        
+        /// <summary>
+        /// uploadedaudioname control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label uploadedaudioname;
+        
+        /// <summary>
+        /// Label1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
+        
+        /// <summary>
+        /// back control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton back;
     }
 }
