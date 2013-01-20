@@ -67,7 +67,7 @@ namespace Altaria
                 double songLength = Math.Round((getMediaDuration(savePath) / 4) / 60, 2);
 
                 //for (int b = 0; b < (getMediaDuration(savePath) / 4 - 2); b += 30)
-                for(int b = 0; b < 90; b+=30)
+                for(int b = 0; b < 60; b+=30)
                 {
                     // Analyze the files (input file)
                     string filename = savePath;
@@ -853,8 +853,8 @@ namespace Altaria
                 string log = proc.StandardError.ReadToEnd();
                 proc.WaitForExit();
 
-                int index = log.LastIndexOf("drop") + 5;
-                int totalFrames = Convert.ToInt32(log.Substring(index, 3).Trim());
+                int index = log.LastIndexOf("frame") + 7;
+                int totalFrames = Convert.ToInt32(log.Substring(index, 4).Trim());
                 return totalFrames;
             }
             catch (Exception ex)

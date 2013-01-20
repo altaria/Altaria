@@ -11,6 +11,9 @@
             <legend>Audio/Video Fingerprinting Library</legend>
         </fieldset>
         <div class="space">
+            <button type="button" onclick="startRecording()">Try me!</button>
+            <button type="button" onclick="stopRecording()">Stop!</button>
+            <br />
             <b>Stage 1:</b>
             <asp:FileUpload ID="uploadedfile" runat="server" ClientIDMode="Static" Width="520px" />
             <span class="input-append">
