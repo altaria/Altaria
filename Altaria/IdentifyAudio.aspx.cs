@@ -9,9 +9,12 @@ using System.Diagnostics;
 using Altaria.Model;
 using System.IO;
 using NAudio.Wave;
+using NAudio.Mixer;
 using System.Collections;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.VisualBasic.Devices;
+using Microsoft.VisualBasic;
 
 namespace Altaria
 {
@@ -28,7 +31,13 @@ namespace Altaria
         [DllImport(@"C:\temp\requiredFiles\codegen\windows\Release\codegen.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr getFingerPrint(string filename, int start_offset, int duration);
 
+        [DllImport("winmm.dll", EntryPoint="mciSendStringA", CharSet=CharSet.Ansi, SetLastError=true, ExactSpelling=true)]
+        public static extern int mciSendString(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
+
         String savePath = @"C:\temp\uploads\";
+        WaveIn waveIn;
+        SampleAggregator sampleAggregator;
+        WaveFileWriter writer;
 
         protected void Page_Load(object sender, EventArgs e)
         {
