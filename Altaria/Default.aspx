@@ -16,7 +16,7 @@
                         A series of image watermarking implementations based on several research papers.</p>
                     <p>
                         The test will also include attempted recovery of watermarks from attacked images.</p>
-                    <a href="ImageWM.aspx" class="btn btn-success" style="width: 92%; margin-top: 10px">Image Watermarking</a>
+                    <a href="ImageWM.aspx" class="btn btn-success" style="margin-top: 10px">Image Watermarking</a>
                 </div>
             </li>
             <li class="span4">
@@ -28,7 +28,7 @@
                         Acts as a checkpoint for individuals before they upload media content online.</p>
                     <p>
                         Attempts to lower online copyright and legal cases.</p>
-                    <a href="IdentifyAudio.aspx" class="btn btn-warning" style="width: 92%">Audio / Video Fingerprinting</a>
+                    <a href="IdentifyAudio.aspx" class="btn btn-warning">Audio / Video Fingerprinting</a>
                 </div>
             </li>
             <li class="span4">
@@ -40,7 +40,7 @@
                         Acts as a checkpoint for individuals before they upload media content online/</p>
                     <p>
                         Lower online copyright and legal cases.</p>
-                    <a href="IdentifyImage.aspx" class="btn btn-info" style="width: 92%">Image Fingerprinting</a>
+                    <a href="IdentifyImage.aspx" class="btn btn-info">Image Fingerprinting</a>
                 </div>
             </li>
         </ul>

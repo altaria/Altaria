@@ -82,6 +82,7 @@
                             runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_all_img" />
+                        <asp:Image runat="server" ID="alphablending_all_obv_img" />
                         <hr />
                     </div>
                     <div class="span6">
@@ -107,6 +108,7 @@
                         <asp:Image runat="server" ID="alphablending_full_random_img" />
                         <asp:Image runat="server" ID="alphablending_full_random_obv_img" />
                     </div>
+                    <asp:Button OnClick="Calculate_Values" Text="SSIM, PSNR" runat="server" />
                 </div>
             </div>
             <div runat="server" id="extract">

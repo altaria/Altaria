@@ -55,7 +55,19 @@ namespace Altaria
                     }
                     else if (mode == "aball")
                     {
-                        ci.AlphaBlendTest(wm).Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
+                        try
+                        {
+                            string alpha = context.Request.QueryString["alpha"];
+                            double a = Convert.ToDouble(alpha) / 10.0;
+                            ci.AlphaBlend(wm, a);
+                        }
+                        catch
+                        {
+                            ci.AlphaBlend(wm);
+                        }
+                        ci.HaarRestore();
+                        ci.ConcatPlanes();
+                        ci.concatbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
                     }
                     else if (mode == "abfull")
                     {

@@ -130,6 +130,15 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.Image alphablending_all_img;
         
         /// <summary>
+        /// alphablending_all_obv_img control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image alphablending_all_obv_img;
+        
+        /// <summary>
         /// Label1 control.
         /// </summary>
         /// <remarks>

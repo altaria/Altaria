@@ -62,7 +62,8 @@ namespace Altaria
                 erplane_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_plane";
                 //Alpha Blending for all subbands
                 //mode = aball
-                alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=aball";
+                alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=aball&alpha=9";
+                alphablending_all_obv_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=aball&alpha=7";
                 //Alpha Blending for lh and hl subbands, but embedding with full watermark (non transformed).
                 //The watermark pixels will be spread out with a formula and is grayscale
                 //mode = abfull
@@ -131,6 +132,11 @@ namespace Altaria
         {
             step1.Visible = true;
             step2.Visible = false;
+        }
+
+        protected void Calculate_Values(object sender, EventArgs e)
+        {
+
         }
     }
 }
