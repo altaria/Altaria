@@ -20,7 +20,6 @@ namespace Altaria
             step2.Visible = false;
             step3.Visible = false;
         }
-        //protected List<AltariaImage> ai = new List<AltariaImage>();
         protected List<AltariaImage> ai = new List<AltariaImage>();
         //Upload file
         protected void upload_onclick(object sender, EventArgs e)
@@ -31,8 +30,6 @@ namespace Altaria
                 for (int i = 0; i < hfc.Count; i++)
                 {
                     HttpPostedFile file = hfc[i];
-                    //AltariaImage temp_ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
-                    //AltariaImage temp_ai = new AltariaImage(file.InputStream, file.FileName);
                     AltariaImage temp_ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
                     ai.Add(temp_ai);
                     //add uploaded file to session
@@ -53,13 +50,15 @@ namespace Altaria
             if (fu.HasFile)
             {
                 //validate whether is image
-                //                if (Validation.isImage(fu.PostedFile.ContentType))
-                //               {
+                // if (Validation.isImage(fu.PostedFile.ContentType))
+                // {
                 Session.Add(fu.PostedFile.FileName, new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
                 step3.Visible = true;
                 extract.Visible = false;
-                rplane_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=rplane";
+                erplane_original_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=aball_plane";
+                erplane_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_all_plane";
                 erplane_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_plane";
+                erplane_rand_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_rand_plane";
                 //Alpha Blending for all subbands
                 //mode = aball
                 alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=aball&alpha=9";
