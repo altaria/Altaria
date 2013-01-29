@@ -24,7 +24,7 @@ namespace Altaria
             {
                 try
                 {
-                    ((NewAltariaImage)context.Session[original]).originalbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Png);
+                    ((AltariaImage)context.Session[original]).originalbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Png);
                 }
                 catch (Exception)
                 {
@@ -40,8 +40,8 @@ namespace Altaria
                 //AltariaImage ci = (AltariaImage)Session[((Label)(ri.FindControl("ci"))).Text]; 
                 if (wmname != null && mode != null)
                 {
-                    NewAltariaImage wm = (NewAltariaImage)context.Session[wmname];
-                    NewAltariaImage ci = (NewAltariaImage)context.Session[filename];
+                    AltariaImage wm = (AltariaImage)context.Session[wmname];
+                    AltariaImage ci = (AltariaImage)context.Session[filename];
                     if (!ci.IsTransformed())
                         ci.HaarTransform();
                     if (!wm.IsTransformed())
@@ -181,7 +181,7 @@ namespace Altaria
                 }
                 else
                 {
-                    NewAltariaImage ci = (NewAltariaImage)context.Session[filename];
+                    AltariaImage ci = (AltariaImage)context.Session[filename];
                     ci.originalbmp.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Bmp);
                 }
         }

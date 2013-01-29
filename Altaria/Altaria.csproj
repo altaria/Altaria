@@ -116,7 +116,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AltariaImage.cs" />
     <Compile Include="AudioVerify.aspx.cs">
       <DependentUpon>AudioVerify.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -174,7 +173,7 @@
     <Compile Include="Model\SongIdentification.cs" />
     <Compile Include="Model\SongInfo.cs" />
     <Compile Include="Model\SongRetrieval.cs" />
-    <Compile Include="NewAltariaImage.cs" />
+    <Compile Include="AltariaImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

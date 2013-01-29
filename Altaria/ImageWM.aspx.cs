@@ -21,7 +21,7 @@ namespace Altaria
             step3.Visible = false;
         }
         //protected List<AltariaImage> ai = new List<AltariaImage>();
-        protected List<NewAltariaImage> ai = new List<NewAltariaImage>();
+        protected List<AltariaImage> ai = new List<AltariaImage>();
         //Upload file
         protected void upload_onclick(object sender, EventArgs e)
         {
@@ -33,7 +33,7 @@ namespace Altaria
                     HttpPostedFile file = hfc[i];
                     //AltariaImage temp_ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
                     //AltariaImage temp_ai = new AltariaImage(file.InputStream, file.FileName);
-                    NewAltariaImage temp_ai = new NewAltariaImage(new Bitmap(file.InputStream), file.FileName);
+                    AltariaImage temp_ai = new AltariaImage(new Bitmap(file.InputStream), file.FileName);
                     ai.Add(temp_ai);
                     //add uploaded file to session
                     Session.Add(file.FileName, temp_ai);
@@ -55,7 +55,7 @@ namespace Altaria
                 //validate whether is image
                 //                if (Validation.isImage(fu.PostedFile.ContentType))
                 //               {
-                Session.Add(fu.PostedFile.FileName, new NewAltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
+                Session.Add(fu.PostedFile.FileName, new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
                 step3.Visible = true;
                 extract.Visible = false;
                 rplane_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=rplane";
@@ -89,14 +89,14 @@ namespace Altaria
                 //validate whether is image
                 //          if (Validation.isImage(fu.PostedFile.ContentType) && ddl.SelectedIndex != 1)
                 //        {
-                Session.Add(fu.PostedFile.FileName, new NewAltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
+                Session.Add(fu.PostedFile.FileName, new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
                 step3.Visible = true;
                 embed.Visible = false;
                 //Extract watermark
                 int alpha = (int)(Convert.ToDouble(ddl.SelectedValue) * 10.0);
                 original_img.ImageUrl = "ImageHandler.ashx?original=" + fu.PostedFile.FileName;
                 extracted_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_ex_rand&alpha=" + alpha;
-                NewAltariaImage nai = new NewAltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName).SaltAndPepper(5);
+                AltariaImage nai = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName).SaltAndPepper(5);
                 Session.Add("snp1", nai);
                 snp1.ImageUrl = "ImageHandler.ashx?original=snp1";
                 extracted_snp1.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=snp1&mode=abfull_ex_rand&alpha=" + alpha;
@@ -114,7 +114,7 @@ namespace Altaria
             if (riea.Item.ItemType == ListItemType.Item || riea.Item.ItemType == ListItemType.AlternatingItem)
             {
                 //AltariaImage ai = riea.Item.DataItem as AltariaImage;
-                NewAltariaImage ai = riea.Item.DataItem as NewAltariaImage;
+                AltariaImage ai = riea.Item.DataItem as AltariaImage;
                 if (ai.watermarked)
                 {
                     //watermarked

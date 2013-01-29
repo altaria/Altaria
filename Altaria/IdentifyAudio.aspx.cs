@@ -9,12 +9,9 @@ using System.Diagnostics;
 using Altaria.Model;
 using System.IO;
 using NAudio.Wave;
-using NAudio.Mixer;
 using System.Collections;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using Microsoft.VisualBasic.Devices;
-using Microsoft.VisualBasic;
 
 namespace Altaria
 {
@@ -35,9 +32,6 @@ namespace Altaria
         public static extern int mciSendString(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
 
         String savePath = @"C:\temp\uploads\";
-        WaveIn waveIn;
-        SampleAggregator sampleAggregator;
-        WaveFileWriter writer;
 
         protected void Page_Load(object sender, EventArgs e)
         {
