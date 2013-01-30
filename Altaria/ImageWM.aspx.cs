@@ -63,17 +63,21 @@ namespace Altaria
                 //mode = aball
                 alphablending_all_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=aball&alpha=9";
                 alphablending_all_obv_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=aball&alpha=7";
+               // alphablending_all_vobv_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=aball&alpha=5";
                 //Alpha Blending for lh and hl subbands, but embedding with full watermark (non transformed).
                 //The watermark pixels will be spread out with a formula and is grayscale
                 //mode = abfull
                 alphablending_full_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull&alpha=9";
                 alphablending_full_obv_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull&alpha=7";
+                alphablending_full_vobv_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull&alpha=5";
                 //like abfull, but for all sub bands
                 alphablending_full_img_all.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_all&alpha=9";
                 alphablending_full_obv_img_all.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_all&alpha=7";
+                //alphablending_full_vobv_img_all.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_all&alpha=5";
                 //like abfull, but the placement is randomized.
                 alphablending_full_random_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_rand&alpha=9";
                 alphablending_full_random_obv_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_rand&alpha=7";
+               // alphablending_full_random_vobv_img.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=" + fu.PostedFile.FileName + "&mode=abfull_rand&alpha=5";
                 //             }
             }
         }
@@ -86,9 +90,6 @@ namespace Altaria
             DropDownList ddl = ri.FindControl("alpha_list") as DropDownList;
             if (fu.HasFile)
             {
-                //validate whether is image
-                //          if (Validation.isImage(fu.PostedFile.ContentType) && ddl.SelectedIndex != 1)
-                //        {
                 Session.Add(fu.PostedFile.FileName, new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName));
                 step3.Visible = true;
                 embed.Visible = false;
@@ -100,11 +101,10 @@ namespace Altaria
                 Session.Add("snp1", nai);
                 snp1.ImageUrl = "ImageHandler.ashx?original=snp1";
                 extracted_snp1.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=snp1&mode=abfull_ex_rand&alpha=" + alpha;
-                //      }
-                //      else
-                //      {
-                //do nothing
-                //      }
+                AltariaImage nai2 = new AltariaImage(new Bitmap(fu.PostedFile.InputStream), fu.PostedFile.FileName).CompressImage(50L);
+                Session.Add("compress1", nai2);
+                compress1.ImageUrl = "ImageHandler.ashx?original=compress1";
+                extracted_compress1.ImageUrl = "ImageHandler.ashx?file=" + ((Label)(ri.FindControl("ci"))).Text + "&wm=compress1&mode=abfull_ex_rand&alpha=" + alpha;
             }
         }
 

@@ -5,6 +5,7 @@ using System.Web;
 using System.Drawing;
 using System.IO;
 using AForge.Imaging.Filters;
+using System.Drawing.Imaging;
 
 namespace Altaria
 {
@@ -450,48 +451,7 @@ namespace Altaria
             lh_b = b_plane.Clone(lh_crop, b_plane.PixelFormat);
             hh_b = b_plane.Clone(hh_crop, b_plane.PixelFormat);
 
-            if (!random)
-            {
-                //embed
-                for (int i = 0; i < wm.Width; i++)
-                    for (int j = 0; j < wm.Height; j++)
-                    {
-                        //hl
-                        finalpixel = alpha * hl_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
-                        hl_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        finalpixel = alpha * hl_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
-                        hl_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        finalpixel = alpha * hl_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
-                        hl_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-
-                        //lh
-                        finalpixel = alpha * lh_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
-                        lh_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        finalpixel = alpha * lh_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
-                        lh_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        finalpixel = alpha * lh_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
-                        lh_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-
-                        if (allplanes)
-                        {
-                            //ll
-                            finalpixel = alpha * ll_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
-                            ll_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                            finalpixel = alpha * ll_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
-                            ll_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                            finalpixel = alpha * ll_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
-                            ll_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                            //hh
-                            finalpixel = alpha * hh_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
-                            hh_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                            finalpixel = alpha * hh_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
-                            hh_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                            finalpixel = alpha * hh_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
-                            hh_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
-                        }
-                    }
-            }
-            else
+            if (random)
             {
                 //determine the position of placement based on maximum coefficient of original image
                 int max_hl_r = 0, max_hl_g = 0, max_hl_b = 0;
@@ -560,6 +520,48 @@ namespace Altaria
                         lh_b.SetPixel(i, jj, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
                     }
                 }
+            }
+            else
+            {
+                //embed
+                for (int i = 0; i < wm.Width; i++)
+                    for (int j = 0; j < wm.Height; j++)
+                    {
+                        //hl
+                        finalpixel = alpha * hl_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                        hl_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * hl_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                        hl_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * hl_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                        hl_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+
+                        //lh
+                        finalpixel = alpha * lh_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                        lh_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * lh_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                        lh_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        finalpixel = alpha * lh_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                        lh_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+
+                        if (allplanes)
+                        {
+                            //ll
+                            finalpixel = alpha * ll_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                            ll_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            finalpixel = alpha * ll_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                            ll_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            finalpixel = alpha * ll_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                            ll_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            //hh
+                            finalpixel = alpha * hh_r.GetPixel(i, j).R + (1.0 - alpha) * wm.GetPixel(i, j).R;
+                            hh_r.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            finalpixel = alpha * hh_g.GetPixel(i, j).G + (1.0 - alpha) * wm.GetPixel(i, j).G;
+                            hh_g.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                            finalpixel = alpha * hh_b.GetPixel(i, j).B + (1.0 - alpha) * wm.GetPixel(i, j).B;
+                            hh_b.SetPixel(i, j, Color.FromArgb((int)finalpixel, (int)finalpixel, (int)finalpixel));
+                        }
+                    }
+
             }
 
             //merge the subbands back
@@ -805,6 +807,34 @@ namespace Altaria
         }
 
         /// <summary>
+        /// Compresses an image.
+        /// </summary>
+        /// <param name="quality">how much quality to retain. value from 0L to 100L (0L is lowest quality)</param>
+        /// <returns></returns>
+        internal AltariaImage CompressImage(long quality)
+        {
+            Bitmap target = this.originalbmp;
+            ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
+
+            // Create an Encoder object based on the GUID 
+            // for the Quality parameter category.
+            System.Drawing.Imaging.Encoder myEncoder =
+                System.Drawing.Imaging.Encoder.Quality;
+
+            // Create an EncoderParameters object. 
+            // An EncoderParameters object has an array of EncoderParameter 
+            // objects. In this case, there is only one 
+            // EncoderParameter object in the array.
+            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+
+            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, quality);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+            MemoryStream memoryStream = new MemoryStream();
+            target.Save(memoryStream, jgpEncoder, myEncoderParameters);
+            return new AltariaImage(new Bitmap(memoryStream), this.Name);
+        }
+
+        /// <summary>
         /// Function to obtain the Peak Signal-to-Noise Ratio. A higher value would normally indicate that the reconstruction
         /// is of a higher quality. It is an approximation to human perception of reconstruction quality.
         /// </summary>
@@ -887,6 +917,21 @@ namespace Altaria
                 throw new InvalidOperationException("The images have to be of the same dimensions of n*n.");
             }
 
+        }
+
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
         }
     }
 }

@@ -88,48 +88,77 @@
                         <hr />
                     </div>
                     <div class="span8">
-                        <asp:Label ID="Label2" Text="Alpha Blending: All sub bands with varying alphas of 0.9 and 0.7"
+                        <asp:Label ID="Label2" Text="Alpha Blending: All sub bands with varying alphas"
                             runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_all_img" />
                         <asp:Image runat="server" ID="alphablending_all_obv_img" />
+                        <!--<asp:Image runat="server" ID="alphablending_all_vobv_img" />-->
                         <hr />
                         <asp:Label Text="Alpha Blending for all sub bands, with non-transformed grayscale watermark."
                             runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_full_img_all" />
                         <asp:Image runat="server" ID="alphablending_full_obv_img_all" />
+                        <!--<asp:Image runat="server" ID="alphablending_full_vobv_img_all" />-->
                         <hr />
                         <asp:Label Text="Alpha Blending for lh and hl sub bands, with non-transformed grayscale watermark."
                             runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_full_img" />
                         <asp:Image runat="server" ID="alphablending_full_obv_img" />
+                        <!--<asp:Image runat="server" ID="alphablending_full_vobv_img" />-->
                         <hr />
                         <asp:Label Text="Alpha Blending for lh and hl sub bands, with randomized placement of non-transformed grayscale watermark."
                             runat="server"></asp:Label>
                         <br />
                         <asp:Image runat="server" ID="alphablending_full_random_img" />
                         <asp:Image runat="server" ID="alphablending_full_random_obv_img" />
+                        <!--<asp:Image runat="server" ID="alphablending_full_random_vobv_img" />-->
                         <br />
                         <!--<asp:Button ID="Button1" OnClick="Calculate_Values" Text="SSIM, PSNR" runat="server" />-->
                     </div>
                 </div>
-                <div runat="server" id="extract">
-                    <asp:Label Text="Results" runat="server" />
-                    <hr />
-                    <div class="container">
-                        <div class="row-fluid">
-                            <div class="span3">
-                                <asp:Image runat="server" ID="original_img" />
-                                <br />
-                                <asp:Image runat="server" ID="extracted_img" />
-                            </div>
-                            <div class="span3">
-                                <asp:Image runat="server" ID="snp1" />
-                                <br />
-                                <asp:Image runat="server" ID="extracted_snp1" />
-                            </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <asp:LinkButton runat="server" ID="LinkButton3" OnClick="backtostep1_onclick" class="btn btn-warning">
+        <i class="icon-backward"></i>
+        Back to first stage
+                        </asp:LinkButton>
+                    </div>
+                </div>
+            </div>
+            <div runat="server" id="extract">
+                <h3>Results</h3>
+                <hr />
+                <div class="container">
+                    <div class="row-fluid">
+                        <div class="span3">
+                            Original image
+                            <asp:Image runat="server" ID="original_img" />
+                            <br />
+                            <asp:Image runat="server" ID="extracted_img" />
+                        </div>
+                        <div class="span3">
+                            Salt and pepper attack
+                            <asp:Image runat="server" ID="snp1" />
+                            <br />
+                            <asp:Image runat="server" ID="extracted_snp1" />
+                        </div>
+                        <div class="span3">
+                            Jpeg2000 compression
+                            <asp:Image runat="server" ID="compress1" />
+                            <br />
+                            <asp:Image runat="server" ID="extracted_compress1" />
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <hr />
+                            <asp:LinkButton runat="server" ID="LinkButton2" OnClick="backtostep1_onclick" class="btn btn-warning">
+        <i class="icon-backward"></i>
+        Back to first stage
+                            </asp:LinkButton>
                         </div>
                     </div>
                 </div>

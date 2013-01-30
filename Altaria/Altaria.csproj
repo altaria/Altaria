@@ -94,6 +94,7 @@
     <Content Include="AudioWM.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Dlls\AForge.Imaging.dll" />
+    <Content Include="Dlls\FreeImage.dll" />
     <Content Include="Dlls\itextsharp.dll" />
     <Content Include="Dlls\MySql.Data.dll" />
     <Content Include="Dlls\MySql.Data.Entity.dll" />

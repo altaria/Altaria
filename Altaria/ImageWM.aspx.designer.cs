@@ -175,6 +175,15 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.Image alphablending_all_obv_img;
         
         /// <summary>
+        /// alphablending_all_vobv_img control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image alphablending_all_vobv_img;
+        
+        /// <summary>
         /// alphablending_full_img_all control.
         /// </summary>
         /// <remarks>
@@ -191,6 +200,15 @@ namespace Altaria {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image alphablending_full_obv_img_all;
+        
+        /// <summary>
+        /// alphablending_full_vobv_img_all control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image alphablending_full_vobv_img_all;
         
         /// <summary>
         /// alphablending_full_img control.
@@ -211,6 +229,15 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.Image alphablending_full_obv_img;
         
         /// <summary>
+        /// alphablending_full_vobv_img control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image alphablending_full_vobv_img;
+        
+        /// <summary>
         /// alphablending_full_random_img control.
         /// </summary>
         /// <remarks>
@@ -229,6 +256,15 @@ namespace Altaria {
         protected global::System.Web.UI.WebControls.Image alphablending_full_random_obv_img;
         
         /// <summary>
+        /// alphablending_full_random_vobv_img control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image alphablending_full_random_vobv_img;
+        
+        /// <summary>
         /// Button1 control.
         /// </summary>
         /// <remarks>
@@ -236,6 +272,15 @@ namespace Altaria {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Button1;
+        
+        /// <summary>
+        /// LinkButton3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButton3;
         
         /// <summary>
         /// extract control.
@@ -281,5 +326,32 @@ namespace Altaria {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image extracted_snp1;
+        
+        /// <summary>
+        /// compress1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image compress1;
+        
+        /// <summary>
+        /// extracted_compress1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image extracted_compress1;
+        
+        /// <summary>
+        /// LinkButton2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButton2;
     }
 }
