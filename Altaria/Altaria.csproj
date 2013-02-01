@@ -51,6 +51,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dlls\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>Dlls\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics.FSharp">
+      <HintPath>Dlls\MathNet.Numerics.FSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics.IO">
+      <HintPath>Dlls\MathNet.Numerics.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="MediaManagerPro_Trial, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\MediaManagerPro_Trial.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MySql.Data, Version=6.6.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -74,6 +87,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xaml" />
@@ -95,10 +109,58 @@
     <Content Include="Default.aspx" />
     <Content Include="Dlls\AForge.Imaging.dll" />
     <Content Include="Dlls\itextsharp.dll" />
+    <Content Include="Dlls\MathNet.Numerics.dll" />
+    <Content Include="Dlls\MathNet.Numerics.FSharp.dll" />
+    <Content Include="Dlls\MathNet.Numerics.IO.dll" />
+    <Content Include="Dlls\MediaManagerPro_Trial.dll" />
     <Content Include="Dlls\MySql.Data.dll" />
     <Content Include="Dlls\MySql.Data.Entity.dll" />
     <Content Include="Dlls\MySql.Web.dll" />
     <Content Include="Dlls\NAudio.dll" />
+    <Content Include="ffmpeg\avcodec-51.dll" />
+    <Content Include="ffmpeg\avdevice-52.dll" />
+    <Content Include="ffmpeg\avformat-51.dll" />
+    <Content Include="ffmpeg\avformat-52.dll" />
+    <Content Include="ffmpeg\avutil-49.dll" />
+    <Content Include="ffmpeg\doc\faq.html" />
+    <Content Include="ffmpeg\doc\ffmpeg-doc.html" />
+    <Content Include="ffmpeg\doc\ffplay-doc.html" />
+    <Content Include="ffmpeg\ffmpeg.exe" />
+    <Content Include="ffmpeg\ffplay.exe" />
+    <Content Include="ffmpeg\GPL.txt" />
+    <Content Include="ffmpeg\imlib2\filters\bumpmap.dll" />
+    <Content Include="ffmpeg\imlib2\filters\colormod.dll" />
+    <Content Include="ffmpeg\imlib2\filters\testfilter.dll" />
+    <Content Include="ffmpeg\imlib2\loaders\argb.dll" />
+    <Content Include="ffmpeg\imlib2\loaders\bmp.dll" />
+    <Content Include="ffmpeg\imlib2\loaders\jpeg.dll" />
+    <Content Include="ffmpeg\imlib2\loaders\lbm.dll" />
+    <Content Include="ffmpeg\imlib2\loaders\png.dll" />
+    <Content Include="ffmpeg\imlib2\loaders\pnm.dll" />
+    <Content Include="ffmpeg\imlib2\loaders\tiff.dll" />
+    <Content Include="ffmpeg\imlib2\loaders\xpm.dll" />
+    <Content Include="ffmpeg\libfreetype-6.dll" />
+    <Content Include="ffmpeg\libImlib2-1.dll" />
+    <Content Include="ffmpeg\libpng-3.dll" />
+    <Content Include="ffmpeg\libtiff-3.dll" />
+    <Content Include="ffmpeg\libungif-4.dll" />
+    <Content Include="ffmpeg\pthreadGC2.dll" />
+    <Content Include="ffmpeg\README.txt" />
+    <Content Include="ffmpeg\SDL.dll" />
+    <Content Include="ffmpeg\swscale-0.dll" />
+    <Content Include="ffmpeg\vhook\drawtext.c" />
+    <Content Include="ffmpeg\vhook\drawtext.dll" />
+    <Content Include="ffmpeg\vhook\fish.c" />
+    <Content Include="ffmpeg\vhook\fish.dll" />
+    <Content Include="ffmpeg\vhook\imlib2.c" />
+    <Content Include="ffmpeg\vhook\imlib2.dll" />
+    <Content Include="ffmpeg\vhook\null.c" />
+    <Content Include="ffmpeg\vhook\null.dll" />
+    <Content Include="ffmpeg\vhook\ppm.c" />
+    <Content Include="ffmpeg\vhook\watermark.c" />
+    <Content Include="ffmpeg\vhook\watermark.dll" />
+    <Content Include="flvtool\examples\tags.xml" />
+    <Content Include="flvtool\flvtool2.exe" />
     <Content Include="IdentifyAudio.aspx" />
     <Content Include="IdentifyImage.aspx" />
     <Content Include="Styles\bootstrap.css" />
@@ -166,7 +228,9 @@
     </Compile>
     <Compile Include="Model\Album.cs" />
     <Compile Include="Model\Artist.cs" />
+    <Compile Include="Model\AudioReader.cs" />
     <Compile Include="Model\DBConnect.cs" />
+    <Compile Include="Model\DCT.cs" />
     <Compile Include="Model\ImageFingerprint.cs" />
     <Compile Include="Model\JsonHelper.cs" />
     <Compile Include="Model\Metadata.cs" />
@@ -185,6 +249,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Audio\" />
+    <Folder Include="ffmpeg\bin\" />
     <Folder Include="img\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
@@ -199,6 +265,20 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ffmpeg\doc\vssver2.scc" />
+    <None Include="ffmpeg\imlib2\filters\vssver2.scc" />
+    <None Include="ffmpeg\imlib2\loaders\vssver2.scc" />
+    <None Include="ffmpeg\Thumbs.db" />
+    <None Include="ffmpeg\vhook\Makefile" />
+    <None Include="ffmpeg\vhook\vssver2.scc" />
+    <None Include="ffmpeg\vssver2.scc" />
+    <None Include="flvtool\CHANGELOG" />
+    <None Include="flvtool\examples\vssver2.scc" />
+    <None Include="flvtool\LICENSE" />
+    <None Include="flvtool\README" />
+    <None Include="flvtool\vssver2.scc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
