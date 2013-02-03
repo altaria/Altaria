@@ -37,7 +37,7 @@
                     <p>
                         Identify image based on uploaded content</p>
                     <p>
-                        Acts as a checkpoint for individuals before they upload media content online/</p>
+                        Acts as a checkpoint for individuals before they upload media content online.</p>
                     <p>
                         Lower online copyright and legal cases.</p>
                     <a href="IdentifyImage.aspx" class="btn btn-info">Image Fingerprinting</a>
