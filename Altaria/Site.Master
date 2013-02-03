@@ -29,6 +29,9 @@
             $('input[id=uploadedfile]').change(function () {
                 $('#imagename').val($(this).val().replace(/C:\\fakepath\\/i, ''));
             });
+            $('input[id=uploadedfile2]').change(function () {
+                $('#imagename2').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+            });
     </script>
     </div>
     </form>

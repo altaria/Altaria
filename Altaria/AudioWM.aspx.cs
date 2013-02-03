@@ -71,10 +71,12 @@ namespace Altaria
         {
 
             ar = new AudioReader(namelabel.Text, pathlabel.Text);
-            FrameInfoLabel.Text = FrameDropDown.SelectedValue;
-            int headerlength = Int32.Parse(FrameDropDown.SelectedValue);
+            //FrameInfoLabel.Text = FrameDropDown.SelectedValue;
+            //int headerlength = Int32.Parse(FrameDropDown.SelectedValue);
+            FrameInfoLabel.Text = "40000";
+            int headerlength = 40000;
             int userid = Int32.Parse(useridlabel.Text);
-            ar.readAudio(userid, headerlength );
+            ar.readAudio(userid, headerlength,1);
             userinfo.Visible = true;
             mediainfo.Visible = true;
             frameinfo.Visible = true;

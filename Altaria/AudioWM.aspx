@@ -23,7 +23,7 @@
             <div runat="server" id="userinfo">
             <h5>User Info</h5>
             <asp:Label ID="UserInfoLabel" runat="server" Text=""></asp:Label>
-            <asp:Label ID="useridlabel" runat="server" Text="Label" Visible="true"></asp:Label>
+            <asp:Label ID="useridlabel" runat="server" Text="Label" Visible="false"></asp:Label>
             <hr />
             </div>
              <div runat="server" id="frameinfo">
@@ -32,10 +32,10 @@
             <hr />
             <asp:Label ID="Label1" runat="server" Text="Your Watermarked Audio File has been generated."></asp:Label>
             <br />
-            <asp:LinkButton runat="server" ID="LinkButton1" OnClick="backtostep1_onclick" class="btn btn-warning">
-
-            <i class="icon-backward"></i>
-            Back to first step
+            <br />
+            <asp:LinkButton runat="server" ID="LinkButton1" PostBackUrl="~/Default.aspx" class="btn btn-warning">
+        <i class="icon-backward"></i>
+        Back to menu
             </asp:LinkButton>
             <hr />
 
@@ -79,7 +79,7 @@
         </div>
         <div runat="server" id="step3">
            
-            <h6>Select Frame Length</h6>
+            <%--<h6>Select Frame Length</h6>
             <asp:DropDownList ID="FrameDropDown" runat="server">
                 <asp:ListItem>40000</asp:ListItem>
                 <asp:ListItem>30000</asp:ListItem>
@@ -87,9 +87,10 @@
                 <asp:ListItem>10000</asp:ListItem>
                 <asp:ListItem>5000</asp:ListItem>
                 <asp:ListItem>1000</asp:ListItem>
-            </asp:DropDownList>
+            </asp:DropDownList>--%>
             <asp:Label ID="PreConfirmLabel" runat="server" Text=""></asp:Label>
             <asp:Button ID="Confirm" runat="server" class="btn btn-success" Text="Confirm" onclick="Confirm_Click" />
+            <br />
             <br />
             <asp:LinkButton runat="server" ID="back2" OnClick="backtostep2_onclick" class="btn btn-warning">
 
