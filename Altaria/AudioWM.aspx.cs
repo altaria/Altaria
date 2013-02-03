@@ -19,6 +19,7 @@ namespace Altaria
             step3.Visible = false;
             mediainfo.Visible = false;
             userinfo.Visible = false;
+            frameinfo.Visible = false;
 
         }
 
@@ -34,9 +35,11 @@ namespace Altaria
                     string filepath = Server.MapPath("~\\Audio\\");
                     ar = new AudioReader(filename, filepath);
                     FileInfoLabel.Text = ar.audioInfo();
-                    ar.readAudio();
+                    //ar.testloop();
                     step1.Visible = false;
                     step2.Visible = true;
+                    namelabel.Text = filename;
+                    pathlabel.Text = filepath;
                     mediainfo.Visible = true;
                     ErrorMessage.Visible = false;
                 }
@@ -55,17 +58,26 @@ namespace Altaria
         
         protected void SelectUserButton_Click(object sender, EventArgs e)
         {
-
             UserInfoLabel.Text = UserDropdown.SelectedItem.ToString();
+            useridlabel.Text = UserDropdown.SelectedItem.Value;
             step1.Visible = false;
             step2.Visible = false;
             step3.Visible = true;
             userinfo.Visible = true;
             mediainfo.Visible = true;
+            frameinfo.Visible = false;
         }
         protected void Confirm_Click(object sender, EventArgs e)
         {
 
+            ar = new AudioReader(namelabel.Text, pathlabel.Text);
+            FrameInfoLabel.Text = FrameDropDown.SelectedValue;
+            int headerlength = Int32.Parse(FrameDropDown.SelectedValue);
+            int userid = Int32.Parse(useridlabel.Text);
+            ar.readAudio(userid, headerlength );
+            userinfo.Visible = true;
+            mediainfo.Visible = true;
+            frameinfo.Visible = true;
         }
 
         protected void backtostep1_onclick(object sender, EventArgs e)
@@ -75,6 +87,7 @@ namespace Altaria
             step3.Visible = false;
             mediainfo.Visible = false;
             userinfo.Visible = false;
+            frameinfo.Visible = false;
         }
 
         protected void backtostep2_onclick(object sender, EventArgs e)
@@ -82,7 +95,9 @@ namespace Altaria
             step1.Visible = false;
             step2.Visible = true;
             step3.Visible = false;
+            mediainfo.Visible = true;
             userinfo.Visible = false;
+            frameinfo.Visible = false;
         }
 
         

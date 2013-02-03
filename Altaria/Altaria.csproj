@@ -65,6 +65,10 @@
       <HintPath>Dlls\MediaManagerPro_Trial.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MoreLinq, Version=1.0.11522.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.6.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dlls\MySql.Data.dll</HintPath>
@@ -113,6 +117,7 @@
     <Content Include="Dlls\MathNet.Numerics.FSharp.dll" />
     <Content Include="Dlls\MathNet.Numerics.IO.dll" />
     <Content Include="Dlls\MediaManagerPro_Trial.dll" />
+    <Content Include="Dlls\MoreLinq.dll" />
     <Content Include="Dlls\MySql.Data.dll" />
     <Content Include="Dlls\MySql.Data.Entity.dll" />
     <Content Include="Dlls\MySql.Web.dll" />
@@ -233,6 +238,7 @@
     <Compile Include="Model\DCT.cs" />
     <Compile Include="Model\ImageFingerprint.cs" />
     <Compile Include="Model\JsonHelper.cs" />
+    <Compile Include="Model\KeyGen.cs" />
     <Compile Include="Model\Metadata.cs" />
     <Compile Include="Model\SongIdentification.cs" />
     <Compile Include="Model\SongInfo.cs" />

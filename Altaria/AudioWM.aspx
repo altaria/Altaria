@@ -15,13 +15,30 @@
             <div runat="server" id="mediainfo">
             <h5>Media Info</h5>
             <asp:Label ID="FileInfoLabel" runat="server" Text=""></asp:Label>
+            <asp:Label ID="namelabel" runat="server" Text="Label" Visible="false"></asp:Label>
+            <asp:Label ID="pathlabel" runat="server" Text="Label" Visible="false"></asp:Label>
             <hr />
             </div>
             
             <div runat="server" id="userinfo">
             <h5>User Info</h5>
             <asp:Label ID="UserInfoLabel" runat="server" Text=""></asp:Label>
+            <asp:Label ID="useridlabel" runat="server" Text="Label" Visible="true"></asp:Label>
             <hr />
+            </div>
+             <div runat="server" id="frameinfo">
+            <h5>Frame Length</h5>
+            <asp:Label ID="FrameInfoLabel" runat="server" Text=""></asp:Label>
+            <hr />
+            <asp:Label ID="Label1" runat="server" Text="Your Watermarked Audio File has been generated."></asp:Label>
+            <br />
+            <asp:LinkButton runat="server" ID="LinkButton1" OnClick="backtostep1_onclick" class="btn btn-warning">
+
+            <i class="icon-backward"></i>
+            Back to first step
+            </asp:LinkButton>
+            <hr />
+
             </div>
         <div runat="server" id="step1">
             <asp:Label ID="ErrorMessage" runat="server" 
@@ -42,10 +59,14 @@
         </div>
         
         <div runat="server" id="step2">
+
             <h6>Select user to register to Media File</h6>
-            <asp:DropDownList ID="UserDropdown" runat="server" DataSourceID="SqlDataSource1" DataTextField="userdataname" DataValueField="userdataname">
+            <asp:DropDownList ID="UserDropdown" runat="server" DataSourceID="SqlDataSource1" DataTextField="userdataname" DataValueField="iduserdata">
             </asp:DropDownList>
-            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:altaria_databaseConnectionString %>" ProviderName="<%$ ConnectionStrings:altaria_databaseConnectionString.ProviderName %>" SelectCommand="SELECT userdataname from userdata;"></asp:SqlDataSource>
+            <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+                ConnectionString="<%$ ConnectionStrings:altaria_databaseConnectionString %>" 
+                ProviderName="<%$ ConnectionStrings:altaria_databaseConnectionString.ProviderName %>" 
+                SelectCommand="SELECT  * from userdata;"></asp:SqlDataSource>
             <asp:Button ID="SelectUserButton" runat="server" Text="Accept" 
                 onclick="SelectUserButton_Click" />
             
@@ -58,8 +79,17 @@
         </div>
         <div runat="server" id="step3">
            
+            <h6>Select Frame Length</h6>
+            <asp:DropDownList ID="FrameDropDown" runat="server">
+                <asp:ListItem>40000</asp:ListItem>
+                <asp:ListItem>30000</asp:ListItem>
+                <asp:ListItem>20000</asp:ListItem>
+                <asp:ListItem>10000</asp:ListItem>
+                <asp:ListItem>5000</asp:ListItem>
+                <asp:ListItem>1000</asp:ListItem>
+            </asp:DropDownList>
             <asp:Label ID="PreConfirmLabel" runat="server" Text=""></asp:Label>
-            <asp:Button ID="Confirm" runat="server" Text="Confirm" onclick="Confirm_Click" />
+            <asp:Button ID="Confirm" runat="server" class="btn btn-success" Text="Confirm" onclick="Confirm_Click" />
             <br />
             <asp:LinkButton runat="server" ID="back2" OnClick="backtostep2_onclick" class="btn btn-warning">
 
