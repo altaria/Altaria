@@ -255,6 +255,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="AudioWatermark\" />
     <Folder Include="Audio\" />
     <Folder Include="ffmpeg\bin\" />
     <Folder Include="img\" />
