@@ -29,36 +29,42 @@
             </fieldset>
             <asp:Repeater ID="UploadedImages" runat="server" OnItemDataBound="UploadedImages_ItemDataBound">
                 <ItemTemplate>
-                    <div class="row-fluid">
-                        <div class="span6">
-                            <asp:Label runat="server" ID="ci" Text='<%# Eval("name") %>'></asp:Label>
-                            <br />
-                            <asp:FileUpload runat="server" ID="fu" />
-                            <span class="input-append">
-                                <input id="wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>" class="input-large"
-                                    type="text">
-                                <script type="text/javascript">
-                                    $('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "") %>]').change(function () {
-                                        $('#wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+                    <div class="container">
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <asp:Label runat="server" ID="ci" Text='<%# Eval("name") %>'></asp:Label>
+                                <br />
+                                <asp:FileUpload runat="server" ID="fu" />
+                                <span class="input-append">
+                                    <input id="wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>" class="input-large"
+                                        type="text">
+                                    <script type="text/javascript">
+                                        $('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "") %>]').change(function () {
+                                            $('#wm_name<%# DataBinder.Eval(Container, "ItemIndex", "") %>').val($(this).val().replace(/C:\\fakepath\\/i, ''));
                                     });
-                                </script>
-                                <a class="btn" onclick="$('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "")%>]').click();">Browse</a> </span>
-                            <asp:Button type="submit" ID="submit_wm" runat="server" OnClick="uploadwm_onclick"
-                                Text="Upload Watermark" class="btn btn-success" Style="margin-left: 5px;" />
-                            <asp:DropDownList ID="alpha_list" runat="server">
-                                <asp:ListItem>select α for extraction</asp:ListItem>
-                                <asp:ListItem>0.1</asp:ListItem>
-                                <asp:ListItem>0.2</asp:ListItem>
-                                <asp:ListItem>0.3</asp:ListItem>
-                                <asp:ListItem>0.4</asp:ListItem>
-                                <asp:ListItem>0.5</asp:ListItem>
-                                <asp:ListItem>0.6</asp:ListItem>
-                                <asp:ListItem>0.7</asp:ListItem>
-                                <asp:ListItem>0.8</asp:ListItem>
-                                <asp:ListItem>0.9</asp:ListItem>
-                            </asp:DropDownList>
-                            <asp:Button type="submit" ID="submit_origin" runat="server" OnClick="uploadorigin_onclick"
-                                Text="Upload original to extract watermark" class="btn btn-success" Style="float: right" />
+                                    </script>
+                                    <a class="btn" onclick="$('input[id=MainContent_UploadedImages_fu_<%# DataBinder.Eval(Container, "ItemIndex", "")%>]').click();">Browse</a> </span>
+                                <asp:DropDownList ID="alpha_list" runat="server">
+                                    <asp:ListItem>select α for extraction</asp:ListItem>
+                                    <asp:ListItem>0.1</asp:ListItem>
+                                    <asp:ListItem>0.2</asp:ListItem>
+                                    <asp:ListItem>0.3</asp:ListItem>
+                                    <asp:ListItem>0.4</asp:ListItem>
+                                    <asp:ListItem>0.5</asp:ListItem>
+                                    <asp:ListItem>0.6</asp:ListItem>
+                                    <asp:ListItem>0.7</asp:ListItem>
+                                    <asp:ListItem>0.8</asp:ListItem>
+                                    <asp:ListItem>0.9</asp:ListItem>
+                                </asp:DropDownList>
+                            </div>
+                            <br />
+                            <div class="span8">
+                                <asp:Button type="submit" ID="submit_wm" runat="server" OnClick="uploadwm_onclick"
+                                    Text="Upload Watermark" class="btn btn-success" />
+                                <br />
+                                <asp:Button type="submit" ID="submit_origin" runat="server" OnClick="uploadorigin_onclick"
+                                    Text="Upload original to extract watermark" class="btn btn-success" />
+                            </div>
                         </div>
                     </div>
                 </ItemTemplate>
@@ -154,7 +160,6 @@
                     </div>
                     <div class="row-fluid">
                         <div class="span12">
-                            <hr />
                             <asp:LinkButton runat="server" ID="LinkButton2" OnClick="backtostep1_onclick" class="btn btn-warning">
         <i class="icon-backward"></i>
         Back to first stage
