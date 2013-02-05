@@ -168,6 +168,7 @@
     <Content Include="flvtool\flvtool2.exe" />
     <Content Include="IdentifyAudio.aspx" />
     <Content Include="IdentifyImage.aspx" />
+    <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Styles\bootstrap.css" />
     <Content Include="ImageWM.aspx" />
     <Content Include="Global.asax" />
@@ -259,7 +260,6 @@
     <Folder Include="Audio\" />
     <Folder Include="ffmpeg\bin\" />
     <Folder Include="img\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Site.Master" />
